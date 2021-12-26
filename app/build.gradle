@@ -14,9 +14,23 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    flatDir{
+        dirs 'libs'
+    }
+
 }
 
 dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'org.web3j:web3j-maven-plugin:4.8.7'
+    implementation 'com.wavesplatform:wavesj:1.2.3'
+    implementation 'com.lmax:disruptor:3.4.4'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testCompileOnly 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
 
