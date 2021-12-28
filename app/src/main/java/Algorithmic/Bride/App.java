@@ -6,7 +6,6 @@ package Algorithmic.Bride;
 import com.lmax.disruptor.dsl.EventProcessorFactory;
 import com.lmax.disruptor.dsl.Disruptor;
 import org.agrona.BitUtil;
-
 import java.util.List;
 
 public class App {

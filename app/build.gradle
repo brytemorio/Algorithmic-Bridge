@@ -26,6 +26,7 @@ dependencies {
     implementation 'com.wavesplatform:wavesj:1.2.3'
     implementation 'com.lmax:disruptor:3.4.4'
     implementation 'org.agrona:agrona:1.14.0'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-toml:2.12.2'
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
     testCompileOnly 'org.projectlombok:lombok:1.18.22'
