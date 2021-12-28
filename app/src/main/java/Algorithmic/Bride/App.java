@@ -3,10 +3,20 @@
  */
 package Algorithmic.Bride;
 
+import com.lmax.disruptor.dsl.EventProcessorFactory;
+import com.lmax.disruptor.dsl.Disruptor;
+import org.agrona.BitUtil;
+
+import java.util.List;
+
 public class App {
     public String getGreeting() {
         return "Hello World!";
     }
+
+    public byte[] test = BitUtil.fromHex("X09w");
+
+    final int bufferSize = 1024;
 
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
