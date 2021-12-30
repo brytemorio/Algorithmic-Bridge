@@ -6,6 +6,10 @@ package Algorithmic.Bride;
 import com.lmax.disruptor.dsl.EventProcessorFactory;
 import com.lmax.disruptor.dsl.Disruptor;
 import org.agrona.BitUtil;
+import com.fasterxml.jackson.dataformat.toml.TomlStreamWriteException;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class App {
@@ -13,11 +17,16 @@ public class App {
         return "Hello World!";
     }
 
-    public byte[] test = BitUtil.fromHex("X09w");
 
-    final int bufferSize = 1024;
+    public static <T> void test( T a){
+        System.out.println(a);
+    }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        String a = "This is ";
+        
+
     }
+
+
 }
