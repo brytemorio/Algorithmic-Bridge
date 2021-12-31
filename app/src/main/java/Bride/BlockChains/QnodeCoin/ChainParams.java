@@ -1,7 +1,9 @@
 package Bride.BlockChains.QnodeCoin;
 
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+
+
+import java.util.Optional;
 
 @Data
 public class ChainParams {
@@ -9,7 +11,7 @@ public class ChainParams {
     private int RPCPort;
     private String RPCPassword;
     private String ControlWalletAddress;
-    private String PrivateKey;
+    private Optional<String> PrivateKey;
     private String Network;
     private float TransferFee;
 
