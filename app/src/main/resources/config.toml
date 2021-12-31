@@ -1,0 +1,31 @@
+[BlockChain]
+    [QnodeCoin]
+    node = ''
+    network = ''
+    control_wallet = ''
+
+    [Waves]
+    node = ''
+    network = ''
+    control_wallet = ''
+
+     [Polygon]
+     node = ''
+     network = ''
+     control_wallet = ''
+
+     [BSC]
+     node = ''
+     network = ''
+     control_wallet = ''
+
+[BridgeParameters]
+    [server]
+    host = ''
+    port =
+
+    [database]
+    name = ''
+    host = ''
+    socket = '' # if used
+    port =
