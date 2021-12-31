@@ -1,4 +1,4 @@
-package Algorithmic.Bride.BlockChains;
+package Bride.BlockChains;
 
 /**
 Abstraction of all blockchains and their properties supported by the bridge

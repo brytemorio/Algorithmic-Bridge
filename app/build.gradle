@@ -42,7 +42,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'Algorithmic.Bride.App'
+    mainClass = 'Bride.App'
 }
 
 tasks.named('test') {

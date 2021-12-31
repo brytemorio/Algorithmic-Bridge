@@ -1,8 +1,8 @@
-package Algorithmic.Bride.common;
+package Bride.common;
 
 import java.util.List;
 
-public interface IChainInteractionService {
+public interface IChainQueryService {
     default <T> List<T> getTrxOfBlockAtHeight(int height) {
         return null;
     }
