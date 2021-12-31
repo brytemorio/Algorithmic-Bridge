@@ -3,30 +3,73 @@
  */
 package Algorithmic.Bride;
 
-import com.lmax.disruptor.dsl.EventProcessorFactory;
+import com.lmax.disruptor.EventFactory;
+import com.lmax.disruptor.EventHandler;
+import com.lmax.disruptor.EventTranslatorOneArg;
+import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
-import org.agrona.BitUtil;
-import com.fasterxml.jackson.dataformat.toml.TomlStreamWriteException;
+import com.lmax.disruptor.util.DaemonThreadFactory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.nio.ByteBuffer;
 
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
+    static class LongEvent {
+        private long value;
+
+        public void set(long value) {
+            this.value = value;
+        }
     }
 
-
-    public static <T> void test( T a){
-        System.out.println(a);
+    static class LongEventFactory implements EventFactory<LongEvent> {
+        public LongEvent newInstance() {
+            return new LongEvent();
+        }
     }
 
-    public static void main(String[] args) {
-        String a = "This is ";
-        
-
+    static class LongEventHandler implements EventHandler<LongEvent> {
+        public void onEvent(LongEvent event, long sequence, boolean endOfBatch) {
+            System.out.println("Event: " + event);
+        }
     }
+
+    static class LongEventProducer {
+        private final RingBuffer<LongEvent> ringBuffer;
+
+        public LongEventProducer(RingBuffer<LongEvent> ringBuffer) {
+            this.ringBuffer = ringBuffer;
+        }
+
+        private static final EventTranslatorOneArg<LongEvent, ByteBuffer> TRANSLATOR = new EventTranslatorOneArg<LongEvent, ByteBuffer>() {
+            @Override
+            public void translateTo(LongEvent event, long sequence, ByteBuffer bb) {
+                event.set(bb.getLong(0));
+            }
+        };
+
+        public void onData(ByteBuffer bb){
+            ringBuffer.publishEvent(TRANSLATOR, bb);
+        }
+    }
+
+    public static void main(String[] args) throws Exception{
+        LongEventFactory factory = new LongEventFactory();
+
+        int bufferSize = 1024;
+        Disruptor<LongEvent> disruptor = new Disruptor<LongEvent>(factory, bufferSize, DaemonThreadFactory.INSTANCE);
+        disruptor.handleEventsWith(new LongEventHandler());
+        disruptor.start();
+
+        RingBuffer<LongEvent> ringBuffer = disruptor.getRingBuffer();
+        LongEventProducer producer = new LongEventProducer(ringBuffer);
+        ByteBuffer bb = ByteBuffer.allocate(8);
+        for(long l=0; true; l++){
+            bb.putLong(0, 1);
+            producer.onData(bb);
+            Thread.sleep(1000);
+        }
+    }
+
 
 
 }
