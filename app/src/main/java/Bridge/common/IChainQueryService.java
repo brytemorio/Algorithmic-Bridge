@@ -1,4 +1,4 @@
-package Bride.common;
+package Bridge.common;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package Bride.Utils;
+package Bridge.Utils;
 
 import sun.misc.Unsafe;
 

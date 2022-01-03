@@ -48,7 +48,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'Bride.App'
+    mainClass = 'Bridge.App'
 }
 
 tasks.named('test') {

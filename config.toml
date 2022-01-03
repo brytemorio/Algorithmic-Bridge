@@ -1,33 +1,42 @@
 title = "Testing"
 
-[BlockChain]
-    [QnodeCoin]
-    node = "wewe"
-    network = "wewe"
-    control_wallet = "ewew"
 
-    [Waves]
-    node = "ewew"
-    network = "wewe"
-    control_wallet = "wasd"
+[Blockchain.Qnodecoin]
+host = "localhost"
+rpc_port = 201611
+rpc_password = "password"
+network = "mainnet"
+control_wallet = "long hex string"
+private_key = "xxxxxxxxxx"
+transfer_fee = 0.0
 
-     [Polygon]
-     node = "sdsd"
-     network = "sdsd"
-     control_wallet = "dsd"
+[Blockchain.Waves]
+node = " https://nodes-testnet.wavesnodes.com"
+network = "testnet"
+network_id = "network_id"
+public_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+private_key = "xxxxxxxxxxxxxxxxxxxxxxx"
+asset_id = "asset_id"
+transfer_fee = 0.0
 
-     [BSC]
-     node = "sdsd"
-     network = "sdsd"
-     control_wallet = "dsd"
 
-[BridgeParameters]
-    [server]
-    host = "sdsd"
-    port = 212
+[Blockchain.Polygon]
+node = "sdsd"
+network = "sdsd"
+control_wallet = "dsd"
 
-    [database]
-    name = "sds"
-    host = "sds"
-    socket = "sds" # if used
-    port = 232
+[Blockchain.BSC]
+node = "sdsd"
+network = "sdsd"
+control_wallet = "dsd"
+
+
+[Bridge.server]
+host = "sdsd"
+port = 212
+
+[Bridge.Database]
+name = "sds"
+host = "sds"
+socket = "sds" # if used
+port = 232
