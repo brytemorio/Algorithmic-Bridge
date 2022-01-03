@@ -3,70 +3,8 @@
  */
 package Bride;
 
-import com.lmax.disruptor.*;
-import com.lmax.disruptor.dsl.Disruptor;
-import com.lmax.disruptor.util.DaemonThreadFactory;
-
-import java.nio.ByteBuffer;
-
 public class App {
-    static class LongEvent {
-        private long value;
-
-        public void set(long value) {
-            this.value = value;
-        }
-    }
-
-    static class LongEventFactory implements EventFactory<LongEvent> {
-        public LongEvent newInstance() {
-            return new LongEvent();
-        }
-    }
-
-    static class LongEventHandler implements EventHandler<LongEvent> {
-        public void onEvent(LongEvent event, long sequence, boolean endOfBatch) {
-            System.out.println("Event: " + event);
-        }
-    }
-
-    static class LongEventProducer {
-        private final RingBuffer<LongEvent> ringBuffer;
-
-        public LongEventProducer(RingBuffer<LongEvent> ringBuffer) {
-            this.ringBuffer = ringBuffer;
-        }
-
-        private static final EventTranslatorOneArg<LongEvent, ByteBuffer> TRANSLATOR = new EventTranslatorOneArg<LongEvent, ByteBuffer>() {
-            @Override
-            public void translateTo(LongEvent event, long sequence, ByteBuffer bb) {
-                event.set(bb.getLong(0));
-            }
-        };
-
-        public void onData(ByteBuffer bb){
-            ringBuffer.publishEvent(TRANSLATOR, bb);
-        }
-    }
-
-    public static void main(String[] args) throws Exception{
-        LongEventFactory factory = new LongEventFactory();
-
-        int bufferSize = 1024;
-        Disruptor<LongEvent> disruptor = new Disruptor<LongEvent>(factory, bufferSize, DaemonThreadFactory.INSTANCE);
-        disruptor.handleEventsWith(new LongEventHandler());
-        disruptor.start();
-
-        RingBuffer<LongEvent> ringBuffer = disruptor.getRingBuffer();
-        LongEventProducer producer = new LongEventProducer(ringBuffer);
-        ByteBuffer bb = ByteBuffer.allocate(8);
-        for(long l=0; true; l++){
-            bb.putLong(0, 1);
-            producer.onData(bb);
-            Thread.sleep(1000);
-        }
-    }
-
-
-
+  public static void main(String[] args) throws Exception {
+    
+  }
 }

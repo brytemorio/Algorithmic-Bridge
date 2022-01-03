@@ -1,0 +1,33 @@
+title = "Testing"
+
+[BlockChain]
+    [QnodeCoin]
+    node = "wewe"
+    network = "wewe"
+    control_wallet = "ewew"
+
+    [Waves]
+    node = "ewew"
+    network = "wewe"
+    control_wallet = "wasd"
+
+     [Polygon]
+     node = "sdsd"
+     network = "sdsd"
+     control_wallet = "dsd"
+
+     [BSC]
+     node = "sdsd"
+     network = "sdsd"
+     control_wallet = "dsd"
+
+[BridgeParameters]
+    [server]
+    host = "sdsd"
+    port = 212
+
+    [database]
+    name = "sds"
+    host = "sds"
+    socket = "sds" # if used
+    port = 232
