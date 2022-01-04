@@ -1,3 +1,7 @@
-###A Bridge for transfers of crypto assets between different blockchains
+# The Algorithmic Bridge
 
-###It is base on Xclaim
+---
+
+A Bridge for transfers of crypto assets between different blockchains
+It is based on ideas picked from the [Xclaim paper](https://github.com/brytemorio/Algorithmic-Bride/blob/main/XCLAIM(research%20paper).pdf)
+Well actually the Bridge is just me playing around with tech :grin:
