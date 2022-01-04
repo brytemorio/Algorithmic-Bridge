@@ -11,6 +11,10 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+
+/**
+ * @author: Bryte Morio
+ */
 @Slf4j
 public final class ConfigParser {
   private static final Charset CHARSET = Charset.forName("ISO8859-1");
