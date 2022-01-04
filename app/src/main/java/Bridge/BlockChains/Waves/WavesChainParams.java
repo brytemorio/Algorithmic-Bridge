@@ -25,4 +25,13 @@ public class WavesChainParams {
 
   @AdvancedPath({"Blockchain", "Waves", "asset_id"})
   private String AssetID;
+
+  @AdvancedPath({"Blockchain", "Waves", "asset_name"})
+  private String AssetName;
+
+  @AdvancedPath({"Blockchain", "Waves", "ticker_symbol"})
+  private String TickerSymbol;
+
+  @AdvancedPath({"Blockchain", "Waves", "chain_identifier"})
+  private String ChainIdentifier;
 }
