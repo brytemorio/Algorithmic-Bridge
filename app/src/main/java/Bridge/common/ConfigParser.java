@@ -5,11 +5,11 @@ import com.electronwill.nightconfig.core.file.FileNotFoundAction;
 import com.electronwill.nightconfig.toml.TomlParser;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 
 @Slf4j
 public final class ConfigParser {
@@ -20,9 +20,14 @@ public final class ConfigParser {
   static {
     try {
 
-      String manualConfigFile = System.getProperty("configfile");
-      Path ConfigFile = Paths.get(Objects.requireNonNullElse(manualConfigFile, "config.toml"));
-      CONFIG = new TomlParser().parse(ConfigFile, FileNotFoundAction.THROW_ERROR, CHARSET);
+      String manualConfigFilePath = System.getProperty("configfile");
+      InputStream ConfigFileFromResources = readResourceConfigFile("config.toml");
+      if (manualConfigFilePath == null) {
+        CONFIG = new TomlParser().parse(ConfigFileFromResources, CHARSET);
+      } else {
+        Path manualConfigFile = Paths.get(manualConfigFilePath);
+        CONFIG = new TomlParser().parse(manualConfigFile, FileNotFoundAction.THROW_ERROR, CHARSET);
+      }
     } catch (Exception exp) {
       log.debug(String.valueOf(exp));
     }
@@ -30,8 +35,7 @@ public final class ConfigParser {
 
   private ConfigParser() {}
 
-
-  private static InputStream readPropFile(String filename) {
+  private static InputStream readResourceConfigFile(String filename)  {
     InputStream inputStream = ConfigParser.class.getClassLoader().getResourceAsStream(filename);
     if (inputStream == null) throw new NullPointerException("File: " + filename + " not found");
     return inputStream;

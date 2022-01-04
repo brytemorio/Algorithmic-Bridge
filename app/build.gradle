@@ -56,13 +56,3 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-task Fatjar(type: Jar) {
-    manifest {
-        attributes 'Main-Class': 'Bridge.App'
-    }
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    with jar
-    duplicatesStrategy "exclude"
-}
