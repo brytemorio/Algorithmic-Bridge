@@ -14,7 +14,7 @@ public class App {
     String value = config.get("Blockchain.Qnodecoin.host");
     QnodecoinChainParams objectConverter = new ObjectConverter().toObject(config, QnodecoinChainParams::new);
     System.out.println(value);
-    System.out.println(objectConverter.getControlWalletAddress());
+    System.out.println(objectConverter.getTransferFee());
     
   }
 }

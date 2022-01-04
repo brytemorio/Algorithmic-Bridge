@@ -11,9 +11,9 @@ private_key = "xxxxxxxxxx"
 transfer_fee = 0.0
 
 [Blockchain.Waves]
-node = " https://nodes-testnet.wavesnodes.com"
+node = "https://nodes-testnet.wavesnodes.com"
 network = "testnet"
-network_id = "network_id"
+network_id = "T"
 public_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 private_key = "xxxxxxxxxxxxxxxxxxxxxxx"
 asset_id = "asset_id"

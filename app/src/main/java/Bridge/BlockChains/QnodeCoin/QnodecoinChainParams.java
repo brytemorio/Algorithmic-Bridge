@@ -25,5 +25,5 @@ public class QnodecoinChainParams {
   private String Network;
 
   @AdvancedPath({"Blockchain", "Qnodecoin", "transfer_fee"})
-  private float TransferFee;
+  private double TransferFee;
 }

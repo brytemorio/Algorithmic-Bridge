@@ -21,7 +21,7 @@ public class WavesChainParams {
   private String NetworkSymbol;
 
   @AdvancedPath({"Blockchain", "Waves", "transfer_fee"})
-  private float TransferFee;
+  private double TransferFee;
 
   @AdvancedPath({"Blockchain", "Waves", "asset_id"})
   private String AssetID;
