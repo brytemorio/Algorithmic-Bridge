@@ -3,18 +3,13 @@ package Bridge.common;
 import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.core.file.FileNotFoundAction;
 import com.electronwill.nightconfig.toml.TomlParser;
-import lombok.extern.slf4j.Slf4j;
-
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import lombok.extern.slf4j.Slf4j;
 
-
-/**
- * @author: Bryte Morio
- */
+/** @author: Bryte Morio */
 @Slf4j
 public final class ConfigParser {
   private static final Charset CHARSET = Charset.forName("ISO8859-1");
@@ -39,7 +34,7 @@ public final class ConfigParser {
 
   private ConfigParser() {}
 
-  private static InputStream readResourceConfigFile(String filename)  {
+  private static InputStream readResourceConfigFile(String filename) {
     InputStream inputStream = ConfigParser.class.getClassLoader().getResourceAsStream(filename);
     if (inputStream == null) throw new NullPointerException("File: " + filename + " not found");
     return inputStream;
