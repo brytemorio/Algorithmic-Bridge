@@ -33,6 +33,7 @@ network = "testnet"
 network_id = "T"
 public_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 private_key = "xxxxxxxxxxxxxxxxxxxxxxx"
+control_wallet = "xxxxxxxxxxxxxxxxxxxxxxx"
 asset_id = "asset_id"
 chain_identifier = "WAV"
 transfer_fee = 0.0
