@@ -1,4 +1,4 @@
-package Bridge.BlockChains.Waves;
+package bridge.BlockChains.Waves;
 
 import com.electronwill.nightconfig.core.conversion.AdvancedPath;
 import lombok.Data;

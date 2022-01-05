@@ -1,10 +1,10 @@
-package Bridge.BlockChains.QnodeCoin;
+package bridge.BlockChains.BitcoinChains;
 
 import com.electronwill.nightconfig.core.conversion.AdvancedPath;
 import lombok.Data;
 
 @Data
-public class QnodecoinChainParams {
+public class BitcoinChainParams {
 
   @AdvancedPath({"Blockchain", "Qnodecoin", "host"})
   private String Host;

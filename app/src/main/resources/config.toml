@@ -18,11 +18,12 @@ ticker_symbol = "QNC"
 host = "localhost"
 rpc_port = 201611
 rpc_password = "password"
+rpc_user = "rpc-user"
 network = "mainnet"
 control_wallet = "long hex string"
 private_key = "xxxxxxxxxx"
 chain_identifier = "QCN"
-transfer_fee = 0
+transfer_fee = 0.0
 
 [Blockchain.Waves]
 asset_name = "Qnodecoin"
@@ -34,7 +35,7 @@ public_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 private_key = "xxxxxxxxxxxxxxxxxxxxxxx"
 asset_id = "asset_id"
 chain_identifier = "WAV"
-transfer_fee = 0
+transfer_fee = 0.0
 
 
 [Blockchain.Polygon]
@@ -46,7 +47,7 @@ control_wallet = "dsd"
 private_key = "Polygon-Private-Key" # Deployer Private Key
 asset_id = "contract-address"   # Contract Address of toker
 chain_identifier = "PLY"
-transfer_fee = 0
+transfer_fee = 0.0
 
 [Blockchain.BSC]
 asset_name = "Qnode.Defi"
@@ -56,7 +57,7 @@ network_node = "network-node"
 control_wallet = "QND-control-Wallet"
 contract_address = "QND-contract-adress"
 chain_identifier = "BSC"
-transfer_fee = 0
+transfer_fee = 0.0
 
 
 [Bridge.server]
