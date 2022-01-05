@@ -1,0 +1,10 @@
+
+i	java:S116
+"ORename this field "Host" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÍÉÚ§ıÿÿÿÿ
+l	java:S116"RRename this field "RPCPort" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(†ÉÅúÿÿÿÿ
+k	java:S116"VRename this field "RPCPassword" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¼Ü¼Û
+y	java:S116"_Rename this field "ControlWalletAddress" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¢¾ÜÕúÿÿÿÿ
+o	java:S116"URename this field "PrivateKey" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(îòÁÄıÿÿÿÿ
+l	java:S116"RRename this field "Network" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ŠÙÌãûÿÿÿÿ
+k	java:S116"VRename this field "TransferFee" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(î…§¶
+n	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(“Ç
