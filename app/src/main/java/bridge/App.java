@@ -17,5 +17,9 @@ public class App {
     System.out.println(x);
     QnodecoinChain qnodecoinChain = new QnodecoinChain();
     System.out.println(qnodecoinChain.getJasonRPCUrl());
+    String aa =
+        qnodecoinChain.getTrxByID(
+            "6a3443c0c36e580221efc011ad4ff68b0c930d81bedb6ff7341b91821ba8e4d4");
+    System.out.println(aa);
   }
 }

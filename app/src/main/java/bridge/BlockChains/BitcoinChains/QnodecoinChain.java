@@ -22,6 +22,7 @@ public class QnodecoinChain extends BitcoinBaseChain {
     super.setTransferFee(configObject.get("Blockchain.Qnodecoin.transfer_fee"));
     super.setRpcUser(configObject.get("Blockchain.Qnodecoin.rpc_user"));
     super.setJasonRPCUrl(setRPCUrl());
+    super.init();
   }
 
   private String setRPCUrl() throws MalformedURLException {

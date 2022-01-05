@@ -15,15 +15,15 @@ title = "Bridge Config"
 [Blockchain.Qnodecoin]
 asset_name = "Qnodecoin"
 ticker_symbol = "QNC"
-host = "localhost"
-rpc_port = 201611
-rpc_password = "password"
-rpc_user = "rpc-user"
+host = "127.0.0.1"
+rpc_port = 20611
+rpc_password = "orion.net"
+rpc_user = "orion"
 network = "mainnet"
-control_wallet = "long hex string"
+control_wallet = "99gsuJ8LoS1fkJED1GMwfFUCcryyaMRKMn"
 private_key = "xxxxxxxxxx"
 chain_identifier = "QCN"
-transfer_fee = 0.0
+transfer_fee = 0.0002
 
 [Blockchain.Waves]
 asset_name = "Qnodecoin"
