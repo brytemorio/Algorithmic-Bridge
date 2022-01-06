@@ -12,6 +12,7 @@ public final class QnodecoinChain extends BitcoinBaseChain {
   private static final CommentedConfig configObject = ConfigObject.CONFIG;
 
   public QnodecoinChain() throws MalformedURLException {
+    super.setAssetName(configObject.get("Blockchain.Qnodecoin.asset_name"));
     super.setNetwork(configObject.get("Blockchain.Qnodecoin.network"));
     super.setHostName(configObject.get("Blockchain.Qnodecoin.host"));
     super.setControlWalletAddress(configObject.get("Blockchain.Qnodecoin.control_wallet"));

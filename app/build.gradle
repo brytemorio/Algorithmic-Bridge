@@ -10,27 +10,27 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'application'
+    id 'idea'
 
 }
 
+defaultTasks 'run'
+
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
 
 
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
-    flatDir {
-        dirs 'libs'
-    }
-
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'org.web3j:web3j-maven-plugin:4.8.7'
     implementation 'com.wavesplatform:wavesj:1.2.3'
     implementation 'com.lmax:disruptor:3.4.4'
     implementation 'org.agrona:agrona:1.14.0'
     implementation 'org.aeonbits.owner:owner:1.0.12'
+    implementation 'wf.bitcoin:bitcoin-rpc-client:1.1.0'
     implementation 'com.electronwill.night-config:toml:3.6.5'
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'

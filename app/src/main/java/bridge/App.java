@@ -6,20 +6,19 @@ package bridge;
 import bridge.BlockChains.BitcoinChains.QnodecoinChain;
 import bridge.common.ConfigObject;
 import com.electronwill.nightconfig.core.CommentedConfig;
+import com.electronwill.nightconfig.core.Config;
 import java.net.MalformedURLException;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 
-@Slf4j
+@Log
 public class App {
   public static void main(String[] args) throws MalformedURLException {
     CommentedConfig configObject = ConfigObject.CONFIG;
     double x = configObject.get("Blockchain.Qnodecoin.transfer_fee");
     System.out.println(x);
     QnodecoinChain qnodecoinChain = new QnodecoinChain();
-    System.out.println(qnodecoinChain.getJasonRPCUrl());
-    String aa =
-        qnodecoinChain.getTrxByID(
-            "6a3443c0c36e580221efc011ad4ff68b0c930d81bedb6ff7341b91821ba8e4d4");
-    System.out.println(aa);
+    log.info(qnodecoinChain.getAssetName().toString());
+    Config aa = configObject.get("Blockchain.Qnodecoin.asset_name");
+    System.out.println(aa.toString());
   }
 }

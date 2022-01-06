@@ -1,6 +1,7 @@
 package bridge.BlockChains.BitcoinChains;
 
 import bridge.common.IChainQueryService;
+import com.electronwill.nightconfig.core.Config;
 import java.net.MalformedURLException;
 import java.util.List;
 import lombok.Data;
@@ -9,6 +10,7 @@ import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient;
 
 @Data
 public class BitcoinBaseChain implements IChainQueryService {
+  private Config assetName;
   private String hostName;
   private int rpcPort;
   private String rpcPassword;

@@ -1,5 +1,7 @@
 
-z
-Japp/src/main/java/Bridge/BlockChains/BitcoinChains/BitcoinChainParams.java,f/6/f6b6649bf684339a56a296e579024996661d02a3
-€
-Papp/src/main/java/Bridge/BlockChains/BitcoinChains/BitcoinChainQueryService.java,7/e/7e15a71b8eaba9ff9b70adc0a8e01adbfc296817
+n
+>app/src/main/java/bridge/BlockChains/Waves/WavesBaseChain.java,c/b/cbfb852b618ed32a4182186127cbff5d5c9af8a6
+D
+commentedConfig.toml,9/e/9eb92b6638089023e778fcfdd48efc175607bc95
+j
+:app/src/main/java/bridge/BlockChains/Waves/WavesChain.java,c/5/c5ae2db14ea9f6dfcf36f1349fb66412d9352eea

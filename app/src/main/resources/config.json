@@ -1,0 +1,94 @@
+{
+  "Blockchain": {
+    "Qnodecoin": {
+      "host": "127.0.0.1",
+      "rpc_user": "orion",
+      "rpc_port": 20611,
+      "rpc_password": "orion.net",
+      "network": "mainnet",
+      "chain_identifier": "QCN",
+      "control_wallet": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "asset": {
+        "name": "Qnodecoin",
+        "ticker": "QNC",
+        "transfer_fee": 0.00001
+      }
+    },
+    "Waves": {
+      "node": "waves-node",
+      "network": "testnet",
+      "network_id": "T",
+      "chain_identifier": "WAV",
+      "assets": {
+        "qnodecoin": {
+          "name": "Qnodecoin",
+          "ticker": "QNC",
+          "asset_id": "asset-id",
+          "transfer_fee": 0.00001,
+          "wallet": {
+            "private_key": "private-key",
+            "public_key": "public-key"
+          }
+        },
+        "fishfactory_p": {
+          "name": "Fishfactory P",
+          "ticker": "XFP",
+          "asset_id": "asset-id",
+          "transfer_fee": 0.00001,
+          "wallet": {
+            "private_key": "private-key",
+            "public_key": "public-key"
+          }
+        }
+      }
+    },
+    "Polygon": {
+      "node": "node",
+      "network": "network",
+      "network_id": "network_id",
+      "chain_identifier": "PLY",
+      "assets": {
+        "fishfactory_p": {
+          "name": "Fishfactory P",
+          "ticker": "XFP",
+          "asset_id": "asset-id",
+          "transfer_fee": 0.00001,
+          "wallet": {
+            "private_key": "private-key",
+            "public_key": "public-key"
+          }
+        }
+      }
+    },
+    "BinanceSmartChain": {
+      "node": "node",
+      "network": "network",
+      "network_id": "network_id",
+      "chain_identifier": "BSC",
+      "assets": {
+        "qnode_defi": {
+          "name": "Qnode.Defi",
+          "ticker": "QND",
+          "asset_id": "asset-id",
+          "transfer_fee": 0.00001,
+          "wallet": {
+            "private_key": "private-key",
+            "public_key": "public-key"
+          }
+        }
+      }
+    }
+  },
+  "Bridge": {
+    "server": {
+      "host": "host-name",
+      "port": "port-name"
+    },
+    "database": {
+      "name": "database-name",
+      "host": "host-name",
+      "socket": "optional-socket-uri",
+      "port": 12121
+    }
+  }
+}
