@@ -1,22 +1,29 @@
 package bridge.BlockChains.EthChains;
 
 import bridge.common.ConfigObject;
-import com.electronwill.nightconfig.core.CommentedConfig;
+import com.electronwill.nightconfig.core.UnmodifiableConfig;
 
-public final class BinanceSmartChain extends EthBaseChain {
-  private static final CommentedConfig configObject = ConfigObject.CONFIG;
+public final class BinanceSmartChain<T> extends EthBaseChain<T> {
+  private static final UnmodifiableConfig configObject = ConfigObject.CONFIG;
+  private String assetName;
 
-  public BinanceSmartChain() {
-    super.setAssetName(configObject.get("Blockchain.BSC.asset_name"));
-    super.setTickerSymbol(configObject.get("Blockchain.BSC.ticker_symbol"));
+  public BinanceSmartChain(String assetName) {
+    this.assetName = assetName;
+    String assetConfigName = configObject.get("Blockchain.BinanceSmartChain.asset." + assetName);
+
+    super.setAsset(configObject.get("Blockchain.BinanceSmartChain.asset"));
     super.setNetworkNode(configObject.get("Blockchain.BSC.node"));
     super.setNetwork(configObject.get("Blockchain.BSC.network"));
     super.setNetworkID(configObject.get("Blockchain.BSC.network_id"));
-    super.setControlWallet(configObject.get("Blockchain.BSC.control_wallet"));
-    super.setPrivateKey(configObject.get("Blockchain.BSC.private_key"));
-    super.setAssetId(configObject.get("Blockchain.BSC.asset_id"));
     super.setChainIdentifier(configObject.get("Blockchain.BSC.chain_identifier"));
-    super.setTransferFee(configObject.get("Blockchain.BSC.transfer_fee"));
-    super.init();
+    // super.init((super.getAsset());
   }
+
+  /*
+  private Map<String, Map<String, String>> getAssetParams(){
+    Config assetParamsFromFile = super.getAsset();
+    //Map<String,  Map<String, String>> assetParams = getAssetParams().get("te");
+    return assetParam
+  }
+   */
 }

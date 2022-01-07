@@ -1,10 +1,10 @@
 package bridge.BlockChains.Waves;
 
 import bridge.common.ConfigObject;
-import com.electronwill.nightconfig.core.CommentedConfig;
+import com.electronwill.nightconfig.core.UnmodifiableConfig;
 
 public final class WavesChain extends WavesBaseChain {
-  private static final CommentedConfig configObject = ConfigObject.CONFIG;
+  private static final UnmodifiableConfig configObject = ConfigObject.CONFIG;
 
   public WavesChain() {
     super.setAssetName(configObject.get("Blockchain.Waves.asset_name"));

@@ -47,7 +47,7 @@
       "network": "network",
       "network_id": "network_id",
       "chain_identifier": "PLY",
-      "assets": {
+      "asset": {
         "fishfactory_p": {
           "name": "Fishfactory P",
           "ticker": "XFP",
@@ -65,7 +65,7 @@
       "network": "network",
       "network_id": "network_id",
       "chain_identifier": "BSC",
-      "assets": {
+      "asset": {
         "qnode_defi": {
           "name": "Qnode.Defi",
           "ticker": "QND",

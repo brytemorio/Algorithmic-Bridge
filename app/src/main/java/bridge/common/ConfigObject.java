@@ -1,13 +1,14 @@
 package bridge.common;
 
-import com.electronwill.nightconfig.core.CommentedConfig;
-import com.electronwill.nightconfig.core.file.FileNotFoundAction;
-import com.electronwill.nightconfig.toml.TomlParser;
-import java.io.InputStream;
+import com.electronwill.nightconfig.core.UnmodifiableConfig;
+import com.electronwill.nightconfig.core.file.FileConfig;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 
 /** @author Bryte Morio */
@@ -15,18 +16,25 @@ import lombok.extern.slf4j.Slf4j;
 public final class ConfigObject {
   private static final Charset CHARSET = StandardCharsets.ISO_8859_1;
 
-  public static CommentedConfig CONFIG;
+  public static UnmodifiableConfig CONFIG;
 
   static {
     try {
 
       String manualConfigFilePath = System.getProperty("configfile");
-      InputStream configFileFromResources = readResourceConfigFile("config.toml");
+      URI configFileFromResources = readResourceConfigFile("config.json");
+
       if (manualConfigFilePath == null) {
-        CONFIG = new TomlParser().parse(configFileFromResources, CHARSET);
+        Path configFile = Paths.get(configFileFromResources);
+        FileConfig temp = FileConfig.of(configFile);
+        temp.load();
+        CONFIG = temp;
+
       } else {
         Path manualConfigFile = Paths.get(manualConfigFilePath);
-        CONFIG = new TomlParser().parse(manualConfigFile, FileNotFoundAction.THROW_ERROR, CHARSET);
+        FileConfig temp = FileConfig.of(manualConfigFile);
+        temp.load();
+        CONFIG = temp;
       }
     } catch (Exception exp) {
       log.trace(String.valueOf(exp));
@@ -35,9 +43,9 @@ public final class ConfigObject {
 
   private ConfigObject() {}
 
-  private static InputStream readResourceConfigFile(String filename) {
-    InputStream inputStream = ConfigObject.class.getClassLoader().getResourceAsStream(filename);
-    if (inputStream == null) throw new NullPointerException("File: " + filename + " not found");
-    return inputStream;
+  private static URI readResourceConfigFile(String filename) throws URISyntaxException {
+    return Objects.requireNonNull(
+            ConfigObject.class.getClassLoader().getResource(filename), "File not Found")
+        .toURI();
   }
 }

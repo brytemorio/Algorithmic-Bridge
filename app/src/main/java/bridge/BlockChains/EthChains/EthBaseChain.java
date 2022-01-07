@@ -1,26 +1,32 @@
 package bridge.BlockChains.EthChains;
 
 import bridge.common.IChainQueryService;
+import com.electronwill.nightconfig.core.Config;
 import java.util.List;
+import java.util.Map;
 import lombok.Data;
+import org.web3j.protocol.Web3j;
 
 @Data
-public class EthBaseChain implements IChainQueryService {
+public class EthBaseChain<T> implements IChainQueryService {
 
-  private String assetName;
-  private String tickerSymbol;
+  private Config asset;
   private String networkNode;
   private String network;
-  private int networkID;
-  private String controlWallet;
-  private String privateKey;
-  private String assetId;
+  private T networkID;
   private String chainIdentifier;
-  private double transferFee;
 
-  public void init() {
+  private static Web3j web3j;
+  /*public void init(Map<String, Map<String, String>> asset) {
+    this.asset = asset;
+    AssetParameter assetParameter = new AssetParameter();
+    assetParameter.assetID = asset
+    web3j =  Web3j.build(new HttpService(node));
+
     // implementation for later
   }
+
+   */
 
   @Override
   public <T> List<T> getTrxOfBlockAtHeight(int height) {
@@ -40,5 +46,13 @@ public class EthBaseChain implements IChainQueryService {
   @Override
   public boolean validateAddress(String address) {
     return false;
+  }
+
+  static class AssetParameter {
+    public String assetName;
+    public String assetTicker;
+    public String assetID;
+    public double transferFee;
+    public Map<String, String> assetControlWallet;
   }
 }

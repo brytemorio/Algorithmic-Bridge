@@ -2,7 +2,7 @@ package bridge.BlockChains.BitcoinChains;
 
 import bridge.common.IChainQueryService;
 import com.electronwill.nightconfig.core.Config;
-import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import lombok.Data;
 import wf.bitcoin.javabitcoindrpcclient.BitcoinJSONRPCClient;
@@ -10,21 +10,19 @@ import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient;
 
 @Data
 public class BitcoinBaseChain implements IChainQueryService {
-  private Config assetName;
+  private Config asset;
   private String hostName;
   private int rpcPort;
   private String rpcPassword;
   private String controlWalletAddress;
-  private String privateKey;
   private String network;
   private String chainIdentifier;
   private String rpcUser;
-  private double transferFee;
 
-  private String jasonRPCUrl;
+  private URL jasonRPCUrl;
   private static BitcoinJSONRPCClient bitcoinJSONRPCClient;
 
-  public void init() throws MalformedURLException {
+  public void init() {
     bitcoinJSONRPCClient = new BitcoinJSONRPCClient(jasonRPCUrl);
   }
 
