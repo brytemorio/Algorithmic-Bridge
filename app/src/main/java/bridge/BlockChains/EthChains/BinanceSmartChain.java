@@ -11,7 +11,7 @@ public final class BinanceSmartChain<T> extends EthBaseChain<T> {
     this.assetName = assetName;
     String assetConfigName = configObject.get("Blockchain.BinanceSmartChain.asset." + assetName);
 
-    super.setAsset(configObject.get("Blockchain.BinanceSmartChain.asset"));
+    // super.setAsset(configObject.get("Blockchain.BinanceSmartChain.asset"));
     super.setNetworkNode(configObject.get("Blockchain.BSC.node"));
     super.setNetwork(configObject.get("Blockchain.BSC.network"));
     super.setNetworkID(configObject.get("Blockchain.BSC.network_id"));

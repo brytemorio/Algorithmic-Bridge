@@ -2,7 +2,6 @@ package bridge.common;
 
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import com.electronwill.nightconfig.core.file.FileConfig;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -22,13 +21,16 @@ public final class ConfigObject {
     try {
 
       String manualConfigFilePath = System.getProperty("configfile");
-      URI configFileFromResources = readResourceConfigFile("config.json");
+      String configFileFromResources = readResourceConfigFile("config.json");
 
       if (manualConfigFilePath == null) {
+        log.info("Resource Json Config file: " + configFileFromResources);
         Path configFile = Paths.get(configFileFromResources);
+        System.out.println(configFile);
         FileConfig temp = FileConfig.of(configFile);
+        assert (temp == null);
         temp.load();
-        CONFIG = temp;
+        log.info(String.valueOf(temp));
 
       } else {
         Path manualConfigFile = Paths.get(manualConfigFilePath);
@@ -43,9 +45,9 @@ public final class ConfigObject {
 
   private ConfigObject() {}
 
-  private static URI readResourceConfigFile(String filename) throws URISyntaxException {
+  private static String readResourceConfigFile(String filename) throws URISyntaxException {
     return Objects.requireNonNull(
             ConfigObject.class.getClassLoader().getResource(filename), "File not Found")
-        .toURI();
+        .getPath();
   }
 }

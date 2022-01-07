@@ -3,17 +3,22 @@
  */
 package bridge;
 
-import bridge.common.ConfigObject;
-import com.electronwill.nightconfig.core.UnmodifiableConfig;
-import java.net.MalformedURLException;
-import java.util.Map;
 import lombok.extern.java.Log;
 
 @Log
 public class App {
-  public static void main(String[] args) throws MalformedURLException {
+  public static void main(String[] args) {
+
+    // UnmodifiableConfig configObject = ConfigObject.CONFIG;
+    int x = 200;
+    assert x > 1000;
+    // assert configObject == null : "The configObject is Null";
+
+    /*
     UnmodifiableConfig configObject = ConfigObject.CONFIG;
     Map<String, String> aa = (configObject.get("Blockchain.Waves.assets"));
     System.out.println(aa);
+
+     */
   }
 }

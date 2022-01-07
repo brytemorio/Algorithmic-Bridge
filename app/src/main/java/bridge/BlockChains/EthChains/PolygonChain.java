@@ -8,7 +8,7 @@ public final class PolygonChain extends EthBaseChain {
   private static final UnmodifiableConfig configObject = ConfigObject.CONFIG;
 
   public PolygonChain() throws MalformedURLException {
-    super.setAsset(configObject.get("Blockchain.Polygon.asset_name"));
+    // super.setAsset(configObject.get("Blockchain.Polygon.asset_name"));
     super.setNetworkNode(configObject.get("Blockchain.Polygon.node"));
     super.setNetwork(configObject.get("Blockchain.Polygon.network"));
     super.setNetworkID(configObject.get("Blockchain.Polygon.network_id"));

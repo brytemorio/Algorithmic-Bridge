@@ -1,7 +1,6 @@
 package bridge.BlockChains.EthChains;
 
 import bridge.common.IChainQueryService;
-import com.electronwill.nightconfig.core.Config;
 import java.util.List;
 import java.util.Map;
 import lombok.Data;
@@ -10,7 +9,7 @@ import org.web3j.protocol.Web3j;
 @Data
 public class EthBaseChain<T> implements IChainQueryService {
 
-  private Config asset;
+  // private Config asset;
   private String networkNode;
   private String network;
   private T networkID;
