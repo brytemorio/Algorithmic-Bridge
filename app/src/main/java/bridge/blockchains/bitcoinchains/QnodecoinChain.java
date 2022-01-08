@@ -1,4 +1,4 @@
-package bridge.BlockChains.BitcoinChains;
+package bridge.blockchains.bitcoinchains;
 
 import bridge.common.ConfigObject;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;

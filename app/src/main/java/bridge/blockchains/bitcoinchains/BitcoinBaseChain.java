@@ -1,4 +1,4 @@
-package bridge.BlockChains.BitcoinChains;
+package bridge.blockchains.bitcoinchains;
 
 import bridge.common.IChainQueryService;
 import com.electronwill.nightconfig.core.Config;
@@ -9,7 +9,7 @@ import wf.bitcoin.javabitcoindrpcclient.BitcoinJSONRPCClient;
 import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient;
 
 @Data
-public class BitcoinBaseChain implements IChainQueryService {
+class BitcoinBaseChain implements IChainQueryService {
   private Config asset;
   private String hostName;
   private int rpcPort;

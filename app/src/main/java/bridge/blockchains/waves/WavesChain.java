@@ -1,4 +1,4 @@
-package bridge.BlockChains.Waves;
+package bridge.blockchains.waves;
 
 import bridge.common.ConfigObject;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
