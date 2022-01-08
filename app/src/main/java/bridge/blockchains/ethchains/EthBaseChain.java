@@ -14,6 +14,7 @@ import org.web3j.protocol.http.HttpService;
 class EthBaseChain<K> implements IChainQueryService {
 
   @Setter(AccessLevel.PROTECTED)
+  @Getter(AccessLevel.PROTECTED)
   Config asset;
 
   @Setter(AccessLevel.PROTECTED)
@@ -53,7 +54,7 @@ class EthBaseChain<K> implements IChainQueryService {
     this.assetTicker = this.asset.get("ticker");
     this.transferFee = this.asset.get("transfer_fee");
     this.assetControlWallet = this.asset.get("wallet");
-    web3j = initWeb3j();
+    this.web3j = initWeb3j();
   }
 
   private Web3j initWeb3j() {

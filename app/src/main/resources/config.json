@@ -19,7 +19,7 @@
       "network": "testnet",
       "network_id": "T",
       "chain_identifier": "WAV",
-      "assets": {
+      "asset": {
         "qnodecoin": {
           "name": "Qnodecoin",
           "ticker": "QNC",

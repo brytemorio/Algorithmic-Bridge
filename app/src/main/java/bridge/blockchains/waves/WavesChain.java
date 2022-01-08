@@ -1,23 +1,28 @@
 package bridge.blockchains.waves;
 
 import bridge.common.ConfigObject;
+import bridge.exceptions.AssetNotFoundException;
+import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 
-public final class WavesChain extends WavesBaseChain {
+public final class WavesChain<K> extends WavesBaseChain<K> {
   private static final UnmodifiableConfig configObject = ConfigObject.CONFIG;
+  private String namedAsset;
 
-  public WavesChain() {
-    super.setAssetName(configObject.get("Blockchain.Waves.asset_name"));
-    super.setTickerSymbol(configObject.get("Blockchain.Waves.ticker_symbol"));
-    super.setNode(configObject.get("Blockchain.Waves.node"));
+  public WavesChain(String namedAsset) throws AssetNotFoundException {
+    Config temp = configObject.get("Blockchain.Waves.asset");
+    this.namedAsset = namedAsset;
+    if (temp.contains(this.namedAsset)) {
+      super.setAsset(configObject.get("Blockchain.Waves.asset" + "." + this.namedAsset));
+    } else {
+      throw new AssetNotFoundException(
+          String.format("Asset: %s, could not be found in the config file", namedAsset));
+    }
+
+    super.setNetworkNode(configObject.get("Blockchain.Waves.node"));
     super.setNetwork(configObject.get("Blockchain.Waves.network"));
-    super.setNetworkId(configObject.get("Blockchain.Waves.network_id"));
-    super.setPrivateKey(configObject.get("Blockchain.Waves.private_key"));
-    super.setPrivateKey(configObject.get("Blockchain.Waves.public_key"));
-    super.setControlWallet(configObject.get("Blockchain.Waves.control_wallet"));
-    super.setAssetId(configObject.get("Blockchain.Waves.asset_id"));
+    super.setNetworkID(configObject.get("Blockchain.Waves.network_id"));
     super.setChainIdentifier(configObject.get("Blockchain.Waves.chain_identifier"));
-    super.setTransferFee(configObject.get("Blockchain.Waves.transfer_fee"));
     super.init();
   }
 }

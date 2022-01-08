@@ -1,0 +1,23 @@
+
+g
+java:S3008"QRename this field "CONFIG" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Þ×ª¬
+Q	java:S125"<This block of commented-out lines of code should be removed.(Éæ‚
+H
+java:S1135"2Complete the task associated to this TODO comment.(Éæ‚
+S	java:S106+"9Replace this use of System.out or System.err by a logger.(×ëÊ—ûÿÿÿÿ
+H
+java:S1135*"2Complete the task associated to this TODO comment.(ÂåÙ›
+d
+java:S1128"NRemove this unused import 'com.electronwill.nightconfig.core.file.FileConfig'.(“‹‘Ó
+S
+java:S1128"8Remove this unused import 'java.net.URISyntaxException'.(Ä®íÿÿÿÿÿ
+I
+java:S1128".Remove this unused import 'java.util.HashMap'.(™˜”€ùÿÿÿÿ
+E
+java:S1128"*Remove this unused import 'java.util.Map'.(¼è½Òþÿÿÿÿ
+K
+java:S1128".Remove this unused import 'java.util.Objects'.(¼¸õ›8¢¡ÀÅã/
+h
+java:S1104"RMake CONFIG a static final constant or non-public and provide accessors if needed.(Þ×ª¬
+B
+java:S1444",Make this "public static CONFIG" field final(Þ×ª¬

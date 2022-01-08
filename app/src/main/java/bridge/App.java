@@ -4,24 +4,22 @@
 package bridge;
 
 import bridge.blockchains.ethchains.BinanceSmartChain;
-
 import bridge.blockchains.ethchains.PolygonChain;
-import bridge.common.ConfigObject;
+import bridge.blockchains.waves.WavesChain;
 import bridge.exceptions.AssetNotFoundException;
-import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import lombok.extern.java.Log;
-
-import java.util.logging.Level;
-
 
 @Log
 public class App {
   public static void main(String[] args) throws AssetNotFoundException {
-     //UnmodifiableConfig config = ConfigObject.CONFIG;
-      PolygonChain<?> polygonChain = new PolygonChain<>("fishfactory_p");
-      BinanceSmartChain<?> binanceSmartChain = new BinanceSmartChain<>("qnode_defi");
-      System.out.println(polygonChain.getNetworkNode());
-      System.out.println(binanceSmartChain.getChainIdentifier());
-      System.out.println(binanceSmartChain.getAssetName());
+    PolygonChain<?> polygonChain = new PolygonChain<>("fishfactory_p");
+    BinanceSmartChain<?> binanceSmartChain = new BinanceSmartChain<>("qnode_defi");
+    WavesChain<?> fishfactoryP = new WavesChain<>("fishfactory_p");
+    WavesChain<?> qnodecoinCoin = new WavesChain<>("qnodecoin");
+
+    System.out.println(qnodecoinCoin.getNetworkID().getClass());
+    System.out.println(polygonChain.getNetworkNode());
+    System.out.println(binanceSmartChain.getChainIdentifier());
+    System.out.println(binanceSmartChain.getAssetName());
   }
 }
