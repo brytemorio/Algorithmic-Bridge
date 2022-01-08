@@ -22,6 +22,6 @@ public final class BinanceSmartChain<K> extends EthBaseChain<K> {
     super.setNetwork(configObject.get("Blockchain.BinanceSmartChain.network"));
     super.setNetworkID(configObject.get("Blockchain.BinanceSmartChain.network_id"));
     super.setChainIdentifier(configObject.get("Blockchain.BinanceSmartChain.chain_identifier"));
-    super.init(super.getAsset());
+    super.init();
   }
 }

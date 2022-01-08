@@ -47,13 +47,12 @@ class EthBaseChain<K> implements IChainQueryService {
   @Getter(AccessLevel.NONE)
   private Web3j web3j;
 
-  public void init(Config asset) {
-    this.asset = asset;
-    this.assetID = asset.get("asset_id");
-    this.assetName = asset.get("name");
-    this.assetTicker = asset.get("ticker");
-    this.transferFee = asset.get("transfer_fee");
-    this.assetControlWallet = asset.get("wallet");
+  public void init() {
+    this.assetID = this.asset.get("asset_id");
+    this.assetName = this.asset.get("name");
+    this.assetTicker = this.asset.get("ticker");
+    this.transferFee = this.asset.get("transfer_fee");
+    this.assetControlWallet = this.asset.get("wallet");
     web3j = initWeb3j();
   }
 
