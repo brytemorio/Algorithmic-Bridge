@@ -2,14 +2,13 @@ package bridge.blockchains.ethchains;
 
 import bridge.common.IChainQueryService;
 import com.electronwill.nightconfig.core.Config;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
-
-import java.util.List;
 
 @Data
 class EthBaseChain<K> implements IChainQueryService {
