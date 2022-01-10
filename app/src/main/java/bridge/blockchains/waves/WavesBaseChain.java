@@ -1,11 +1,10 @@
 package bridge.blockchains.waves;
 
 import bridge.common.BaseChainInterface;
-import bridge.exceptions.Chain;
 import com.electronwill.nightconfig.core.Config;
-import java.net.MalformedURLException;
 import java.util.List;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
 class WavesBaseChain<K> implements BaseChainInterface {
@@ -52,9 +51,21 @@ class WavesBaseChain<K> implements BaseChainInterface {
 
   @Override
   @SneakyThrows
-  public void establishNodeConnection(String networkNode)
-      throws Chain.ChainNodeException, MalformedURLException {
-    BaseChainInterface.super.establishNodeConnection(networkNode);
+  public Config getNodeResponse(String nodeEndpoint) {
+    String fullRPCQueryPath;
+    if (networkNode.endsWith("/")) {
+      if (nodeEndpoint.startsWith("/")) {
+        fullRPCQueryPath = StringUtils.chop(networkNode) + nodeEndpoint;
+      } else {
+        fullRPCQueryPath = networkNode + nodeEndpoint;
+      }
+    } else if (!networkNode.endsWith("/") || !nodeEndpoint.startsWith("/")) {
+      fullRPCQueryPath = networkNode + "/" + nodeEndpoint;
+    } else {
+      fullRPCQueryPath = networkNode + nodeEndpoint;
+    }
+    // String fullRPCQueryPath = networkNode.st + nodeEndpoint;
+    return BaseChainInterface.super.getNodeResponse(fullRPCQueryPath);
   }
 
   @Override

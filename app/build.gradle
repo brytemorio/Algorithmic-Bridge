@@ -25,6 +25,8 @@ sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+
+
 }
 
 dependencies {
@@ -33,7 +35,8 @@ dependencies {
     implementation 'com.lmax:disruptor:3.4.4'
     implementation 'org.agrona:agrona:1.14.0'
 
-    //implementation 'org.aeonbits.owner:owner:1.0.12'
+    implementation 'org.aeonbits.owner:owner:1.0.12'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'wf.bitcoin:bitcoin-rpc-client:1.1.0'
     implementation 'com.electronwill.night-config:json:3.6.5'
     compileOnly 'org.projectlombok:lombok:1.18.22'

@@ -11,8 +11,8 @@ public class Chain {
   }
 
   public static class ChainNodeException extends Exception {
-    public ChainNodeException(String msg) {
-      super(msg);
+    public ChainNodeException(String msg, int statusCode, String info) {
+      super(msg + " " + statusCode + " " + info + " ");
     }
   }
 
