@@ -19,6 +19,6 @@ public class App {
     // WavesChain<?> fishfactoryP = new WavesChain<>("fishfactory_p");
     WavesChain<?> qnodecoinCoin = new WavesChain<>("qnodecoin");
 
-    Config x = qnodecoinCoin.getNodeResponse("blocks/at/" + Integer.toString(12345));
+    Config x = qnodecoinCoin.getNodeResponse("blockss/at/" + Integer.toString(12345));
   }
 }

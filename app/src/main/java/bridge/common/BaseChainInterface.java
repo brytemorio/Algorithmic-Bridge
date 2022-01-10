@@ -1,23 +1,17 @@
 package bridge.common;
 
 import static bridge.exceptions.Chain.ChainNodeException;
-import static java.net.http.HttpResponse.*;
+import static java.net.http.HttpResponse.BodyHandlers;
 
 import com.electronwill.nightconfig.core.Config;
-import com.electronwill.nightconfig.core.ConfigFormat;
-import com.electronwill.nightconfig.core.io.ConfigParser;
-import com.electronwill.nightconfig.json.JsonFormat;
-import java.io.*;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
 
 public interface BaseChainInterface {
   void init();
@@ -49,16 +43,23 @@ public interface BaseChainInterface {
       HttpRequest request =
           HttpRequest.newBuilder(node.toURI()).header("Accept", "application/json").build();
       HttpClient client = HttpClient.newBuilder().build();
-      HttpResponse<Supplier<Config>> response =
-          client.send(request, new JsonRepsonseHandler(Config.class));
+      HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
       if (200 != response.statusCode())
         throw new ChainNodeException(
-            response.uri().toString(), response.statusCode(), response.body().get().toString());
-      return response.body().get();
+            response.uri().toString(), response.statusCode(), response.body());
+
+      /* HttpResponse<Supplier<Config>> response =
+           client.send(request, new JsonRepsonseHandler(Config.class));
+       if (200 != response.statusCode())
+         throw new ChainNodeException(
+             response.uri().toString(), response.statusCode(), response.body().get().toString());
+       return response.body().get();
+      */
     }
     return null;
   }
 
+  /*
   class JsonRepsonseHandler implements BodyHandler<Supplier<Config>> {
     private Class<Config> responseType;
 
@@ -85,15 +86,14 @@ public interface BaseChainInterface {
           Charset charset = StandardCharsets.ISO_8859_1;
           ConfigFormat<Config> jsonFormat = JsonFormat.fancyInstance();
           ConfigParser<Config> jsonParser = jsonFormat.createParser();
-          // InputStreamReader inputStreamReader= new InputStreamReader(inputStream1);
-          // BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-          // bufferedReader.lines().forEach(System.out::println);
           return jsonParser.parse(inputStream1);
 
         } catch (IOException e) {
           throw new UncheckedIOException(e);
+        } catch (ParsingException e) {
+          throw new RuntimeException(e);
         }
       };
     }
-  }
+  } */
 }
