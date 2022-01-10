@@ -2,12 +2,12 @@ package bridge.blockchains.waves;
 
 import static bridge.exceptions.Chain.*;
 
-import bridge.common.ConfigObject;
+import bridge.common.ConfigFileObj;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 
 public final class WavesChain<K> extends WavesBaseChain<K> {
-  private static final UnmodifiableConfig configObject = ConfigObject.CONFIG;
+  private static final UnmodifiableConfig configObject = ConfigFileObj.CONFIG;
   private String namedAsset;
 
   public WavesChain(String namedAsset) throws AssetNotFoundException {

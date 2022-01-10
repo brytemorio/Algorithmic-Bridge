@@ -9,5 +9,3 @@ X
 app/build.gradle,f/4/f4a01d6a4fcb971362ec00a83903fd3902f52164
 a
 1app/src/main/java/bridge/common/BridgeLogger.java,1/c/1c9f2987626887a2c4bb528f8615a0740d13223b
-a
-1app/src/main/java/bridge/common/ConfigObject.java,f/b/fb81a776d7628a34bce82cfa3246bbff224486d8

@@ -1,8 +1,6 @@
 package bridge;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import bridge.common.ConfigObject;
+import bridge.common.ConfigFileObj;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.Test;
@@ -13,7 +11,7 @@ public class AppTest implements WithAssertions {
   @Test
   @DisplayName("ConfigObject: Null Test")
   public void configObjNotNull() {
-    UnmodifiableConfig configObject = ConfigObject.CONFIG;
+    UnmodifiableConfig configObject = ConfigFileObj.CONFIG;
     assertThat(configObject).isNotNull();
   }
 }

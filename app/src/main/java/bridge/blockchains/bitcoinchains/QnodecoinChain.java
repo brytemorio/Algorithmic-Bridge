@@ -1,6 +1,6 @@
 package bridge.blockchains.bitcoinchains;
 
-import bridge.common.ConfigObject;
+import bridge.common.ConfigFileObj;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -9,7 +9,7 @@ import lombok.extern.java.Log;
 @Log
 public final class QnodecoinChain extends BitcoinBaseChain {
 
-  private static final UnmodifiableConfig configObject = ConfigObject.CONFIG;
+  private static final UnmodifiableConfig configObject = ConfigFileObj.CONFIG;
 
   public QnodecoinChain() throws MalformedURLException {
     super.setAsset(configObject.get("Blockchain.Qnodecoin.asset"));

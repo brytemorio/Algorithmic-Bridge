@@ -2,12 +2,12 @@ package bridge.blockchains.ethchains;
 
 import static bridge.exceptions.Chain.*;
 
-import bridge.common.ConfigObject;
+import bridge.common.ConfigFileObj;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 
 public final class BinanceSmartChain<K> extends EthBaseChain<K> {
-  private static final UnmodifiableConfig configObject = ConfigObject.CONFIG;
+  private static final UnmodifiableConfig configObject = ConfigFileObj.CONFIG;
   private String namedAsset;
 
   public BinanceSmartChain(String namedAsset) throws AssetNotFoundException {

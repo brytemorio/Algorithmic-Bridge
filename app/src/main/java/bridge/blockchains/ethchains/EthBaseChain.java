@@ -1,6 +1,6 @@
 package bridge.blockchains.ethchains;
 
-import bridge.common.IChainQueryService;
+import bridge.common.BaseChainInterface;
 import com.electronwill.nightconfig.core.Config;
 import java.util.List;
 import lombok.AccessLevel;
@@ -11,7 +11,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
 
 @Data
-class EthBaseChain<K> implements IChainQueryService {
+class EthBaseChain<K> implements BaseChainInterface {
 
   @Setter(AccessLevel.PROTECTED)
   @Getter(AccessLevel.PROTECTED)
@@ -63,17 +63,17 @@ class EthBaseChain<K> implements IChainQueryService {
 
   @Override
   public <T> List<T> getTrxOfBlockAtHeight(int height) {
-    return IChainQueryService.super.getTrxOfBlockAtHeight(height);
+    return BaseChainInterface.super.getTrxOfBlockAtHeight(height);
   }
 
   @Override
   public String getTrxByID(String trxID) {
-    return IChainQueryService.super.getTrxByID(trxID);
+    return BaseChainInterface.super.getTrxByID(trxID);
   }
 
   @Override
   public <T> T getTrxHash(int blockHeight) {
-    return IChainQueryService.super.getTrxHash(blockHeight);
+    return BaseChainInterface.super.getTrxHash(blockHeight);
   }
 
   @Override

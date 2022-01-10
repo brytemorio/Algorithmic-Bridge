@@ -1,6 +1,6 @@
 package bridge.blockchains.bitcoinchains;
 
-import bridge.common.IChainQueryService;
+import bridge.common.BaseChainInterface;
 import com.electronwill.nightconfig.core.Config;
 import java.net.URL;
 import java.util.List;
@@ -9,7 +9,7 @@ import wf.bitcoin.javabitcoindrpcclient.BitcoinJSONRPCClient;
 import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient;
 
 @Data
-class BitcoinBaseChain implements IChainQueryService {
+class BitcoinBaseChain implements BaseChainInterface {
   private Config asset;
   private String hostName;
   private int rpcPort;
@@ -28,7 +28,7 @@ class BitcoinBaseChain implements IChainQueryService {
 
   @Override
   public <T> List<T> getTrxOfBlockAtHeight(int height) {
-    return IChainQueryService.super.getTrxOfBlockAtHeight(height);
+    return BaseChainInterface.super.getTrxOfBlockAtHeight(height);
   }
 
   @Override
@@ -40,7 +40,7 @@ class BitcoinBaseChain implements IChainQueryService {
 
   @Override
   public <T> T getTrxHash(int blockHeight) {
-    return IChainQueryService.super.getTrxHash(blockHeight);
+    return BaseChainInterface.super.getTrxHash(blockHeight);
   }
 
   @Override

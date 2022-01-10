@@ -1,15 +1,14 @@
 package bridge.blockchains.waves;
 
-import bridge.common.IChainQueryService;
+import bridge.common.BaseChainInterface;
+import bridge.exceptions.Chain;
 import com.electronwill.nightconfig.core.Config;
+import java.net.MalformedURLException;
 import java.util.List;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Data
-class WavesBaseChain<K> implements IChainQueryService {
+class WavesBaseChain<K> implements BaseChainInterface {
 
   @Setter(AccessLevel.PROTECTED)
   private String networkNode;
@@ -42,6 +41,7 @@ class WavesBaseChain<K> implements IChainQueryService {
   @Setter(AccessLevel.NONE)
   private double transferFee;
 
+  @Override
   public void init() {
     this.assetID = this.asset.get("asset_id");
     this.assetName = this.asset.get("name");
@@ -51,18 +51,25 @@ class WavesBaseChain<K> implements IChainQueryService {
   }
 
   @Override
+  @SneakyThrows
+  public void establishNodeConnection(String networkNode)
+      throws Chain.ChainNodeException, MalformedURLException {
+    BaseChainInterface.super.establishNodeConnection(networkNode);
+  }
+
+  @Override
   public <T> List<T> getTrxOfBlockAtHeight(int height) {
-    return IChainQueryService.super.getTrxOfBlockAtHeight(height);
+    return BaseChainInterface.super.getTrxOfBlockAtHeight(height);
   }
 
   @Override
   public String getTrxByID(String trxID) {
-    return IChainQueryService.super.getTrxByID(trxID);
+    return BaseChainInterface.super.getTrxByID(trxID);
   }
 
   @Override
   public <T> T getTrxHash(int blockHeight) {
-    return IChainQueryService.super.getTrxHash(blockHeight);
+    return BaseChainInterface.super.getTrxHash(blockHeight);
   }
 
   @Override
