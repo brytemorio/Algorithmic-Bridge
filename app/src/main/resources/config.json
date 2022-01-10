@@ -2,9 +2,9 @@
   "Blockchain": {
     "Qnodecoin": {
       "host": "127.0.0.1",
-      "rpc_user": "orion",
+      "rpc_user": "southerner",
       "rpc_port": 20611,
-      "rpc_password": "orion.net",
+      "rpc_password": "southern_light",
       "network": "mainnet",
       "chain_identifier": "QCN",
       "control_wallet": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
@@ -15,7 +15,7 @@
       }
     },
     "Waves": {
-      "node": "waves-node",
+      "node": "https://nodes-testnet.wavesnodes.com/",
       "network": "testnet",
       "network_id": "T",
       "chain_identifier": "WAV",
@@ -23,29 +23,29 @@
         "qnodecoin": {
           "name": "Qnodecoin",
           "ticker": "QNC",
-          "asset_id": "asset-id",
+          "asset_id": "MFW1SBXgPYxP32RfmDFkHQ3N7sGzU7YEAeUBYBxrJeC",
           "transfer_fee": 0.00001,
           "wallet": {
-            "private_key": "private-key",
-            "public_key": "public-key"
+            "private_key": "F2Lb67ooGdS2UiXU2PkdFZEhRv18PKX2NqoDMd1BNg9s",
+            "public_key": "HnHMx5Dbnd9ikFacnXBr79nHBNAzRgxtDz3QZmLPNaQN"
           }
         },
         "fishfactory_p": {
           "name": "Fishfactory P",
           "ticker": "XFP",
-          "asset_id": "asset-id",
+          "asset_id": "51x7v7eg4aRzzeDTnR2CcMyrTprDyDt9sYCGcZJ6Xpp3",
           "transfer_fee": 0.00001,
           "wallet": {
-            "private_key": "private-key",
-            "public_key": "public-key"
+            "private_key": "F2Lb67ooGdS2UiXU2PkdFZEhRv18PKX2NqoDMd1BNg9s",
+            "public_key": "HnHMx5Dbnd9ikFacnXBr79nHBNAzRgxtDz3QZmLPNaQN"
           }
         }
       }
     },
     "Polygon": {
-      "node": "node",
-      "network": "network",
-      "network_id": 2324,
+      "node": "https://polygon-mumbai.g.alchemy.com/v2/IBNmC1qkZLhf_erKYMZU4flSAlFGfXpc",
+      "network": "testnet",
+      "network_id": 80001,
       "chain_identifier": "PLY",
       "asset": {
         "fishfactory_p": {
@@ -54,26 +54,26 @@
           "asset_id": "asset-id",
           "transfer_fee": 0.00001,
           "wallet": {
-            "private_key": "private-key",
-            "public_key": "public-key"
+            "private_key": "09856de4c8f218ffe18c229afd04235be11958358bdd0aaea128f6bbb4bdc77c",
+            "public_key": "0x96E47ED942a933484d79DC8A6F447FCDB6966c97"
           }
         }
       }
     },
     "BinanceSmartChain": {
-      "node": "node",
-      "network": "network",
-      "network_id": "network_id",
+      "node": "https://data-seed-prebsc-1-s1.binance.org:8545",
+      "network": "testnet",
+      "network_id": 97,
       "chain_identifier": "BSC",
       "asset": {
         "qnode_defi": {
           "name": "Qnode.Defi",
           "ticker": "QND",
-          "asset_id": "asset-id",
+          "asset_id": "0x34f1BD5aBC180df218631278a249d7C606B2E89d",
           "transfer_fee": 0.00001,
           "wallet": {
-            "private_key": "private-key",
-            "public_key": "public-key"
+            "private_key": "09856de4c8f218ffe18c229afd04235be11958358bdd0aaea128f6bbb4bdc77c",
+            "public_key": "0x96E47ED942a933484d79DC8A6F447FCDB6966c97"
           }
         }
       }

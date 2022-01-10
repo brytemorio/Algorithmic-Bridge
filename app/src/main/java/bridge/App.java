@@ -3,19 +3,22 @@
  */
 package bridge;
 
+import static bridge.exceptions.Chain.*;
+
 import bridge.blockchains.ethchains.BinanceSmartChain;
 import bridge.blockchains.ethchains.PolygonChain;
 import bridge.blockchains.waves.WavesChain;
-import bridge.exceptions.AssetNotFoundException;
 import lombok.extern.java.Log;
 
 @Log
 public class App {
+
   public static void main(String[] args) throws AssetNotFoundException {
+
     PolygonChain<?> polygonChain = new PolygonChain<>("fishfactory_p");
     BinanceSmartChain<?> binanceSmartChain = new BinanceSmartChain<>("qnode_defi");
     WavesChain<?> fishfactoryP = new WavesChain<>("fishfactory_p");
-    WavesChain<?> qnodecoinCoin = new WavesChain<>("qnodecoin");
+    WavesChain<?> qnodecoinCoin = new WavesChain<>("qnodecoinx");
 
     System.out.println(qnodecoinCoin.getNetworkID().getClass());
     System.out.println(polygonChain.getNetworkNode());

@@ -5,15 +5,9 @@ A
 gradle.properties,2/a/2afbb999f001938c88fa43fc2ef52abf0f8213e4
 X
 (gradle/wrapper/gradle-wrapper.properties,f/b/fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
-x
-Happ/src/main/java/bridge/blockchains/bitcoinchains/BitcoinBaseChain.java,1/b/1b1197feb996143beb002cc307a82b0b894724ef
 @
 app/build.gradle,f/4/f4a01d6a4fcb971362ec00a83903fd3902f52164
 a
 1app/src/main/java/bridge/common/BridgeLogger.java,1/c/1c9f2987626887a2c4bb528f8615a0740d13223b
-o
-?app/src/main/java/bridge/exceptions/AssetNotFoundException.java,7/b/7b0786e7efbca6087fd47d7e921335521fff087b
-p
-@app/src/main/java/bridge/blockchains/ethchains/PolygonChain.java,7/e/7ec86768d390ac322fbd0b6f56cbe4ab37ced065
 a
 1app/src/main/java/bridge/common/ConfigObject.java,f/b/fb81a776d7628a34bce82cfa3246bbff224486d8

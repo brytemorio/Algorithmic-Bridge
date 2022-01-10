@@ -1,7 +1,8 @@
 package bridge.blockchains.waves;
 
+import static bridge.exceptions.Chain.*;
+
 import bridge.common.ConfigObject;
-import bridge.exceptions.AssetNotFoundException;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 
