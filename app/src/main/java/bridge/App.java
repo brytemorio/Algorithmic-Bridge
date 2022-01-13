@@ -5,20 +5,20 @@ package bridge;
 
 import static bridge.exceptions.Chain.*;
 
-import bridge.blockchains.waves.WavesChain;
-import com.electronwill.nightconfig.core.Config;
-import lombok.extern.java.Log;
+import bridge.blockchains.bitcoinchains.QnodecoinChainI;
+import bridge.blockchains.ethchains.BinanceSmartChainI;
+import bridge.blockchains.ethchains.PolygonChainI;
+import bridge.common.TransactionModels.*;
+import lombok.extern.slf4j.Slf4j;
 
-@Log
+@Slf4j
 public class App {
 
-  public static void main(String[] args) throws AssetNotFoundException {
+  public static void main(String[] args) throws Exception {
 
-    // PolygonChain<?> polygonChain = new PolygonChain<>("fishfactory_p");
-    // BinanceSmartChain<?> binanceSmartChain = new BinanceSmartChain<>("qnode_defi");
-    // WavesChain<?> fishfactoryP = new WavesChain<>("fishfactory_p");
-    WavesChain<?> qnodecoinCoin = new WavesChain<>("qnodecoin");
-
-    Config x = qnodecoinCoin.getNodeResponse("blockss/at/" + Integer.toString(12345));
+    BinanceSmartChainI<?> qnodecoin = new BinanceSmartChainI<>("qnode_defi");
+    QnodecoinChainI qnodecoinChainI = new QnodecoinChainI();
+    PolygonChainI<?> fishfactory = new PolygonChainI<>("fishfactory_p");
+    log.info(qnodecoinChainI.getBlockHeight().toString());
   }
 }

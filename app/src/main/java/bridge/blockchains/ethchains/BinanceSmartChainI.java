@@ -6,11 +6,11 @@ import bridge.common.ConfigFileObj;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 
-public final class BinanceSmartChain<K> extends EthBaseChain<K> {
+public final class BinanceSmartChainI<K> extends EthIBaseChain<K> {
   private static final UnmodifiableConfig configObject = ConfigFileObj.CONFIG;
   private String namedAsset;
 
-  public BinanceSmartChain(String namedAsset) throws AssetNotFoundException {
+  public BinanceSmartChainI(String namedAsset) throws AssetNotFoundException {
     Config temp = configObject.get("Blockchain.BinanceSmartChain.asset");
     this.namedAsset = namedAsset;
     if (temp.contains(this.namedAsset)) {

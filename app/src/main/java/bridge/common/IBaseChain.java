@@ -3,18 +3,22 @@ package bridge.common;
 import static bridge.exceptions.Chain.ChainNodeException;
 import static java.net.http.HttpResponse.BodyHandlers;
 
-import com.electronwill.nightconfig.core.Config;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.net.http.WebSocket;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
-public interface BaseChainInterface {
+public interface IBaseChain {
   void init();
+
+  <T> T getBlockHeight();
 
   default <T> List<T> getTrxOfBlockAtHeight(int height) {
     return Collections.emptyList();
@@ -24,46 +28,45 @@ public interface BaseChainInterface {
     return null;
   }
 
-  default <T> T getTrxHash(int blockHeight) {
-    return null;
+  default <T> List<T> getTrxHash(int blockHeight) {
+    return Collections.emptyList();
   }
 
   default boolean validateAddress(String address) {
     return false;
   }
 
-  default Config getNodeResponse(String nodeEndpoint)
-      throws ChainNodeException, IOException, URISyntaxException, InterruptedException {
+  default String getNodeResponse(String nodeEndpoint)
+      throws ChainNodeException, IOException, URISyntaxException, InterruptedException,
+          ExecutionException {
     URL node = new URL(nodeEndpoint);
-
     String protocol = node.getProtocol();
-    if ("wss".equals(protocol) || "ws".equals(protocol)) {
-      // TODO: implement websocket handling logic here
-    } else {
-      HttpRequest request =
-          HttpRequest.newBuilder(node.toURI()).header("Accept", "application/json").build();
-      HttpClient client = HttpClient.newBuilder().build();
-      HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-      if (200 != response.statusCode())
-        throw new ChainNodeException(
-            response.uri().toString(), response.statusCode(), response.body());
+    HttpRequest request =
+        HttpRequest.newBuilder(node.toURI()).header("Accept", "application/json").build();
+    HttpResponse<String> response;
 
-      /* HttpResponse<Supplier<Config>> response =
-           client.send(request, new JsonRepsonseHandler(Config.class));
-       if (200 != response.statusCode())
-         throw new ChainNodeException(
-             response.uri().toString(), response.statusCode(), response.body().get().toString());
-       return response.body().get();
-      */
+    if ("wss".equals(protocol) || "ws".equals(protocol)) {
+      HttpClient webSocket = HttpClient.newHttpClient();
+      WebSocket.Listener listener = new WebSocket.Listener() {};
+      WebSocket.Builder wsBuilder = webSocket.newWebSocketBuilder();
+      CompletableFuture<WebSocket> wsClient = wsBuilder.buildAsync(node.toURI(), listener);
+      return wsClient.get().toString();
+
+    } else {
+      HttpClient client = HttpClient.newBuilder().build();
+      response = client.send(request, BodyHandlers.ofString());
     }
-    return null;
+    if (200 != response.statusCode())
+      throw new ChainNodeException(
+          response.uri().toString(), response.statusCode(), response.body().toString());
+    return response.body();
   }
 
   /*
-  class JsonRepsonseHandler implements BodyHandler<Supplier<Config>> {
+  class JsonresponseHandler implements BodyHandler<Supplier<Config>> {
     private Class<Config> responseType;
 
-    public JsonRepsonseHandler(Class<Config> responseType) {
+    public JsonresponseHandler(Class<Config> responseType) {
       this.responseType = responseType;
     }
 
@@ -96,4 +99,6 @@ public interface BaseChainInterface {
       };
     }
   } */
+
+  class JsonWebSocketListener implements WebSocket.Listener {}
 }

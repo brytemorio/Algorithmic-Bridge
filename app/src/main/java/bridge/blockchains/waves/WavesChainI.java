@@ -6,11 +6,11 @@ import bridge.common.ConfigFileObj;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 
-public final class WavesChain<K> extends WavesBaseChain<K> {
+public final class WavesChainI<K> extends WavesIBaseChain<K> {
   private static final UnmodifiableConfig configObject = ConfigFileObj.CONFIG;
   private String namedAsset;
 
-  public WavesChain(String namedAsset) throws AssetNotFoundException {
+  public WavesChainI(String namedAsset) throws AssetNotFoundException {
     Config temp = configObject.get("Blockchain.Waves.asset");
     this.namedAsset = namedAsset;
     if (temp.contains(this.namedAsset)) {

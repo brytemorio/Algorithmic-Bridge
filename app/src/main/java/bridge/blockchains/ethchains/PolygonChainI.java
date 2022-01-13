@@ -6,10 +6,10 @@ import bridge.common.ConfigFileObj;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 
-public final class PolygonChain<K> extends EthBaseChain<K> {
+public final class PolygonChainI<K> extends EthIBaseChain<K> {
   private static final UnmodifiableConfig configObject = ConfigFileObj.CONFIG;
 
-  public PolygonChain(String namedAsset) throws AssetNotFoundException {
+  public PolygonChainI(String namedAsset) throws AssetNotFoundException {
     String innerNamedAsset;
     Config temp = configObject.get("Blockchain.Polygon.asset");
     if (temp.contains(namedAsset)) {

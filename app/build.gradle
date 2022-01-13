@@ -17,7 +17,6 @@ plugins {
 }
 
 defaultTasks 'run'
-
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
 
 
@@ -35,8 +34,11 @@ dependencies {
     implementation 'com.lmax:disruptor:3.4.4'
     implementation 'org.agrona:agrona:1.14.0'
 
-    implementation 'org.aeonbits.owner:owner:1.0.12'
+    //implementation 'org.aeonbits.owner:owner:1.0.12'
+    //implementation 'co.paralleluniverse:quasar-core:0.8.0'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'io.undertow:undertow-servlet:2.2.14.Final'
+    implementation 'io.undertow:undertow-core:2.2.14.Final'
     implementation 'wf.bitcoin:bitcoin-rpc-client:1.1.0'
     implementation 'com.electronwill.night-config:json:3.6.5'
     compileOnly 'org.projectlombok:lombok:1.18.22'

@@ -43,7 +43,7 @@
       }
     },
     "Polygon": {
-      "node": "https://polygon-mumbai.g.alchemy.com/v2/IBNmC1qkZLhf_erKYMZU4flSAlFGfXpc",
+      "node": "wss://polygon-mumbai.g.alchemy.com/v2/IBNmC1qkZLhf_erKYMZU4flSAlFGfXpc",
       "network": "testnet",
       "network_id": 80001,
       "chain_identifier": "PLY",
@@ -61,7 +61,7 @@
       }
     },
     "BinanceSmartChain": {
-      "node": "https://data-seed-prebsc-1-s1.binance.org:8545",
+      "node": "wssds://bsc-ws-node.nariox.org:443",
       "network": "testnet",
       "network_id": 97,
       "chain_identifier": "BSC",

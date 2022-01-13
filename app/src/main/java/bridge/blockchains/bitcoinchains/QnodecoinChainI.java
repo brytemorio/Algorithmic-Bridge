@@ -7,11 +7,11 @@ import java.net.URL;
 import lombok.extern.java.Log;
 
 @Log
-public final class QnodecoinChain extends BitcoinBaseChain {
+public final class QnodecoinChainI extends BitcoinIBaseChain {
 
   private static final UnmodifiableConfig configObject = ConfigFileObj.CONFIG;
 
-  public QnodecoinChain() throws MalformedURLException {
+  public QnodecoinChainI() throws MalformedURLException {
     super.setAsset(configObject.get("Blockchain.Qnodecoin.asset"));
     super.setNetwork(configObject.get("Blockchain.Qnodecoin.network"));
     super.setHostName(configObject.get("Blockchain.Qnodecoin.host"));
