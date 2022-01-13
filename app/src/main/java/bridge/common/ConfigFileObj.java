@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import lombok.extern.slf4j.Slf4j;
 
-/** @author Bryte Morio */
 // TODO: Replace @Slf4j with a properly configured logger class;
 @Slf4j
 public final class ConfigFileObj {

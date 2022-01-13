@@ -5,10 +5,11 @@ package bridge;
 
 import static bridge.exceptions.Chain.*;
 
-import bridge.blockchains.bitcoinchains.QnodecoinChainI;
-import bridge.blockchains.ethchains.BinanceSmartChainI;
-import bridge.blockchains.ethchains.PolygonChainI;
 import bridge.common.TransactionModels.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -16,9 +17,13 @@ public class App {
 
   public static void main(String[] args) throws Exception {
 
-    BinanceSmartChainI<?> qnodecoin = new BinanceSmartChainI<>("qnode_defi");
-    QnodecoinChainI qnodecoinChainI = new QnodecoinChainI();
-    PolygonChainI<?> fishfactory = new PolygonChainI<>("fishfactory_p");
-    log.info(qnodecoinChainI.getBlockHeight().toString());
+    // BinanceSmartChainI<?> qnodecoin = new BinanceSmartChainI<>("qnode_defi");
+    // QnodecoinChainI qnodecoinChainI = new QnodecoinChainI();
+    // PolygonChainI<?> fishfactory = new PolygonChainI<>("fishfactory_p");
+    // log.info(qnodecoinChainI.getBlockHeight().toString());
+    ZonedDateTime time;
+    ZoneId zoneId = ZoneId.of("Etc/Zulu");
+    var zoneDatTime = ZonedDateTime.of(LocalDateTime.now(), zoneId);
+    log.info(zoneDatTime.format(DateTimeFormatter.RFC_1123_DATE_TIME));
   }
 }
