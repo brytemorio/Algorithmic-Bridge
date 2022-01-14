@@ -185,14 +185,46 @@ public class TransactionModels {
       this.tries = tries;
     }
 
-    public void hasCompleted(TransactionAttempt attempt, String transactionID) {
+    /**
+     * marks the next transaction attempt in the list of transactions to be handled as completed,
+     * once the transaction has been successful handled
+     *
+     * @param attempt The list of transactions to be handled
+     * @param transactionID The corresponding transaction ID for each transaction in list
+     */
+    public void markAsCompleted(TransactionAttempt attempt, String transactionID) {
       // TODO: Implementation details later
     }
 
+    /**
+     * Increments the retry counter for a failing transaction until the maximum number of retries is
+     * reached, at which point the transaction is abandoned and stored as a failed transaction in
+     * the transaction history.
+     */
     public void incrementRetries() {
       tries = tries + 1;
       ZoneId zoneId = ZoneId.of("Etc/Zulu");
       lastModifiedOn.of(LocalDateTime.now(), zoneId).format(DateTimeFormatter.RFC_1123_DATE_TIME);
+    }
+
+    /**
+     * Retrieve the next transaction from the list of transactions to be handled.
+     *
+     * @return TransactionAttempt
+     */
+    public TransactionAttempt nextIncompleteAttempt() {
+      // : TODO: Implementation detatils for later
+      return null;
+    }
+
+    /**
+     * checks if the current batch of transactions has all been handled
+     *
+     * @return true|false
+     */
+    public boolean hasCompleted() {
+      // : Todo: Implementation details for later
+      return true;
     }
   }
 }
