@@ -20,8 +20,8 @@ public interface IBaseChain {
 
   <T> T getBlockHeight();
 
-  default <T> List<T> getTrxOfBlockAtHeight(int height) {
-    return Collections.emptyList();
+  default <T> T getTrxOfBlockAtHeight(int height) {
+    return null;
   }
 
   default String getTrxByID(String trxID) {

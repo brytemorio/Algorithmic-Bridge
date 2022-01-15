@@ -31,8 +31,7 @@ public final class ConfigFileObj {
         CONFIG = jsonParser.parse(manualConfigFile, FileNotFoundAction.THROW_ERROR, CHARSET);
       }
     } catch (Exception exp) {
-      // TODO: Replace with a logger
-      System.out.println(exp);
+      log.trace(String.valueOf(exp));
     }
   }
 

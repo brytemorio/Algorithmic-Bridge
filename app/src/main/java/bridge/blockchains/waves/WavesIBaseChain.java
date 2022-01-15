@@ -2,6 +2,7 @@ package bridge.blockchains.waves;
 
 import bridge.common.IBaseChain;
 import com.electronwill.nightconfig.core.Config;
+import com.wavesplatform.wavesj.Block;
 import com.wavesplatform.wavesj.Node;
 import java.util.List;
 import lombok.*;
@@ -73,8 +74,9 @@ class WavesIBaseChain<K> implements IBaseChain {
   }
 
   @Override
-  public <T> List<T> getTrxOfBlockAtHeight(int height) {
-    return IBaseChain.super.getTrxOfBlockAtHeight(height);
+  @SneakyThrows
+  public Block getTrxOfBlockAtHeight(int height) {
+    return rpcClient.getBlock(height);
   }
 
   @Override

@@ -67,7 +67,7 @@ class EthIBaseChain<K> implements IBaseChain {
   }
 
   @Override
-  public <T> List<T> getTrxOfBlockAtHeight(int height) {
+  public <T> T getTrxOfBlockAtHeight(int height) {
     return IBaseChain.super.getTrxOfBlockAtHeight(height);
   }
 

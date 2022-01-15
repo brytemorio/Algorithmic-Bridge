@@ -5,6 +5,7 @@ package bridge;
 
 import static bridge.exceptions.Chain.*;
 
+import bridge.blockchains.waves.WavesChainI;
 import bridge.common.TransactionModels.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -21,8 +22,22 @@ public class App {
     // QnodecoinChainI qnodecoinChainI = new QnodecoinChainI();
     // PolygonChainI<?> fishfactory = new PolygonChainI<>("fishfactory_p");
     // log.info(qnodecoinChainI.getBlockHeight().toString());
-    ZonedDateTime time;
+
+    WavesChainI<?> qnodecoinW = new WavesChainI<>("qnodecoin");
+    var xx = qnodecoinW.getTrxOfBlockAtHeight(23142).id();
+    // System.out.println(xx);
+    // ZonedDateTime time;
     ZoneId zoneId = ZoneId.of("Etc/Zulu");
+
+    Thread yy =
+        Thread.startVirtualThread(
+            () -> {
+              for (int i = 0; i < 1000; i++) {
+                System.out.println(i);
+              }
+            });
+    yy.start();
+
     var zoneDatTime = ZonedDateTime.of(LocalDateTime.now(), zoneId);
     log.info(zoneDatTime.format(DateTimeFormatter.RFC_1123_DATE_TIME));
   }
