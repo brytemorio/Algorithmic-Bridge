@@ -1,5 +1,6 @@
 package bridge.blockchains.waves;
 
+import bridge.common.BaseBlockChain;
 import bridge.common.IBaseChain;
 import com.electronwill.nightconfig.core.Config;
 import com.wavesplatform.wavesj.Block;
@@ -8,7 +9,7 @@ import java.util.List;
 import lombok.*;
 
 @Data
-class WavesIBaseChain<K> implements IBaseChain {
+class WavesIBaseChain<K> implements IBaseChain, BaseBlockChain {
 
   @Setter(AccessLevel.PROTECTED)
   private String networkNode;

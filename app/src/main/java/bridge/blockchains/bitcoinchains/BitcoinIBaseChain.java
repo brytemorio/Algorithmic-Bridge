@@ -1,5 +1,6 @@
 package bridge.blockchains.bitcoinchains;
 
+import bridge.common.BaseBlockChain;
 import bridge.common.IBaseChain;
 import com.electronwill.nightconfig.core.Config;
 import java.net.URL;
@@ -12,8 +13,7 @@ import wf.bitcoin.javabitcoindrpcclient.BitcoinJSONRPCClient;
 import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient;
 
 @Data
-class BitcoinIBaseChain implements IBaseChain {
-
+class BitcoinIBaseChain implements IBaseChain, BaseBlockChain {
   @Setter(AccessLevel.PROTECTED)
   private Config asset;
 

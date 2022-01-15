@@ -1,5 +1,6 @@
 package bridge.blockchains.ethchains;
 
+import bridge.common.BaseBlockChain;
 import bridge.common.IBaseChain;
 import com.electronwill.nightconfig.core.Config;
 import java.math.BigInteger;
@@ -9,7 +10,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
 
 @Data
-class EthIBaseChain<K> implements IBaseChain {
+class EthIBaseChain<K> implements IBaseChain, BaseBlockChain {
 
   @Setter(AccessLevel.PROTECTED)
   @Getter(AccessLevel.PROTECTED)
