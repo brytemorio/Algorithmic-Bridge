@@ -20,6 +20,8 @@ public interface IBaseChain {
 
   <T> T getBlockHeight();
 
+  <T> T getChainIdentifier();
+
   default <T> T getTrxOfBlockAtHeight(int height) {
     return null;
   }

@@ -15,9 +15,9 @@ public class App {
   @SneakyThrows
   public static void main(String[] args) {
     QnodecoinChainI qnodecoinQ = new QnodecoinChainI();
-    PolygonChainI<?> fishfactoryP = new PolygonChainI<>("fishfactory_P");
+    PolygonChainI<?> fishfactoryP = new PolygonChainI<>("fishfactory_p");
     WavesChainI<?> qnodecoinW = new WavesChainI<>("qnodecoin");
     NewBlockEventProducer producer = new NewBlockEventProducer();
-    producer.start(qnodecoinQ, qnodecoinW, fishfactoryP);
+    producer.start(qnodecoinW, fishfactoryP);
   }
 }

@@ -1,16 +1,13 @@
 package bridge;
 
-import bridge.blockchains.waves.WavesChainI;
-import bridge.common.BaseBlockChain;
+import bridge.common.IBaseChain;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.util.DaemonThreadFactory;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Setter;
-import lombok.SneakyThrows;
+import org.agrona.collections.Object2ObjectHashMap;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This classs is just a temporary hack
@@ -22,12 +19,18 @@ public class NewBlockEventProducer {
 
   public NewBlockEventProducer() {}
 
-  public NewBlockEventProducer(RingBuffer<BlockProp> ringBuffer) {
+  // Constructor is use internally
+  private NewBlockEventProducer(RingBuffer<BlockProp> ringBuffer) {
     this.ringBuffer = ringBuffer;
   }
 
-  /** @param blockchains */
-  public void start(BaseBlockChain... blockchains) {
+  /**
+   * The parameter passed to {@code start()} are instance of Classes or the SubClasses of Classes
+   * that implements the interface {@link bridge.common.IBaseChain}
+   *
+   * @param blockchains instances of BaseBlockchain
+   */
+  public void start(IBaseChain... blockchains) {
     int buffersize = 4096;
     NewBlockEventFactory newBlockEventFactory = new NewBlockEventFactory();
     Disruptor<BlockProp> disruptor =
@@ -39,48 +42,40 @@ public class NewBlockEventProducer {
     NewBlockEventProducer producer = new NewBlockEventProducer(ringBuffer);
 
     for (int i = 0; true; i++) {
-      producer.onData();
+      producer.onData(blockchains[0]);
     }
   }
 
-  private void onData() {
+  private void onData(IBaseChain blockchain) {
     long sequence = ringBuffer.next();
     BlockProp newBlockHeight = ringBuffer.get(sequence);
+    newBlockHeight.setProp(blockchain);
     ringBuffer.publish(sequence);
   }
 
   private static class NewBlockEventHandler implements EventHandler<BlockProp> {
     @Override
     public void onEvent(BlockProp event, long sequence, boolean endOfBatch) throws Exception {
-      System.out.println("Event: " + event.blockHeight + "  " + event.chainIdentifier);
+      System.out.println("Event: " + event.getProp().stream().iterator().next().getValue());
     }
   }
 
   private static class NewBlockEventFactory implements EventFactory<BlockProp> {
-    private final WavesChainI<?> wavesChainI;
-
-    @SneakyThrows
-    NewBlockEventFactory() {
-      this.wavesChainI = new WavesChainI<>("qnodecoin");
-    }
-
     @Override
     public BlockProp newInstance() {
-      return new BlockProp(wavesChainI.getBlockHeight(), wavesChainI.getChainIdentifier());
+      return new BlockProp();
     }
   }
 
-  @Data
   private static class BlockProp {
-    @Setter(AccessLevel.NONE)
-    private Integer blockHeight;
+    private final Object2ObjectHashMap<Integer, String> newBlockProp = new Object2ObjectHashMap<>();
 
-    @Setter(AccessLevel.NONE)
-    private String chainIdentifier;
+    public void setProp(@NotNull IBaseChain blockChain) {
+      newBlockProp.put(blockChain.getBlockHeight(), blockChain.getChainIdentifier());
+    }
 
-    BlockProp(Integer blockHeight, String chainIdentifier) {
-      this.blockHeight = blockHeight;
-      this.chainIdentifier = chainIdentifier;
+    public Object2ObjectHashMap<Integer, String>.EntrySet getProp() {
+      return newBlockProp.entrySet();
     }
   }
 }
