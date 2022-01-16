@@ -1,4 +1,4 @@
-package bridge;
+package bridge.messageservice;
 
 import bridge.common.IBaseChain;
 import com.lmax.disruptor.EventFactory;
@@ -6,13 +6,15 @@ import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.util.DaemonThreadFactory;
-import org.agrona.collections.Object2ObjectHashMap;
-import org.jetbrains.annotations.NotNull;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Setter;
 
-/**
- * This classs is just a temporary hack
- *
- * @author bryte
+/*
+TODO => Write Code to proberly handle IBaseChain[] past to NewBlockEventProducer.start() method.
+TODO => Use a combo of RxJava, Threads, Channels to  coordinate the request for / keep up with
+      new blockheigts  among all blockchains in  NewBlockEventProducer.start() or refactor that
+      into it's own sub private function;
  */
 public class NewBlockEventProducer {
   private RingBuffer<BlockProp> ringBuffer;
@@ -20,7 +22,7 @@ public class NewBlockEventProducer {
   public NewBlockEventProducer() {}
 
   // Constructor is use internally
-  private NewBlockEventProducer(RingBuffer<BlockProp> ringBuffer) {
+  public NewBlockEventProducer(RingBuffer<BlockProp> ringBuffer) {
     this.ringBuffer = ringBuffer;
   }
 
@@ -49,14 +51,15 @@ public class NewBlockEventProducer {
   private void onData(IBaseChain blockchain) {
     long sequence = ringBuffer.next();
     BlockProp newBlockHeight = ringBuffer.get(sequence);
-    newBlockHeight.setProp(blockchain);
+    newBlockHeight.setChainIdentifier(blockchain.getChainIdentifier());
+    newBlockHeight.setBlockHeight(blockchain.getBlockHeight());
     ringBuffer.publish(sequence);
   }
 
   private static class NewBlockEventHandler implements EventHandler<BlockProp> {
     @Override
     public void onEvent(BlockProp event, long sequence, boolean endOfBatch) throws Exception {
-      System.out.println("Event: " + event.getProp().stream().iterator().next().getValue());
+      System.out.println("Event: " + event.getChainIdentifier() + " => " + event.getBlockHeight());
     }
   }
 
@@ -67,15 +70,20 @@ public class NewBlockEventProducer {
     }
   }
 
-  private static class BlockProp {
-    private final Object2ObjectHashMap<Integer, String> newBlockProp = new Object2ObjectHashMap<>();
+  @Data
+  private static class BlockProp<T> {
 
-    public void setProp(@NotNull IBaseChain blockChain) {
-      newBlockProp.put(blockChain.getBlockHeight(), blockChain.getChainIdentifier());
-    }
+    @Setter(AccessLevel.PROTECTED)
+    private String chainIdentifier;
 
-    public Object2ObjectHashMap<Integer, String>.EntrySet getProp() {
-      return newBlockProp.entrySet();
+    @Setter(AccessLevel.PROTECTED)
+    private T blockHeight;
+
+    public BlockProp() {}
+
+    public BlockProp(String chainIdentifier, T blockHeight) {
+      this.chainIdentifier = chainIdentifier;
+      this.blockHeight = blockHeight;
     }
   }
 }
