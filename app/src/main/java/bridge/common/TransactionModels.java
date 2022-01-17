@@ -1,5 +1,6 @@
 package bridge.common;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -18,13 +19,13 @@ public class TransactionModels {
     @Setter(AccessLevel.NONE)
     private String address;
 
-    TransactionSender(String address) {
+    public TransactionSender(String address) {
       this.address = address;
     }
   }
 
   @Data
-  public static class TransactionReceiver {
+  public static class TransactionReceiver implements Serializable {
 
     @Setter(AccessLevel.NONE)
     private String address;
@@ -32,7 +33,7 @@ public class TransactionModels {
     @Setter(AccessLevel.NONE)
     private Double amount;
 
-    TransactionReceiver(String address, Double amount) {
+    public TransactionReceiver(String address, Double amount) {
       this.address = address;
       this.amount = amount;
     }
@@ -50,7 +51,7 @@ public class TransactionModels {
     @Setter(AccessLevel.NONE)
     private List<TransactionSender> senders;
 
-    Transaction(
+    public Transaction(
         String transactionID,
         List<TransactionReceiver> receivers,
         List<TransactionSender> senders) {
@@ -59,7 +60,7 @@ public class TransactionModels {
       this.senders = senders;
     }
 
-    Transaction(String transactionID, List<TransactionReceiver> receivers) {
+    public Transaction(String transactionID, List<TransactionReceiver> receivers) {
       this.transactionID = transactionID;
       this.receivers = receivers;
     }

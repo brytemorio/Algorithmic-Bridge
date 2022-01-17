@@ -6,6 +6,7 @@ import com.electronwill.nightconfig.core.file.FileNotFoundAction;
 import com.electronwill.nightconfig.core.io.ConfigParser;
 import com.electronwill.nightconfig.json.JsonFormat;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -21,7 +22,7 @@ public final class ConfigFileObj {
   static {
     try {
       String manualConfigFilePath = System.getProperty("configfile");
-      InputStream configFileFromResources = readResourceConfigFile("config.json");
+      InputStream configFileFromResources = readResourceAsStream("config.json");
       ConfigFormat<?> jsonFormat = JsonFormat.fancyInstance();
       ConfigParser<?> jsonParser = jsonFormat.createParser();
       if (manualConfigFilePath == null) {
@@ -37,9 +38,15 @@ public final class ConfigFileObj {
 
   private ConfigFileObj() {}
 
-  private static InputStream readResourceConfigFile(String filename) throws NullPointerException {
+  public static InputStream readResourceAsStream(String filename) throws NullPointerException {
     InputStream configfileStream =
         ConfigFileObj.class.getClassLoader().getResourceAsStream(filename);
+    if (configfileStream == null) throw new NullPointerException("File Not found");
+    return configfileStream;
+  }
+
+  public static URL readResource(String filename) throws NullPointerException {
+    URL configfileStream = ConfigFileObj.class.getClassLoader().getResource(filename);
     if (configfileStream == null) throw new NullPointerException("File Not found");
     return configfileStream;
   }
