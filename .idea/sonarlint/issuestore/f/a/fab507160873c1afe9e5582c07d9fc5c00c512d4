@@ -1,0 +1,17 @@
+
+W
+java:S1854"<Remove this useless assignment to local variable "producer".(ÅÞíÔúÿÿÿÿ
+Y
+java:S1854">Remove this useless assignment to local variable "qnodecoinW".(µõà²ûÿÿÿÿ
+[
+java:S1854"@Remove this useless assignment to local variable "fishfactoryP".(˜Ã¢Ìþÿÿÿÿ
+Y
+java:S1854">Remove this useless assignment to local variable "qnodecoinQ".(ð÷±Äùÿÿÿÿ
+J
+java:S1481"/Remove this unused "qnodecoinQ" local variable.(ð÷±Äùÿÿÿÿ
+L
+java:S1481"1Remove this unused "fishfactoryP" local variable.(˜Ã¢Ìþÿÿÿÿ
+J
+java:S1481"/Remove this unused "qnodecoinW" local variable.(µõà²ûÿÿÿÿ
+H
+java:S1481"-Remove this unused "producer" local variable.(ÅÞíÔúÿÿÿÿ

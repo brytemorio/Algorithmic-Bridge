@@ -11,7 +11,12 @@ import io.undertow.server.handlers.PathHandler;
 import io.undertow.servlet.api.DeploymentInfo;
 import io.undertow.servlet.api.DeploymentManager;
 import io.undertow.servlet.api.ErrorPage;
+import io.undertow.servlet.api.MimeMapping;
+import io.undertow.util.StatusCodes;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import javax.servlet.ServletException;
 
 public class UndertowController {
@@ -19,10 +24,11 @@ public class UndertowController {
 
   private UndertowController() {}
 
-  public static void runServerController() {
+  public static void runServerController() throws IOException {
     URL errorPages = ConfigFileObj.readResource("WEB-INF/errorpages/404.html");
-    String errofilePath = errorPages.getPath();
-    ErrorPage errorPage = new ErrorPage(errofilePath);
+    String errofile = Files.readString(Path.of(errorPages.getPath()));
+    ErrorPage errorPage = new ErrorPage(errofile, StatusCodes.INTERNAL_SERVER_ERROR);
+    MimeMapping mimeMapping = new MimeMapping(".html", "text/html");
     try {
       DeploymentInfo servletBuilder =
           deployment()
@@ -30,16 +36,20 @@ public class UndertowController {
               .setContextPath(MYAPP)
               .setDeploymentName("Agol-Bridge.war")
               .addErrorPage(errorPage)
-              .addServlets(servlet("TestServerlet", TestServerlet.class).addMapping("/"));
+              .addMimeMapping(mimeMapping)
+              .setIgnoreFlush(true)
+              .addServlets(servlet("TestServerlet", TestServerlet.class).addMapping("/*"));
 
       DeploymentManager manager = defaultContainer().addDeployment(servletBuilder);
       manager.deploy();
 
+      // HttpServerExchange exchange;
+      // exchange.getResponseHeaders().put(Headers.CONTENT_LENGTH, "" );
       HttpHandler servletHandler = manager.start();
       PathHandler path =
           Handlers.path(Handlers.redirect(MYAPP)).addPrefixPath(MYAPP, servletHandler);
       Undertow server =
-          Undertow.builder().addHttpListener(8080, "localhost").setHandler(servletHandler).build();
+          Undertow.builder().addHttpListener(5000, "127.0.0.2").setHandler(servletHandler).build();
       server.start();
     } catch (ServletException e) {
       throw new RuntimeException(e);

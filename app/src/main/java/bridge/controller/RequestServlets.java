@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class RequestServlets {
-  private static final Gson gson = new Gson();
+  private static Gson gson; // = new Gson();
 
   private RequestServlets() {}
 
@@ -51,18 +51,17 @@ public class RequestServlets {
   public static class CheckForTransaction extends HttpServlet {}
 
   public static class TestServerlet extends HttpServlet {
+
     @Override
-    public void init() {
-      this.getServletContext();
-    }
+    public void init() {}
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       String param = request.getParameter("name");
       PrintWriter writer = response.getWriter();
-      response.setHeader("Content-Type", "application/json");
+      // response.setHeader("Content-Type", "application/json");
       writer.write(gson.toJson(new TransactionReceiver("xxxxxxxxxxxxxxxxx", 23.45)));
-      writer.close();
+      // writer.flush();
     }
 
     @Override

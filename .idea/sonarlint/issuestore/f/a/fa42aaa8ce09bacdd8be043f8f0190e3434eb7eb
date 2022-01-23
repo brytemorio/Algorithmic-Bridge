@@ -1,0 +1,13 @@
+
+`	java:S112<"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
+S
+java:S18545"8Remove this useless assignment to local variable "path".(®ˆ÷úÿÿÿÿ
+V	java:S1252"<This block of commented-out lines of code should be removed.(¤şá“ùÿÿÿÿ
+D
+java:S14815")Remove this unused "path" local variable.(®ˆ÷úÿÿÿÿ
+X
+java:S1128"BRemove this unused import 'io.undertow.server.HttpServerExchange'.(Ç‰è
+P
+java:S1128"5Remove this unused import 'io.undertow.util.Headers'.(íß¯ƒıÿÿÿÿ
+N
+java:S1128"3Remove this unused import 'org.apache.http.Header'.(ËÇ¶òûÿÿÿÿ

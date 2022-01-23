@@ -1,10 +1,21 @@
 package bridge.controller;
 
-import javax.servlet.http.HttpServlet;
+import bridge.common.ConfigFileObj;
+import io.undertow.io.Sender;
+import io.undertow.server.HttpHandler;
+import io.undertow.server.HttpServerExchange;
+import io.undertow.util.Headers;
 
-public class BridgeRequestHandler extends HttpServlet {
-  HttpServlet x;
+public class BridgeRequestHandler implements HttpHandler {
+  private ConfigFileObj pro;
 
   @Override
-  public void init() {}
+  public void handleRequest(HttpServerExchange exchange) throws Exception {
+    if (exchange.getStatusCode() == 500) {
+      String errorResponse = ConfigFileObj.readResourceAsStream("404.hmtl").toString();
+      exchange.getResponseHeaders().put(Headers.CONTENT_LENGTH, " " + errorResponse.length());
+      Sender sender = exchange.getResponseSender();
+      sender.send(errorResponse);
+    }
+  }
 }
