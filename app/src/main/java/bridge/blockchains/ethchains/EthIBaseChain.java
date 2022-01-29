@@ -36,27 +36,27 @@ class EthIBaseChain<K> implements IBaseChain {
   private Web3j web3j;
 
   public String getAssetID(String assetConfigName) {
-    Assets assetInfo = assetInfoFactory(assetConfigName);
+    EthAssets assetInfo = assetInfoFactory(assetConfigName);
     return assetInfo.getAssetID();
   }
 
   public String getAssetTicker(String assetConfigName) {
-    Assets assetInfo = assetInfoFactory(assetConfigName);
+    EthAssets assetInfo = assetInfoFactory(assetConfigName);
     return assetInfo.getAssetTicker();
   }
 
   public String getAssetName(String assetConfigName) {
-    Assets assetInfo = assetInfoFactory(assetConfigName);
+    EthAssets assetInfo = assetInfoFactory(assetConfigName);
     return assetInfo.getAssetName();
   }
 
   public Double getAssetTransferFee(String assetConfigName) {
-    Assets assetInfo = assetInfoFactory(assetConfigName);
+    EthAssets assetInfo = assetInfoFactory(assetConfigName);
     return assetInfo.getTransferFee();
   }
 
-  private Assets assetInfoFactory(String assetConfigName) {
-    return new Assets(asset.get(assetConfigName));
+  private EthAssets assetInfoFactory(String assetConfigName) {
+    return new EthAssets(asset.get(assetConfigName));
   }
 
   @Override
@@ -96,7 +96,7 @@ class EthIBaseChain<K> implements IBaseChain {
   }
 
   @Data
-  class Assets {
+  class EthAssets {
 
     @Setter(AccessLevel.NONE)
     private String assetID;
@@ -117,7 +117,7 @@ class EthIBaseChain<K> implements IBaseChain {
     @Setter(AccessLevel.NONE)
     private Config asset;
 
-    public Assets(final Config asset) {
+    public EthAssets(final Config asset) {
       this.asset = asset;
       this.assetID = this.asset.get("asset_id");
       this.assetName = this.asset.get("name");

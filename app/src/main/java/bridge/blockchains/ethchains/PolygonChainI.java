@@ -8,27 +8,27 @@ import java.util.Objects;
 import org.agrona.collections.Object2ObjectHashMap;
 
 public final class PolygonChainI<K> extends EthIBaseChain<K> {
-  private static final UnmodifiableConfig configObject = ConfigFileObj.CONFIG;
-  private String[] namedAssets;
 
-  public PolygonChainI(final String... namedAssets) throws AssetNotFoundException {
-    this.namedAssets =
+  private static final UnmodifiableConfig configObject = ConfigFileObj.CONFIG;
+  private String[] assetConfigName;
+
+  public PolygonChainI(final String... assetConfigName) throws AssetNotFoundException {
+    this.assetConfigName =
         Objects.requireNonNull(
-            namedAssets,
+            assetConfigName,
             "Cannot construct object "
                 + PolygonChainI.class.getName()
                 + " without the required parameter(s)");
-    // ArrayList<Config> assets = new ArrayList<>();
+
     Object2ObjectHashMap<String, Config> assets = new Object2ObjectHashMap<>();
     Config assetList = configObject.get("Blockchain.Polygon.asset");
-    for (String name : this.namedAssets) {
-      if (!assetList.contains(name)) {
+    for (String configName : this.assetConfigName) {
+      if (!assetList.contains(configName)) {
         throw new AssetNotFoundException(
-            String.format("Asset: %s, could not be found in the config file", name));
+            String.format("Asset: %s, could not be found in the config file", configName));
       }
 
-      assets.put(name, configObject.get("Blockchain.Polygon.asset" + "." + name));
-      // assets.add(configObject.get("Blockchain.Polygon.asset" + "." + name));
+      assets.put(configName, configObject.get("Blockchain.Polygon.asset" + "." + configName));
     }
 
     super.setAsset(assets);

@@ -1,6 +1,5 @@
 package bridge.blockchains.waves;
 
-import bridge.common.BaseBlockChain;
 import bridge.common.IBaseChain;
 import com.electronwill.nightconfig.core.Config;
 import com.wavesplatform.wavesj.Block;
@@ -11,9 +10,10 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import org.agrona.collections.Object2ObjectHashMap;
 
 @Data
-class WavesIBaseChain<K> implements IBaseChain, BaseBlockChain {
+class WavesIBaseChain<K> implements IBaseChain {
 
   @Setter(AccessLevel.PROTECTED)
   private String networkNode;
@@ -29,34 +29,38 @@ class WavesIBaseChain<K> implements IBaseChain, BaseBlockChain {
 
   @Setter(AccessLevel.PROTECTED)
   @Getter(AccessLevel.PROTECTED)
-  private Config asset;
-
-  @Setter(AccessLevel.NONE)
-  private String assetName;
-
-  @Setter(AccessLevel.NONE)
-  private String assetID;
-
-  @Setter(AccessLevel.NONE)
-  private String assetTicker;
-
-  @Setter(AccessLevel.NONE)
-  private Config assetControlWallet;
-
-  @Setter(AccessLevel.NONE)
-  private double transferFee;
+  private Object2ObjectHashMap<String, Config> asset;
 
   @Setter(AccessLevel.NONE)
   @Getter(AccessLevel.NONE)
   private Node rpcClient;
 
+  public String getAssetID(String assetConfigName) {
+    WavesAssets assetInfo = assetInfoFactory(assetConfigName);
+    return assetInfo.getAssetID();
+  }
+
+  public String getAssetTicker(String assetConfigName) {
+    WavesAssets assetInfo = assetInfoFactory(assetConfigName);
+    return assetInfo.getAssetTicker();
+  }
+
+  public String getAssetName(String assetConfigName) {
+    WavesAssets assetInfo = assetInfoFactory(assetConfigName);
+    return assetInfo.getAssetName();
+  }
+
+  public Double getAssetTransferFee(String assetConfigName) {
+    WavesAssets assetInfo = assetInfoFactory(assetConfigName);
+    return assetInfo.getTransferFee();
+  }
+
+  private WavesAssets assetInfoFactory(String assetConfigName) {
+    return new WavesAssets(asset.get(assetConfigName));
+  }
+
   @Override
   public void init() {
-    this.assetID = asset.get("asset_id");
-    this.assetName = asset.get("name");
-    this.assetTicker = asset.get("ticker");
-    this.transferFee = asset.get("transfer_fee");
-    this.assetControlWallet = asset.get("wallet");
     this.rpcClient = getNodeObj();
   }
 
@@ -97,5 +101,37 @@ class WavesIBaseChain<K> implements IBaseChain, BaseBlockChain {
   @Override
   public boolean validateAddress(String address) {
     return false;
+  }
+
+  @Data
+  class WavesAssets {
+
+    @Setter(AccessLevel.NONE)
+    private String assetID;
+
+    @Setter(AccessLevel.NONE)
+    private String assetName;
+
+    @Setter(AccessLevel.NONE)
+    private String assetTicker;
+
+    @Setter(AccessLevel.NONE)
+    private Double transferFee;
+
+    @Setter(AccessLevel.NONE)
+    private Config assetControlWallet;
+
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private Config asset;
+
+    public WavesAssets(final Config asset) {
+      this.asset = asset;
+      this.assetID = this.asset.get("asset_id");
+      this.assetName = this.asset.get("name");
+      this.assetTicker = this.asset.get("ticker");
+      this.transferFee = this.asset.get("transfer_fee");
+      this.assetControlWallet = this.asset.get("wallet");
+    }
   }
 }
