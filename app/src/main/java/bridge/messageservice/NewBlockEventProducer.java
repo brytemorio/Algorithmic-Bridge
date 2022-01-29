@@ -8,17 +8,14 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import lombok.extern.slf4j.Slf4j;
 
-/*
-TODO => Write Code to proberly handle IBaseChain[] past to NewBlockEventProducer.start() method.
-TODO => Use a combo of RxJava, Threads, Channels to  coordinate the request for / keep up with
-      new blockheigts  among all blockchains in  NewBlockEventProducer.start() or refactor that
-      into it's own sub private function;
- */
-
-public class NewBlockEventProducer {
-  private RingBuffer<BlockProp> ringBuffer;
+@Slf4j
+public final class NewBlockEventProducer {
+  private static NewBlockEventProducer newBlockEventProducer;
+  private static RingBuffer<BlockProp> ringBuffer;
   private IBaseChain[] blockChains;
+  private ExecutorService threadExecutor;
 
   /**
    * The parameter passed to {@code NewBlockEventProducer} are instance of Classes or the SubClasses
@@ -26,32 +23,48 @@ public class NewBlockEventProducer {
    *
    * @param blockchains instances of IBaseChain
    */
-  public NewBlockEventProducer(final IBaseChain... cblockChains) {
-    if (Objects.nonNull(cblockChains)) {
-      this.blockChains = cblockChains;
+  private NewBlockEventProducer(final IBaseChain... cblockChains) {
+    this.blockChains = cblockChains;
+  }
+
+  public static synchronized NewBlockEventProducer getNewBlockEventProducer(
+      final IBaseChain... cblockChains) {
+    if (!Objects.nonNull(newBlockEventProducer)) {
+      newBlockEventProducer =
+          new NewBlockEventProducer(
+              Objects.requireNonNull(
+                  cblockChains,
+                  "Cannot construct object NewBlockEventProducer without the required"
+                      + " parameter(s)"));
     } else {
-      throw new NullPointerException(
-          "Cannot construct object NewBlockEventProducer without the required parameter(s)");
+      log.trace("An instance of NewBlockEventProducer already exits");
     }
+    return newBlockEventProducer;
   }
 
   public void start() {
-    ExecutorService threadExecutor = Executors.newFixedThreadPool(blockChains.length);
+
+    int buffersize = 4096;
+    NewBlockEventFactory newBlockEventFactory = new NewBlockEventFactory();
+    Disruptor<BlockProp> disruptor =
+        new Disruptor<>(newBlockEventFactory, buffersize, DaemonThreadFactory.INSTANCE);
+    disruptor.handleEventsWith(new BlockDispatchService());
+    disruptor.start();
+
+    ringBuffer = disruptor.getRingBuffer();
+
+    threadExecutor = Executors.newFixedThreadPool(blockChains.length);
     for (int index = 0; index < blockChains.length; index++) {
       threadExecutor.execute(new ProducerInitializer(blockChains[index]));
     }
   }
 
-  class NewBlockEventFactory implements EventFactory<BlockProp> {
-    @Override
-    public BlockProp newInstance() {
-      return new BlockProp();
-    }
+  public void stop() {
+    threadExecutor.shutdown();
   }
 
   class ProducerInitializer implements Runnable {
     private IBaseChain blockchain;
-    private RingBuffer<BlockProp> ringBuffer;
 
     public ProducerInitializer(final IBaseChain blockchain) {
       this.blockchain = blockchain;
@@ -59,18 +72,11 @@ public class NewBlockEventProducer {
 
     @Override
     public void run() {
-      int buffersize = 4096;
-      NewBlockEventFactory newBlockEventFactory = new NewBlockEventFactory();
-      Disruptor<BlockProp> disruptor =
-          new Disruptor<>(newBlockEventFactory, buffersize, DaemonThreadFactory.INSTANCE);
-      disruptor.handleEventsWith(new BlockDispatchService());
-      disruptor.start();
 
-      ringBuffer = disruptor.getRingBuffer();
-      // NewBlockEventProducer producer = new NewBlockEventProducer(ringBuffer);
-
-      // TODO Add an keyboard event handler for gracefully shutting down this loop
-      // (CTRL-C)
+      /*
+       * TODO Add an keyboard event handler for gracefully shutting down this loop e.g
+       * using (CTRL-C)
+       */
       for (; ; ) {
         long sequence = ringBuffer.next();
         BlockProp newBlockHeight = ringBuffer.get(sequence);
@@ -78,6 +84,13 @@ public class NewBlockEventProducer {
         newBlockHeight.setBlockHeight(blockchain.getBlockHeight());
         ringBuffer.publish(sequence);
       }
+    }
+  }
+
+  class NewBlockEventFactory implements EventFactory<BlockProp> {
+    @Override
+    public BlockProp newInstance() {
+      return new BlockProp();
     }
   }
 }

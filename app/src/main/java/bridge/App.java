@@ -16,7 +16,8 @@ public class App {
     PolygonChainI<?> fishfactoryP = new PolygonChainI<>("fishfactory_p");
     WavesChainI<?> qnodecoinW = new WavesChainI<>("qnodecoin");
     NewBlockEventProducer producer =
-        new NewBlockEventProducer(qnodecoinQ, fishfactoryP, qnodecoinW);
+        NewBlockEventProducer.getNewBlockEventProducer(qnodecoinQ, fishfactoryP, qnodecoinW);
+
     producer.start();
 
     // UndertowController.runServerController();
