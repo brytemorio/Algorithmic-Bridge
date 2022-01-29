@@ -17,16 +17,16 @@ public final class NewBlockEventProducer {
   private IBaseChain[] blockChains;
   private ExecutorService threadExecutor;
 
-  /**
-   * The parameter passed to {@code NewBlockEventProducer} are instance of Classes or the SubClasses
-   * of Classes that implements the interface {@link bridge.common.IBaseChain}
-   *
-   * @param blockchains instances of IBaseChain
-   */
   private NewBlockEventProducer(final IBaseChain... cblockChains) {
     this.blockChains = cblockChains;
   }
 
+  /**
+   * The parameter passed to {@code getNewBlockEventProducer} are instance of (Classes or the
+   * SubClasses of Classes) that implements the interface {@link bridge.common.IBaseChain}
+   *
+   * @param blockchains instances of IBaseChain
+   */
   public static synchronized NewBlockEventProducer getNewBlockEventProducer(
       final IBaseChain... cblockChains) {
     if (!Objects.nonNull(newBlockEventProducer)) {
