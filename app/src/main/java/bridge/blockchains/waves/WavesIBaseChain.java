@@ -6,7 +6,11 @@ import com.electronwill.nightconfig.core.Config;
 import com.wavesplatform.wavesj.Block;
 import com.wavesplatform.wavesj.Node;
 import java.util.List;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.SneakyThrows;
 
 @Data
 class WavesIBaseChain<K> implements IBaseChain, BaseBlockChain {
@@ -63,7 +67,7 @@ class WavesIBaseChain<K> implements IBaseChain, BaseBlockChain {
 
   @Override
   @SneakyThrows
-  public Integer getBlockHeight() {
+  public Number getBlockHeight() {
     return rpcClient.getHeight();
   }
 

@@ -2,9 +2,12 @@ package bridge.blockchains.ethchains;
 
 import bridge.common.IBaseChain;
 import com.electronwill.nightconfig.core.Config;
-import java.math.BigInteger;
 import java.util.List;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.SneakyThrows;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
 
@@ -46,6 +49,7 @@ class EthIBaseChain<K> implements IBaseChain {
   @Getter(AccessLevel.NONE)
   private Web3j web3j;
 
+  @Override
   public void init() {
     this.assetID = this.asset.get("asset_id");
     this.assetName = this.asset.get("name");
@@ -62,7 +66,7 @@ class EthIBaseChain<K> implements IBaseChain {
 
   @Override
   @SneakyThrows
-  public BigInteger getBlockHeight() {
+  public Number getBlockHeight() {
     return web3j.ethBlockNumber().send().getBlockNumber();
   }
 

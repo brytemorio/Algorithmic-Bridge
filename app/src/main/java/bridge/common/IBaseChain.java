@@ -1,15 +1,27 @@
 package bridge.common;
 
-import static bridge.exceptions.Chain.ChainNodeException;
-import static java.net.http.HttpResponse.BodyHandlers;
-
+import bridge.exceptions.Chain.ChainNodeException;
+import com.electronwill.nightconfig.core.Config;
+import com.electronwill.nightconfig.core.ConfigFormat;
+import com.electronwill.nightconfig.core.io.ConfigParser;
+import com.electronwill.nightconfig.core.io.ParsingException;
+import com.electronwill.nightconfig.json.JsonFormat;
+import com.google.common.base.Supplier;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandler;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.net.http.HttpResponse.BodySubscriber;
+import java.net.http.HttpResponse.BodySubscribers;
 import java.net.http.WebSocket;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -18,11 +30,11 @@ import java.util.concurrent.ExecutionException;
 public interface IBaseChain {
   void init();
 
-  <T> T getBlockHeight();
+  Number getBlockHeight();
 
-  <T> T getChainIdentifier();
+  <T extends Object> T getChainIdentifier();
 
-  default <T> T getTrxOfBlockAtHeight(int height) {
+  default <T extends Object> T getTrxOfBlockAtHeight(int height) {
     return null;
   }
 
@@ -30,7 +42,7 @@ public interface IBaseChain {
     return null;
   }
 
-  default <T> List<T> getTrxHash(int blockHeight) {
+  default <T extends Object> List<T> getTrxHash(int blockHeight) {
     return Collections.emptyList();
   }
 
@@ -64,7 +76,7 @@ public interface IBaseChain {
     return response.body();
   }
 
-  /*
+  /**/
   class JsonresponseHandler implements BodyHandler<Supplier<Config>> {
     private Class<Config> responseType;
 
@@ -100,7 +112,7 @@ public interface IBaseChain {
         }
       };
     }
-  } */
+  }
 
   class JsonWebSocketListener implements WebSocket.Listener {}
 }

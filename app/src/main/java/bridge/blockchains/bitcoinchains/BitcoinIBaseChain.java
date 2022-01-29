@@ -2,8 +2,10 @@ package bridge.blockchains.bitcoinchains;
 
 import bridge.common.BaseBlockChain;
 import bridge.common.IBaseChain;
+import bridge.common.TransactionModels.Transaction;
 import com.electronwill.nightconfig.core.Config;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -11,6 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import wf.bitcoin.javabitcoindrpcclient.BitcoinJSONRPCClient;
 import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient;
+import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient.Block;
 
 @Data
 class BitcoinIBaseChain implements IBaseChain, BaseBlockChain {
@@ -54,6 +57,7 @@ class BitcoinIBaseChain implements IBaseChain, BaseBlockChain {
   @Getter(AccessLevel.NONE)
   private BitcoinJSONRPCClient rpcClient;
 
+  @Override
   public void init() {
     this.assetName = asset.get("name");
     this.assetTicker = asset.get("ticker");
@@ -62,13 +66,14 @@ class BitcoinIBaseChain implements IBaseChain, BaseBlockChain {
   }
 
   @Override
-  public Integer getBlockHeight() {
+  public Number getBlockHeight() {
     return rpcClient.getBlockCount();
   }
 
   @Override
-  public <T> T getTrxOfBlockAtHeight(int height) {
-    return IBaseChain.super.getTrxOfBlockAtHeight(height);
+  public List<Transaction> getTrxOfBlockAtHeight(int height) {
+    Block blockHash = rpcClient.getBlock(height);
+    return Collections.EMPTY_LIST;
   }
 
   @Override

@@ -3,7 +3,6 @@ package bridge;
 import bridge.blockchains.bitcoinchains.QnodecoinChainI;
 import bridge.blockchains.ethchains.PolygonChainI;
 import bridge.blockchains.waves.WavesChainI;
-import bridge.controller.UndertowController;
 import bridge.messageservice.NewBlockEventProducer;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,10 @@ public class App {
     QnodecoinChainI qnodecoinQ = new QnodecoinChainI();
     PolygonChainI<?> fishfactoryP = new PolygonChainI<>("fishfactory_p");
     WavesChainI<?> qnodecoinW = new WavesChainI<>("qnodecoin");
-    NewBlockEventProducer producer = new NewBlockEventProducer();
-    UndertowController.runServerController();
+    NewBlockEventProducer producer =
+        new NewBlockEventProducer(qnodecoinQ, fishfactoryP, qnodecoinW);
+    producer.start();
+
+    // UndertowController.runServerController();
   }
 }
