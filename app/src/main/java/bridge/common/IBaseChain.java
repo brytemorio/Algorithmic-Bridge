@@ -26,11 +26,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import org.agrona.collections.Object2ObjectHashMap;
 
 public interface IBaseChain {
   void init();
 
   Number getBlockHeight();
+
+  Object2ObjectHashMap<String, Object> getChain2IdentifierMapping();
 
   <T extends Object> T getChainIdentifier();
 

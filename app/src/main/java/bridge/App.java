@@ -1,22 +1,26 @@
 package bridge;
 
 import bridge.blockchains.bitcoinchains.QnodecoinChainI;
+import bridge.blockchains.ethchains.BinanceSmartChainI;
 import bridge.blockchains.ethchains.PolygonChainI;
 import bridge.blockchains.waves.WavesChainI;
 import bridge.messageservice.NewBlockEventProducer;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.agrona.collections.Object2ObjectHashMap;
 
 @Slf4j
 public class App {
 
   @SneakyThrows
   public static void main(String[] args) {
-    QnodecoinChainI qnodecoinQ = new QnodecoinChainI();
-    PolygonChainI<?> fishfactoryP = new PolygonChainI<>("fishfactory_p");
-    WavesChainI<?> qnodecoinW = new WavesChainI<>("qnodecoin");
+    QnodecoinChainI qnodecoinChain = new QnodecoinChainI();
+    PolygonChainI<?> polygonChain = new PolygonChainI<>("fishfactory_p");
+    WavesChainI<?> wavesChain = new WavesChainI<>("qnodecoin", "fishfactory_P");
+    BinanceSmartChainI<?> binanceSmartChain = new BinanceSmartChainI<>("qnode_defi");
+    Object2ObjectHashMap<String, Object> chainIdentifier2Blockchain = new Object2ObjectHashMap<>();
     NewBlockEventProducer producer =
-        NewBlockEventProducer.getNewBlockEventProducer(qnodecoinQ, fishfactoryP, qnodecoinW);
+        NewBlockEventProducer.getNewBlockEventProducer(qnodecoinChain, polygonChain, wavesChain);
 
     producer.start();
 

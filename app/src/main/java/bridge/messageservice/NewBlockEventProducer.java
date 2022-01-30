@@ -3,8 +3,6 @@ package bridge.messageservice;
 import bridge.common.IBaseChain;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.dsl.Disruptor;
-import com.lmax.disruptor.util.DaemonThreadFactory;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -43,14 +41,13 @@ public final class NewBlockEventProducer {
   }
 
   public void start() {
-
-    int buffersize = 4096;
-    NewBlockEventFactory newBlockEventFactory = new NewBlockEventFactory();
-    Disruptor<BlockProp> disruptor =
-        new Disruptor<>(newBlockEventFactory, buffersize, DaemonThreadFactory.INSTANCE);
-    disruptor.handleEventsWith(new BlockDispatchService());
+    BlockDispatchService dispatchService =
+        BlockDispatchService.getNewBlockDispatchService(blockChains);
+    NewBlockEventFactory blockEventFactory = new NewBlockEventFactory();
+    Integer bufferSize = 4096;
+    DisruptorObjFactory<BlockProp> disruptor =
+        new DisruptorObjFactory<>(dispatchService, blockEventFactory, bufferSize);
     disruptor.start();
-
     ringBuffer = disruptor.getRingBuffer();
 
     threadExecutor = Executors.newFixedThreadPool(blockChains.length);

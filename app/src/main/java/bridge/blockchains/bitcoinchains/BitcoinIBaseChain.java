@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.agrona.collections.Object2ObjectHashMap;
 import wf.bitcoin.javabitcoindrpcclient.BitcoinJSONRPCClient;
 import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient;
 import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient.Block;
@@ -52,6 +53,9 @@ class BitcoinIBaseChain implements IBaseChain, BaseBlockChain {
 
   @Setter(AccessLevel.NONE)
   private double assetTransferFee;
+
+  @Setter(AccessLevel.PROTECTED)
+  Object2ObjectHashMap<String, Object> chain2IdentifierMapping;
 
   @Setter(AccessLevel.NONE)
   @Getter(AccessLevel.NONE)

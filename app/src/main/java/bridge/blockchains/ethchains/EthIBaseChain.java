@@ -20,6 +20,9 @@ class EthIBaseChain<K> implements IBaseChain {
   Object2ObjectHashMap<String, Config> asset;
 
   @Setter(AccessLevel.PROTECTED)
+  Object2ObjectHashMap<String, Object> chain2IdentifierMapping;
+
+  @Setter(AccessLevel.PROTECTED)
   private String networkNode;
 
   @Setter(AccessLevel.PROTECTED)

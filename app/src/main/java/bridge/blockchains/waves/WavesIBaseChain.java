@@ -31,6 +31,9 @@ class WavesIBaseChain<K> implements IBaseChain {
   @Getter(AccessLevel.PROTECTED)
   private Object2ObjectHashMap<String, Config> asset;
 
+  @Setter(AccessLevel.PROTECTED)
+  Object2ObjectHashMap<String, Object> chain2IdentifierMapping;
+
   @Setter(AccessLevel.NONE)
   @Getter(AccessLevel.NONE)
   private Node rpcClient;
