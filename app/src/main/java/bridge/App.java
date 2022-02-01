@@ -7,7 +7,6 @@ import bridge.blockchains.waves.WavesChainI;
 import bridge.messageservice.NewBlockEventProducer;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.agrona.collections.Object2ObjectHashMap;
 
 @Slf4j
 public class App {
@@ -16,9 +15,8 @@ public class App {
   public static void main(String[] args) {
     QnodecoinChainI qnodecoinChain = new QnodecoinChainI();
     PolygonChainI<?> polygonChain = new PolygonChainI<>("fishfactory_p");
-    WavesChainI<?> wavesChain = new WavesChainI<>("qnodecoin", "fishfactory_P");
+    WavesChainI<?> wavesChain = new WavesChainI<>("qnodecoin", "fishfactory_p");
     BinanceSmartChainI<?> binanceSmartChain = new BinanceSmartChainI<>("qnode_defi");
-    Object2ObjectHashMap<String, Object> chainIdentifier2Blockchain = new Object2ObjectHashMap<>();
     NewBlockEventProducer producer =
         NewBlockEventProducer.getNewBlockEventProducer(qnodecoinChain, polygonChain, wavesChain);
 

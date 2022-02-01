@@ -1,11 +1,13 @@
 package bridge.messageservice;
 
 import bridge.common.IBaseChain;
+import bridge.exceptions.BridgeExceptions.ObjectCreationException;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.RingBuffer;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -25,8 +27,10 @@ public final class NewBlockEventProducer {
    *
    * @param blockchains instances of IBaseChain
    */
+  @SneakyThrows
   public static synchronized NewBlockEventProducer getNewBlockEventProducer(
       final IBaseChain... cblockChains) {
+    String className = NewBlockEventProducer.class.getCanonicalName();
     if (!Objects.nonNull(newBlockEventProducer)) {
       newBlockEventProducer =
           new NewBlockEventProducer(
@@ -35,14 +39,13 @@ public final class NewBlockEventProducer {
                   "Cannot construct object NewBlockEventProducer without the required"
                       + " parameter(s)"));
     } else {
-      log.trace("An instance of NewBlockEventProducer already exits");
+      throw new ObjectCreationException("An instance of " + className + " already exits");
     }
     return newBlockEventProducer;
   }
 
   public void start() {
-    BlockDispatchService dispatchService =
-        BlockDispatchService.getNewBlockDispatchService(blockChains);
+    Extractor dispatchService = Extractor.getExtractorObj(blockChains);
     NewBlockEventFactory blockEventFactory = new NewBlockEventFactory();
     Integer bufferSize = 4096;
     DisruptorObjFactory<BlockProp> disruptor =

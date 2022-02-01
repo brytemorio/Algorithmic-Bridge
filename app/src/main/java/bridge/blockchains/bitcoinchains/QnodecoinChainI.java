@@ -4,9 +4,9 @@ import bridge.common.ConfigFileObj;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import java.net.MalformedURLException;
 import java.net.URL;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
-@Log
+@Slf4j
 public final class QnodecoinChainI extends BitcoinIBaseChain {
 
   private static final UnmodifiableConfig configObject = ConfigFileObj.CONFIG;

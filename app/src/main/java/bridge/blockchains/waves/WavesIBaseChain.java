@@ -79,13 +79,6 @@ class WavesIBaseChain<K> implements IBaseChain {
   }
 
   @Override
-  @SneakyThrows
-  public String getNodeResponse(String nodeEndpoint) {
-    String fullRPCQueryPath = networkNode + nodeEndpoint;
-    return IBaseChain.super.getNodeResponse(fullRPCQueryPath);
-  }
-
-  @Override
   public <T> T getTrxOfBlockAtHeight(Integer height) {
     return null;
   }

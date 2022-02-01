@@ -1,6 +1,6 @@
 package bridge.common;
 
-import bridge.exceptions.Chain.ChainNodeException;
+import bridge.exceptions.BridgeExceptions.ChainNodeException;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.ConfigFormat;
 import com.electronwill.nightconfig.core.io.ConfigParser;
@@ -41,6 +41,7 @@ public interface IBaseChain {
 
   boolean validateAddress(String address);
 
+  /* This default method is broken */
   default String getNodeResponse(String nodeEndpoint)
       throws ChainNodeException, IOException, URISyntaxException, InterruptedException,
           ExecutionException {
