@@ -30,7 +30,7 @@ final class BlockProp {
       previousBlockHeight = this.blockHeight;
       // TODO: implement logic that updates the block height in the Database Registry
     } else {
-      Thread.sleep(2000);
+      Thread.sleep(1000);
     }
   }
 }

@@ -21,10 +21,6 @@ public final class WavesChainI<K> extends WavesIBaseChain<K> {
 
   @Getter(AccessLevel.NONE)
   @Setter(AccessLevel.NONE)
-  private static final Integer ZERO = 0;
-
-  @Getter(AccessLevel.NONE)
-  @Setter(AccessLevel.NONE)
   private String[] assetConfigName;
 
   public WavesChainI(String... assetConfigName)
