@@ -1,5 +1,6 @@
 package bridge.messageservice;
 
+import bridge.common.BridgeUtils;
 import bridge.common.IBaseChain;
 import bridge.exceptions.BridgeExceptions.ObjectCreationException;
 import com.lmax.disruptor.EventFactory;
@@ -32,7 +33,9 @@ final class Extractor implements EventHandler<BlockProp> {
 
   @SneakyThrows
   public static synchronized Extractor getExtractorObj(final IBaseChain... cBlockchains) {
-    String className = Extractor.class.getCanonicalName();
+    String className = Extractor.class.getName();
+    BridgeUtils.checkArgsLength(
+        cBlockchains, "Atleast One or more blockchain Object is required as parameter");
     if (extractor == null) {
       extractor = new Extractor(cBlockchains);
     } else {
@@ -78,21 +81,4 @@ final class Extractor implements EventHandler<BlockProp> {
       return new ArrayList<>();
     }
   }
-
-  /*
-   * @Data class Extractor { private IBaseChain blockChain; private String
-   * chainIdentifier; private RingBuffer<ArrayList<String>> chainRingBuffer;
-   *
-   * public Extractor(final String chainIdentifier, final IBaseChain blockChain,
-   * final RingBuffer<ArrayList<String>> chainRingBuffer) { this.chainIdentifier =
-   * chainIdentifier; this.blockChain = blockChain; this.chainRingBuffer =
-   * chainRingBuffer; }
-   *
-   * public void extractTrx(Number height) { ArrayList<String> trxHashList =
-   * blockChain.getTrxHash(height); long sequence = chainRingBuffer.next();
-   * ArrayList<String> nextSlot = chainRingBuffer.get(sequence);
-   * nextSlot.addAll(trxHashList); chainRingBuffer.publish(sequence); }
-   *
-   * }
-   */
 }

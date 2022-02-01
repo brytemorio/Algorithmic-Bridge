@@ -1,5 +1,6 @@
 package bridge.blockchains.waves;
 
+import bridge.common.BridgeUtils;
 import bridge.common.ConfigFileObj;
 import bridge.exceptions.BridgeExceptions.AssetNotFoundException;
 import bridge.exceptions.BridgeExceptions.ObjectCreationException;
@@ -28,12 +29,11 @@ public final class WavesChainI<K> extends WavesIBaseChain<K> {
 
   public WavesChainI(String... assetConfigName)
       throws AssetNotFoundException, ObjectCreationException {
-    if (assetConfigName.length == ZERO) {
-      throw new ObjectCreationException(
-          "Atleast one token name should be passed to "
-              + getClass().getSimpleName()
-              + " constructor");
-    }
+    BridgeUtils.checkArgsLength(
+        assetConfigName,
+        "Atleast one token name should be passed to "
+            + getClass().getSimpleName()
+            + " constructor");
     this.assetConfigName = Objects.requireNonNull(assetConfigName);
     Object2ObjectHashMap<String, Config> assets = new Object2ObjectHashMap<>();
     Config assetList = configObject.get("Blockchain.Waves.asset");

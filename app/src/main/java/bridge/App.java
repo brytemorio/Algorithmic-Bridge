@@ -15,7 +15,7 @@ public class App {
   public static void main(String[] args) {
     QnodecoinChainI qnodecoinChain = new QnodecoinChainI();
     PolygonChainI<?> polygonChain = new PolygonChainI<>("fishfactory_p");
-    WavesChainI<?> wavesChain = new WavesChainI<>("qnodecoin", "fishfactory_p");
+    WavesChainI<?> wavesChain = new WavesChainI<>(); // "qnodecoin", "fishfactory_p"
     BinanceSmartChainI<?> binanceSmartChain = new BinanceSmartChainI<>("qnode_defi");
     NewBlockEventProducer producer =
         NewBlockEventProducer.getNewBlockEventProducer(qnodecoinChain, polygonChain, wavesChain);
