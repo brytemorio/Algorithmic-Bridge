@@ -1,12 +1,10 @@
 package bridge.blockchains.bitcoinchains;
 
-import bridge.common.BaseBlockChain;
 import bridge.common.IBaseChain;
 import bridge.common.TransactionModels.Transaction;
 import com.electronwill.nightconfig.core.Config;
 import java.net.URL;
-import java.util.Collections;
-import java.util.List;
+import java.util.ArrayList;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -16,8 +14,9 @@ import wf.bitcoin.javabitcoindrpcclient.BitcoinJSONRPCClient;
 import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient;
 import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient.Block;
 
+@SuppressWarnings("unchecked")
 @Data
-class BitcoinIBaseChain implements IBaseChain, BaseBlockChain {
+class BitcoinIBaseChain implements IBaseChain {
   @Setter(AccessLevel.PROTECTED)
   private Config asset;
 
@@ -75,9 +74,9 @@ class BitcoinIBaseChain implements IBaseChain, BaseBlockChain {
   }
 
   @Override
-  public List<Transaction> getTrxOfBlockAtHeight(int height) {
+  public ArrayList<Transaction> getTrxOfBlockAtHeight(Integer height) {
     Block blockHash = rpcClient.getBlock(height);
-    return Collections.EMPTY_LIST;
+    return new ArrayList<Transaction>();
   }
 
   @Override
@@ -88,8 +87,8 @@ class BitcoinIBaseChain implements IBaseChain, BaseBlockChain {
   }
 
   @Override
-  public <T> List<T> getTrxHash(int blockHeight) {
-    return IBaseChain.super.getTrxHash(blockHeight);
+  public <T> ArrayList<String> getTrxHash(T blockHeight) {
+    return new ArrayList<>();
   }
 
   @Override

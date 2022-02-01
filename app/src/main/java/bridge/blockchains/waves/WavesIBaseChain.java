@@ -2,9 +2,8 @@ package bridge.blockchains.waves;
 
 import bridge.common.IBaseChain;
 import com.electronwill.nightconfig.core.Config;
-import com.wavesplatform.wavesj.Block;
 import com.wavesplatform.wavesj.Node;
-import java.util.List;
+import java.util.ArrayList;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -12,6 +11,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import org.agrona.collections.Object2ObjectHashMap;
 
+@SuppressWarnings("unchecked")
 @Data
 class WavesIBaseChain<K> implements IBaseChain {
 
@@ -74,7 +74,7 @@ class WavesIBaseChain<K> implements IBaseChain {
 
   @Override
   @SneakyThrows
-  public Number getBlockHeight() {
+  public Integer getBlockHeight() {
     return rpcClient.getHeight();
   }
 
@@ -86,19 +86,18 @@ class WavesIBaseChain<K> implements IBaseChain {
   }
 
   @Override
-  @SneakyThrows
-  public Block getTrxOfBlockAtHeight(int height) {
-    return rpcClient.getBlock(height);
+  public <T> T getTrxOfBlockAtHeight(Integer height) {
+    return null;
   }
 
   @Override
   public String getTrxByID(String trxID) {
-    return IBaseChain.super.getTrxByID(trxID);
+    return null;
   }
 
   @Override
-  public <T> List<T> getTrxHash(int blockHeight) {
-    return IBaseChain.super.getTrxHash(blockHeight);
+  public <T> ArrayList<String> getTrxHash(T blockHeight) {
+    return new ArrayList<>();
   }
 
   @Override

@@ -2,7 +2,7 @@ package bridge.blockchains.ethchains;
 
 import bridge.common.IBaseChain;
 import com.electronwill.nightconfig.core.Config;
-import java.util.List;
+import java.util.ArrayList;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -12,6 +12,7 @@ import org.agrona.collections.Object2ObjectHashMap;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
 
+@SuppressWarnings("unchecked")
 @Data
 class EthIBaseChain<K> implements IBaseChain {
 
@@ -20,7 +21,7 @@ class EthIBaseChain<K> implements IBaseChain {
   Object2ObjectHashMap<String, Config> asset;
 
   @Setter(AccessLevel.PROTECTED)
-  Object2ObjectHashMap<String, Object> chain2IdentifierMapping;
+  Object2ObjectHashMap<String, Object> identifier2ChainMapping;
 
   @Setter(AccessLevel.PROTECTED)
   private String networkNode;
@@ -79,18 +80,18 @@ class EthIBaseChain<K> implements IBaseChain {
   }
 
   @Override
-  public <T> T getTrxOfBlockAtHeight(int height) {
-    return IBaseChain.super.getTrxOfBlockAtHeight(height);
+  public ArrayList<String> getTrxOfBlockAtHeight(Integer height) {
+    return new ArrayList<>();
   }
 
   @Override
   public String getTrxByID(String trxID) {
-    return IBaseChain.super.getTrxByID(trxID);
+    return null;
   }
 
   @Override
-  public <T> List<T> getTrxHash(int blockHeight) {
-    return IBaseChain.super.getTrxHash(blockHeight);
+  public <T> ArrayList<String> getTrxHash(T blockHeight) {
+    return new ArrayList<>();
   }
 
   @Override

@@ -22,36 +22,24 @@ import java.net.http.HttpResponse.BodySubscribers;
 import java.net.http.WebSocket;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import org.agrona.collections.Object2ObjectHashMap;
 
 public interface IBaseChain {
   void init();
 
-  Number getBlockHeight();
+  <T> T getBlockHeight();
 
-  Object2ObjectHashMap<String, Object> getChain2IdentifierMapping();
+  <T> T getChainIdentifier();
 
-  <T extends Object> T getChainIdentifier();
+  <T> T getTrxOfBlockAtHeight(Integer height);
 
-  default <T extends Object> T getTrxOfBlockAtHeight(int height) {
-    return null;
-  }
+  String getTrxByID(String trxID);
 
-  default String getTrxByID(String trxID) {
-    return null;
-  }
+  <T> ArrayList<String> getTrxHash(T blockHeight);
 
-  default <T extends Object> List<T> getTrxHash(int blockHeight) {
-    return Collections.emptyList();
-  }
-
-  default boolean validateAddress(String address) {
-    return false;
-  }
+  boolean validateAddress(String address);
 
   default String getNodeResponse(String nodeEndpoint)
       throws ChainNodeException, IOException, URISyntaxException, InterruptedException,
