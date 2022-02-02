@@ -1,9 +1,11 @@
 package bridge.controller;
 
-import static bridge.controller.RequestServlets.TestServerlet;
-import static io.undertow.servlet.Servlets.*;
+import static io.undertow.servlet.Servlets.defaultContainer;
+import static io.undertow.servlet.Servlets.deployment;
+import static io.undertow.servlet.Servlets.servlet;
 
-import bridge.common.ConfigFileObj;
+import bridge.common.BridgeUtils;
+import bridge.controller.RequestServlets.TestServerlet;
 import io.undertow.Handlers;
 import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
@@ -25,7 +27,7 @@ public class UndertowController {
   private UndertowController() {}
 
   public static void runServerController() throws IOException {
-    URL errorPages = ConfigFileObj.readResource("WEB-INF/errorpages/404.html");
+    URL errorPages = BridgeUtils.readResource("WEB-INF/errorpages/404.html");
     String errofile = Files.readString(Path.of(errorPages.getPath()));
     ErrorPage errorPage = new ErrorPage(errofile, StatusCodes.INTERNAL_SERVER_ERROR);
     MimeMapping mimeMapping = new MimeMapping(".html", "text/html");

@@ -1,9 +1,14 @@
 package bridge.common;
 
+import com.electronwill.nightconfig.core.Config;
+import com.electronwill.nightconfig.core.ConfigFormat;
+import com.electronwill.nightconfig.core.io.ConfigParser;
+import com.electronwill.nightconfig.json.JsonFormat;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Objects;
-import lombok.SneakyThrows;
 import org.agrona.collections.Object2ObjectHashMap;
 
 public class BridgeUtils {
@@ -25,7 +30,6 @@ public class BridgeUtils {
     }
   }
 
-  @SneakyThrows
   public static Object2ObjectHashMap<String, IBaseChain> getIdentifier2ChainMapping(
       IBaseChain... chains) {
     Object2ObjectHashMap<String, IBaseChain> mapping = new Object2ObjectHashMap<>();
@@ -39,5 +43,24 @@ public class BridgeUtils {
   public static String object2JsonConverter(Object object) {
     Gson gsonParser = new GsonBuilder().create();
     return gsonParser.toJson(object);
+  }
+
+  public static ConfigParser<Config> getJsonDeserializer() {
+    ConfigFormat<Config> jsonFormat = JsonFormat.fancyInstance();
+    ConfigParser<Config> jsonParser = jsonFormat.createParser();
+    return jsonParser;
+  }
+
+  public static InputStream readResourceAsStream(String filename) throws NullPointerException {
+    InputStream configfileStream =
+        ConfigFileObj.class.getClassLoader().getResourceAsStream(filename);
+    if (configfileStream == null) throw new NullPointerException("File Not found");
+    return configfileStream;
+  }
+
+  public static URL readResource(String filename) throws NullPointerException {
+    URL configfileStream = ConfigFileObj.class.getClassLoader().getResource(filename);
+    if (configfileStream == null) throw new NullPointerException("File Not found");
+    return configfileStream;
   }
 }

@@ -5,6 +5,7 @@ import bridge.blockchains.ethchains.BinanceSmartChainI;
 import bridge.blockchains.ethchains.PolygonChainI;
 import bridge.blockchains.waves.WavesChainI;
 import bridge.messageservice.NewBlockEventProducer;
+import com.wavesplatform.wavesj.Node;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,13 +22,10 @@ public class App {
         NewBlockEventProducer.getNewBlockEventProducer(qnodecoinChain, polygonChain, wavesChain);
     // producer.start();
 
-    System.out.println(qnodecoinChain);
-    /*
-     * Node test = wavesChain.getNodeObj(); for (var tt
-     * test.getBlock(23232).transactions()) { System.out.println(tt.tx());
-     *
-     * }
-     */
+    // System.out.println(qnodecoinChain.getTrxOfBlockAtHeight(BigInteger.valueOf(1000)));
+
+    Node test = wavesChain.getNodeObj();
+
     // System.out.println(object2JsonConverter(test.getBlock(23232).transactions()));
   }
 }

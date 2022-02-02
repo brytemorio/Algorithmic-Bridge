@@ -2,9 +2,9 @@
   "Blockchain": {
     "Qnodecoin": {
       "host": "127.0.0.1",
-      "rpc_user": "southerner",
+      "rpc_user": "orion",
       "rpc_port": 20611,
-      "rpc_password": "southern_light",
+      "rpc_password": "orion.net",
       "network": "mainnet",
       "chain_identifier": "QCN",
       "control_wallet": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
