@@ -29,7 +29,8 @@ public final class BinanceSmartChainI<K> extends EthIBaseChain<K> {
         throw new AssetNotFoundException(
             String.format("Asset: %s, could not be found in the config file", configName));
       }
-      assets.put(configName, configObject.get("Blockchain.Polygon.asset" + "." + configName));
+      assets.put(
+          configName, configObject.get("Blockchain.BinanceSmartChain.asset" + "." + configName));
     }
     super.setAsset(assets);
     super.setNetworkNode(configObject.get("Blockchain.BinanceSmartChain.node"));

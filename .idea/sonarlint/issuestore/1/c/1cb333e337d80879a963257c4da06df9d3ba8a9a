@@ -1,0 +1,18 @@
+
+V	java:S125"<This block of commented-out lines of code should be removed.(›ª˜ûÿÿÿÿ
+—
+java:S1186:"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.( Üó
+N
+java:S1854?"9Remove this useless assignment to local variable "param".(€Ì
+?
+java:S1481?"*Remove this unused "param" local variable.(€Ì
+f
+java:S1989@"PHandle the following exception that could be thrown by "getWriter": IOException.(×–·›
+Q	java:S125A"<This block of commented-out lines of code should be removed.(±Ì†Û
+V	java:S125C"<This block of commented-out lines of code should be removed.(úÖ’ÿÿÿÿÿ
+g
+java:S1989I"LHandle the following exception that could be thrown by "doGet": IOException.(®Ó‘ûÿÿÿÿÿ
+O
+java:S1128"9Remove this unused import 'javax.servlet.ServletContext'.(á¡æŞ
+Q
+java:S1128	";Remove this unused import 'javax.servlet.ServletException'.(Š‰™Œ

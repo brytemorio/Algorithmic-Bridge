@@ -10,6 +10,7 @@ import com.google.common.base.Supplier;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.http.HttpClient;
@@ -27,13 +28,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public interface IBaseChain {
-  void init();
+  // void init();
 
   <T> T getBlockHeight();
 
   <T> T getChainIdentifier();
 
-  <T> T getTrxOfBlockAtHeight(Integer height);
+  ArrayList<String> getTrxOfBlockAtHeight(BigInteger height);
 
   String getTrxByID(String trxID);
 

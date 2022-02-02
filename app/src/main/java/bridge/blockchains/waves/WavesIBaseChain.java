@@ -3,6 +3,7 @@ package bridge.blockchains.waves;
 import bridge.common.IBaseChain;
 import com.electronwill.nightconfig.core.Config;
 import com.wavesplatform.wavesj.Node;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -62,13 +63,12 @@ class WavesIBaseChain<K> implements IBaseChain {
     return new WavesAssets(asset.get(assetConfigName));
   }
 
-  @Override
-  public void init() {
+  protected void init() {
     this.rpcClient = getNodeObj();
   }
 
   @SneakyThrows
-  private Node getNodeObj() {
+  public Node getNodeObj() {
     return new Node(networkNode);
   }
 
@@ -79,7 +79,10 @@ class WavesIBaseChain<K> implements IBaseChain {
   }
 
   @Override
-  public <T> T getTrxOfBlockAtHeight(Integer height) {
+  @SneakyThrows
+  public ArrayList<String> getTrxOfBlockAtHeight(BigInteger height) {
+    var temp = rpcClient.getBlock(height.intValue());
+    // temp.transactions().;
     return null;
   }
 

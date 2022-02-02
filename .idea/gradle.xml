@@ -8,8 +8,12 @@
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+<<<<<<< HEAD
         <option name="gradleHome" value="/usr/local/Cellar/gradle/7.3.3/libexec" />
         <option name="gradleJvm" value="#JAVA_HOME" />
+=======
+        <option name="gradleJvm" value="zulu-17" />
+>>>>>>> 27e9f726c72a0af18fd7e3aab5d580ad9b1af236
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />

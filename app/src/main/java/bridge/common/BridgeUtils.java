@@ -1,5 +1,7 @@
 package bridge.common;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.util.Objects;
 import lombok.SneakyThrows;
 import org.agrona.collections.Object2ObjectHashMap;
@@ -32,5 +34,10 @@ public class BridgeUtils {
       mapping.put(chain.getChainIdentifier(), chain);
     }
     return mapping;
+  }
+
+  public static String object2JsonConverter(Object object) {
+    Gson gsonParser = new GsonBuilder().create();
+    return gsonParser.toJson(object);
   }
 }

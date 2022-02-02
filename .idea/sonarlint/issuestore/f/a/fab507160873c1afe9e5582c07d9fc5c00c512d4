@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 p
 java:S1854"NRemove this useless assignment to local variable "chainIdentifier2Blockchain".(ß††Èüÿÿÿÿ8œŠê”ë/
 b
@@ -8,3 +9,21 @@ java:S1481"6Remove this unused "binanceSmartChain" local variable.(üªÉ8ó‹ê”ë
 a
 java:S1481"?Remove this unused "chainIdentifier2Blockchain" local variable.(ß††Èüÿÿÿÿ8ö‹ê”ë/
 X	java:S125"<This block of commented-out lines of code should be removed.(ñ×8°Œê”ë/
+=======
+W
+java:S1854"<Remove this useless assignment to local variable "producer".(ÅŞíÔúÿÿÿÿ
+Y
+java:S1854">Remove this useless assignment to local variable "qnodecoinW".(µõà²ûÿÿÿÿ
+[
+java:S1854"@Remove this useless assignment to local variable "fishfactoryP".(˜Ã¢Ìşÿÿÿÿ
+Y
+java:S1854">Remove this useless assignment to local variable "qnodecoinQ".(ğ÷±Äùÿÿÿÿ
+J
+java:S1481"/Remove this unused "qnodecoinQ" local variable.(ğ÷±Äùÿÿÿÿ
+L
+java:S1481"1Remove this unused "fishfactoryP" local variable.(˜Ã¢Ìşÿÿÿÿ
+J
+java:S1481"/Remove this unused "qnodecoinW" local variable.(µõà²ûÿÿÿÿ
+H
+java:S1481"-Remove this unused "producer" local variable.(ÅŞíÔúÿÿÿÿ
+>>>>>>> 27e9f726c72a0af18fd7e3aab5d580ad9b1af236

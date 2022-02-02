@@ -15,13 +15,19 @@ public class App {
   public static void main(String[] args) {
     QnodecoinChainI qnodecoinChain = new QnodecoinChainI();
     PolygonChainI<?> polygonChain = new PolygonChainI<>("fishfactory_p");
-    WavesChainI<?> wavesChain = new WavesChainI<>(); // "qnodecoin", "fishfactory_p"
+    WavesChainI<?> wavesChain = new WavesChainI<>("qnodecoin", "fishfactory_p");
     BinanceSmartChainI<?> binanceSmartChain = new BinanceSmartChainI<>("qnode_defi");
     NewBlockEventProducer producer =
         NewBlockEventProducer.getNewBlockEventProducer(qnodecoinChain, polygonChain, wavesChain);
+    // producer.start();
 
-    producer.start();
-
-    // UndertowController.runServerController();
+    System.out.println(qnodecoinChain);
+    /*
+     * Node test = wavesChain.getNodeObj(); for (var tt
+     * test.getBlock(23232).transactions()) { System.out.println(tt.tx());
+     *
+     * }
+     */
+    // System.out.println(object2JsonConverter(test.getBlock(23232).transactions()));
   }
 }

@@ -2,6 +2,9 @@ package bridge.blockchains.ethchains;
 
 import bridge.common.IBaseChain;
 import com.electronwill.nightconfig.core.Config;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -10,11 +13,18 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import org.agrona.collections.Object2ObjectHashMap;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.methods.response.EthBlock;
+import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.http.HttpService;
 
 @SuppressWarnings("unchecked")
 @Data
 class EthIBaseChain<K> implements IBaseChain {
+
+  @Setter(AccessLevel.NONE)
+  @Getter(AccessLevel.NONE)
+  private final Gson gsonParser = new GsonBuilder().create();
 
   @Setter(AccessLevel.PROTECTED)
   @Getter(AccessLevel.PROTECTED)
@@ -60,25 +70,31 @@ class EthIBaseChain<K> implements IBaseChain {
     return new EthAssets(asset.get(assetConfigName));
   }
 
-  @Override
-  public void init() {
+  protected void init() {
     this.web3j = initWeb3j();
   }
 
   @SneakyThrows
-  private Web3j initWeb3j() {
+  public Web3j initWeb3j() {
     return Web3j.build(new HttpService(networkNode));
   }
 
   @Override
   @SneakyThrows
   public Number getBlockHeight() {
-    return web3j.ethBlockNumber().send().getBlockNumber();
+    EthBlockNumber ethBlockNumber = web3j.ethBlockNumber().sendAsync().get();
+    return ethBlockNumber.getBlockNumber();
   }
 
   @Override
-  public ArrayList<String> getTrxOfBlockAtHeight(Integer height) {
-    return new ArrayList<>();
+  @SneakyThrows
+  public ArrayList<String> getTrxOfBlockAtHeight(BigInteger height) {
+    ArrayList<String> trxhashes = new ArrayList<>();
+    EthBlock block = web3j.ethGetBlockByNumber(DefaultBlockParameter.valueOf(height), true).send();
+    for (var trx : block.getBlock().getTransactions()) {
+      trxhashes.add(gsonParser.toJson(trx));
+    }
+    return trxhashes;
   }
 
   @Override
@@ -87,7 +103,7 @@ class EthIBaseChain<K> implements IBaseChain {
   }
 
   @Override
-  public <T> ArrayList<String> getTrxHash(T blockHeight) {
+  public <Integer> ArrayList<String> getTrxHash(Integer blockHeight) {
     return new ArrayList<>();
   }
 

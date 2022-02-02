@@ -1,8 +1,8 @@
 package bridge.blockchains.bitcoinchains;
 
 import bridge.common.IBaseChain;
-import bridge.common.TransactionModels.Transaction;
 import com.electronwill.nightconfig.core.Config;
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
 import lombok.AccessLevel;
@@ -60,8 +60,7 @@ class BitcoinIBaseChain implements IBaseChain {
   @Getter(AccessLevel.NONE)
   private BitcoinJSONRPCClient rpcClient;
 
-  @Override
-  public void init() {
+  protected void init() {
     this.assetName = asset.get("name");
     this.assetTicker = asset.get("ticker");
     this.assetTransferFee = asset.get("transfer_fee");
@@ -74,9 +73,12 @@ class BitcoinIBaseChain implements IBaseChain {
   }
 
   @Override
-  public ArrayList<Transaction> getTrxOfBlockAtHeight(Integer height) {
-    Block blockHash = rpcClient.getBlock(height);
-    return new ArrayList<Transaction>();
+  public ArrayList<String> getTrxOfBlockAtHeight(BigInteger height) {
+    ArrayList<String> trx = new ArrayList<>();
+    Block block = rpcClient.getBlock(height.intValue());
+    var trxList = block.tx();
+    trx.addAll(trxList);
+    return trx;
   }
 
   @Override
