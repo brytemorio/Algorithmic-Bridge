@@ -17,8 +17,9 @@ public class App {
     WavesChainI<?> wavesChain = new WavesChainI<>("qnodecoin", "fishfactory_p");
     BinanceSmartChainI<?> binanceSmartChain = new BinanceSmartChainI<>("qnode_defi");
     NewBlockEventProducer producer =
-        NewBlockEventProducer.getNewBlockEventProducer(qnodecoinChain, polygonChain, wavesChain);
-    // producer.start();
+        NewBlockEventProducer.getNewBlockEventProducer(
+            qnodecoinChain, polygonChain, wavesChain, binanceSmartChain);
+    producer.start();
     // System.out.println(qnodecoinChain.getTrxOfBlockAtHeight(BigInteger.valueOf(1000)));
   }
 }

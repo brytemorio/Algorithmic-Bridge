@@ -83,7 +83,7 @@ class EthIBaseChain<K> implements IBaseChain {
   @Override
   @SneakyThrows
   public Number getBlockHeight() {
-    EthBlockNumber ethBlockNumber = web3j.ethBlockNumber().sendAsync().get();
+    EthBlockNumber ethBlockNumber = web3j.ethBlockNumber().send();
     return ethBlockNumber.getBlockNumber();
   }
 

@@ -61,7 +61,7 @@
       }
     },
     "BinanceSmartChain": {
-      "node": "wssds://bsc-ws-node.nariox.org:443",
+      "node": "https://data-seed-prebsc-1-s1.binance.org:8545",
       "network": "testnet",
       "network_id": 97,
       "chain_identifier": "BSC",
