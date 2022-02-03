@@ -2,10 +2,9 @@ package bridge.common;
 
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.ConfigFormat;
+import com.electronwill.nightconfig.core.conversion.ObjectConverter;
 import com.electronwill.nightconfig.core.io.ConfigParser;
 import com.electronwill.nightconfig.json.JsonFormat;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Objects;
@@ -40,9 +39,9 @@ public class BridgeUtils {
     return mapping;
   }
 
-  public static String object2JsonConverter(Object object) {
-    Gson gsonParser = new GsonBuilder().create();
-    return gsonParser.toJson(object);
+  public static Config object2JsonConverter(Object object) {
+    ObjectConverter objectConverter = new ObjectConverter();
+    return objectConverter.toConfig(object, Config::inMemory);
   }
 
   public static ConfigParser<Config> getJsonDeserializer() {

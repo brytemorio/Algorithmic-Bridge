@@ -1,5 +1,6 @@
 package bridge.blockchains.ethchains;
 
+import bridge.common.BridgeUtils;
 import bridge.common.IBaseChain;
 import com.electronwill.nightconfig.core.Config;
 import com.google.gson.Gson;
@@ -75,7 +76,7 @@ class EthIBaseChain<K> implements IBaseChain {
   }
 
   @SneakyThrows
-  public Web3j initWeb3j() {
+  private Web3j initWeb3j() {
     return Web3j.build(new HttpService(networkNode));
   }
 
@@ -88,13 +89,14 @@ class EthIBaseChain<K> implements IBaseChain {
 
   @Override
   @SneakyThrows
-  public ArrayList<String> getTrxOfBlockAtHeight(BigInteger height) {
-    ArrayList<String> trxhashes = new ArrayList<>();
-    EthBlock block = web3j.ethGetBlockByNumber(DefaultBlockParameter.valueOf(height), true).send();
-    for (var trx : block.getBlock().getTransactions()) {
-      trxhashes.add(gsonParser.toJson(trx));
+  public ArrayList<String> getTrxIdsByBlockHeight(BigInteger height) {
+    EthBlock.Block block =
+        web3j.ethGetBlockByNumber(DefaultBlockParameter.valueOf(height), false).send().getBlock();
+    ArrayList<String> trxIds = new ArrayList<>();
+    for (var trx : block.getTransactions()) {
+      trxIds.add(BridgeUtils.object2JsonConverter(trx).get("value").toString());
     }
-    return trxhashes;
+    return trxIds;
   }
 
   @Override

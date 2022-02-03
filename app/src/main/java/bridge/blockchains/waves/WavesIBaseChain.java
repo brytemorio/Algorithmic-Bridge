@@ -82,7 +82,7 @@ class WavesIBaseChain<K> implements IBaseChain {
 
   @Override
   @SneakyThrows
-  public ArrayList<String> getTrxOfBlockAtHeight(BigInteger height) {
+  public ArrayList<String> getTrxIdsByBlockHeight(BigInteger height) {
     Block block = rpcClient.getBlock(height.intValue());
     ArrayList<String> trxId = new ArrayList<>();
     for (var tt : block.transactions()) {

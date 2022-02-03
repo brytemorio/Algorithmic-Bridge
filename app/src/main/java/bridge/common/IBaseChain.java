@@ -34,7 +34,7 @@ public interface IBaseChain {
 
   <T> T getChainIdentifier();
 
-  ArrayList<String> getTrxOfBlockAtHeight(BigInteger height);
+  ArrayList<String> getTrxIdsByBlockHeight(BigInteger height);
 
   String getTrxByID(String trxID);
 

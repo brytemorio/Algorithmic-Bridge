@@ -73,7 +73,7 @@ class BitcoinIBaseChain implements IBaseChain {
   }
 
   @Override
-  public ArrayList<String> getTrxOfBlockAtHeight(BigInteger height) {
+  public ArrayList<String> getTrxIdsByBlockHeight(BigInteger height) {
     ArrayList<String> trx = new ArrayList<>();
     Block block = rpcClient.getBlock(height.intValue());
     var trxList = block.tx();
