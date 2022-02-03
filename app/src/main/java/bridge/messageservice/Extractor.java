@@ -23,9 +23,11 @@ final class Extractor implements EventHandler<BlockProp> {
   private Extractor(final IBaseChain... cBlockchains) {
     // TOOD: Implement eventHandler and specify an appropriate buffer size
     this.blockChains = cBlockchains;
+    Integer bufferSize = 1 * 1024 * 1024;
     for (IBaseChain iter : this.blockChains) {
       var disruptor =
-          new DisruptorObjFactory<ArrayList<String>>(null, new TrxHashListFactory(), null);
+          new DisruptorObjFactory<ArrayList<String>>(
+              new TransactionHandler(), new TrxHashListFactory(), bufferSize);
       disruptor.start();
       chainRingBufferMapping.put(iter.getChainIdentifier(), disruptor.getRingBuffer());
     }
@@ -63,7 +65,7 @@ final class Extractor implements EventHandler<BlockProp> {
     IBaseChain uniqueChain = Objects.requireNonNull(getUniqueChain(event.getChainIdentifier()));
     RingBuffer<ArrayList<String>> uniqueChainBuffer =
         chainRingBufferMapping.get(uniqueChainIdentifier);
-    ArrayList<String> trxHashList = uniqueChain.getTrxHash(event.getBlockHeight());
+    ArrayList<String> trxHashList = uniqueChain.getTrxIdsByBlockHeight(event.getBlockHeight());
     long uniqueChainBufferSequence = uniqueChainBuffer.next();
     ArrayList<String> nextSlot = uniqueChainBuffer.get(uniqueChainBufferSequence);
     nextSlot.addAll(trxHashList);

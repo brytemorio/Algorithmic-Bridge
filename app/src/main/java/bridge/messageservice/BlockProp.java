@@ -1,5 +1,6 @@
 package bridge.messageservice;
 
+import java.math.BigInteger;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -13,7 +14,7 @@ final class BlockProp {
   private String chainIdentifier;
 
   @Setter(AccessLevel.NONE)
-  private Number blockHeight;
+  private BigInteger blockHeight;
 
   @Setter(AccessLevel.NONE)
   @Getter(AccessLevel.NONE)
@@ -24,7 +25,7 @@ final class BlockProp {
   }
 
   @SneakyThrows
-  public void setBlockHeight(Number blockHeight) {
+  public void setBlockHeight(BigInteger blockHeight) {
     if (blockHeight.longValue() > previousBlockHeight.longValue()) {
       this.blockHeight = blockHeight;
       previousBlockHeight = this.blockHeight;

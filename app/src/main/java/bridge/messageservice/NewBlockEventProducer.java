@@ -30,13 +30,15 @@ public final class NewBlockEventProducer {
   @SneakyThrows
   public static synchronized NewBlockEventProducer getNewBlockEventProducer(
       final IBaseChain... cblockChains) {
-    String className = NewBlockEventProducer.class.getCanonicalName();
+    String className = NewBlockEventProducer.class.getName();
     if (!Objects.nonNull(newBlockEventProducer)) {
       newBlockEventProducer =
           new NewBlockEventProducer(
               Objects.requireNonNull(
                   cblockChains,
-                  "Cannot construct object NewBlockEventProducer without the required"
+                  "Cannot construct object "
+                      + className
+                      + " without the required"
                       + " parameter(s)"));
     } else {
       throw new ObjectCreationException("An instance of " + className + " already exits");
@@ -47,9 +49,9 @@ public final class NewBlockEventProducer {
   public void start() {
     Extractor dispatchService = Extractor.getExtractorObj(blockChains);
     NewBlockEventFactory blockEventFactory = new NewBlockEventFactory();
-    Integer bufferSize = 4096;
+    Integer bufferSize = 1 * 1024 * 1024;
     DisruptorObjFactory<BlockProp> disruptor =
-        new DisruptorObjFactory<>(dispatchService, blockEventFactory, bufferSize);
+        new DisruptorObjFactory<>(dispatchService, blockEventFactory, bufferSize, true);
     disruptor.start();
     ringBuffer = disruptor.getRingBuffer();
 
