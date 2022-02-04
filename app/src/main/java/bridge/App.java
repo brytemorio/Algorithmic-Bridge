@@ -19,7 +19,6 @@ public class App {
     NewBlockEventProducer producer =
         NewBlockEventProducer.getNewBlockEventProducer(
             wavesChain, qnodecoinChain, polygonChain, binanceSmartChain);
-
     producer.start();
   }
 }

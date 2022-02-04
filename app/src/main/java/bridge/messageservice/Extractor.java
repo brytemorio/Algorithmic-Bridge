@@ -65,6 +65,7 @@ final class Extractor implements EventHandler<BlockProp> {
     if (currentBlockHeight.compareTo(previousBlockHeight) > 0) {
       previousBlockHeight = currentBlockHeight;
     } else {
+      event = null;
       return;
     }
     log.info("Got Block: " + previousBlockHeight + " with ID: " + currentBlockHeightChainID);

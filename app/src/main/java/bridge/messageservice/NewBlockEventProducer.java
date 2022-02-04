@@ -1,12 +1,12 @@
 package bridge.messageservice;
 
 import bridge.blockchains.IBaseChain;
+import bridge.common.BridgeUtils;
 import bridge.exceptions.BridgeExceptions.ObjectCreationException;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.RingBuffer;
 import java.math.BigInteger;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.SneakyThrows;
@@ -48,12 +48,16 @@ public final class NewBlockEventProducer {
     return newBlockEventProducer;
   }
 
-  public void start() throws InterruptedException, ExecutionException {
+  public void start() {
     Extractor dispatchService = Extractor.getExtractorObj(blockChains);
     NewBlockEventFactory blockEventFactory = new NewBlockEventFactory();
     Integer bufferSize = 1024;
     DisruptorObjFactory<BlockProp> disruptor =
-        new DisruptorObjFactory<>(dispatchService, blockEventFactory, bufferSize, true);
+        new DisruptorObjFactory<>(
+            dispatchService,
+            blockEventFactory,
+            bufferSize,
+            BridgeUtils.determineWaitStrategy(blockChains));
     disruptor.start();
     ringBuffer = disruptor.getRingBuffer();
 
