@@ -1,5 +1,6 @@
 package bridge.common;
 
+import bridge.blockchains.IBaseChain;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.ConfigFormat;
 import com.electronwill.nightconfig.core.conversion.ObjectConverter;

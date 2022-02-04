@@ -15,9 +15,9 @@
       }
     },
     "Waves": {
-      "node": "https://nodes-testnet.wavesnodes.com/",
-      "network": "testnet",
-      "network_id": "T",
+      "node": "https://nodes.wavesnodes.com",
+      "network": "mainnet",
+      "network_id": "W",
       "chain_identifier": "WAV",
       "asset": {
         "qnodecoin": {

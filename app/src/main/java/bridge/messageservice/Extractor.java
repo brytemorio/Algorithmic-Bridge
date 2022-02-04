@@ -1,11 +1,12 @@
 package bridge.messageservice;
 
+import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
-import bridge.common.IBaseChain;
 import bridge.exceptions.BridgeExceptions.ObjectCreationException;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Objects;
 import lombok.SneakyThrows;
@@ -23,7 +24,7 @@ final class Extractor implements EventHandler<BlockProp> {
   private Extractor(final IBaseChain... cBlockchains) {
     // TOOD: Implement eventHandler and specify an appropriate buffer size
     this.blockChains = cBlockchains;
-    Integer bufferSize = 1 * 1024 * 1024;
+    Integer bufferSize = 1024;
     for (IBaseChain iter : this.blockChains) {
       var disruptor =
           new DisruptorObjFactory<ArrayList<String>>(
@@ -58,14 +59,21 @@ final class Extractor implements EventHandler<BlockProp> {
 
   @Override
   public void onEvent(BlockProp event, long sequence, boolean endOfBatch) throws Exception {
-
-    log.info("Got " + event.getBlockHeight() + " with ID: " + event.getChainIdentifier());
+    BigInteger previousBlockHeight = BigInteger.ZERO;
+    BigInteger currentBlockHeight = event.getBlockHeight();
+    String currentBlockHeightChainID = event.getChainIdentifier();
+    if (currentBlockHeight.compareTo(previousBlockHeight) > 0) {
+      previousBlockHeight = currentBlockHeight;
+    } else {
+      return;
+    }
+    log.info("Got Block: " + previousBlockHeight + " with ID: " + currentBlockHeightChainID);
 
     String uniqueChainIdentifier = event.getChainIdentifier();
-    IBaseChain uniqueChain = Objects.requireNonNull(getUniqueChain(event.getChainIdentifier()));
+    IBaseChain uniqueChain = Objects.requireNonNull(getUniqueChain(currentBlockHeightChainID));
     RingBuffer<ArrayList<String>> uniqueChainBuffer =
         chainRingBufferMapping.get(uniqueChainIdentifier);
-    ArrayList<String> trxHashList = uniqueChain.getTrxIdsByBlockHeight(event.getBlockHeight());
+    ArrayList<String> trxHashList = uniqueChain.getTrxIdsByBlockHeight(previousBlockHeight);
     long uniqueChainBufferSequence = uniqueChainBuffer.next();
     ArrayList<String> nextSlot = uniqueChainBuffer.get(uniqueChainBufferSequence);
     nextSlot.addAll(trxHashList);

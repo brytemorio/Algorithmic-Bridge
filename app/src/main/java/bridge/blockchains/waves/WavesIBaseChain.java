@@ -1,9 +1,8 @@
 package bridge.blockchains.waves;
 
+import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
-import bridge.common.IBaseChain;
 import com.electronwill.nightconfig.core.Config;
-import com.wavesplatform.wavesj.Block;
 import com.wavesplatform.wavesj.Node;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -76,18 +75,22 @@ class WavesIBaseChain<K> implements IBaseChain {
 
   @Override
   @SneakyThrows
-  public Integer getBlockHeight() {
-    return rpcClient.getHeight();
+  public BigInteger getBlockHeight() {
+    Integer height = rpcClient.getHeight();
+    return BigInteger.valueOf(height.intValue());
   }
 
   @Override
   @SneakyThrows
   public ArrayList<String> getTrxIdsByBlockHeight(BigInteger height) {
-    Block block = rpcClient.getBlock(height.intValue());
+    // Block block = rpcClient.getBlock(height.intValue());
+    String endpoint = getNetworkNode() + "/blocks/at/" + height.intValue();
+    Config response = BridgeUtils.getJsonDeserializer().parse(getNodeResponse(endpoint));
     ArrayList<String> trxId = new ArrayList<>();
-    for (var tt : block.transactions()) {
-      Config parsed = BridgeUtils.getJsonDeserializer().parse((tt.tx().toJson()));
-      trxId.add(parsed.get("id").toString());
+    ArrayList<Config> transactions = response.get("transactions");
+    for (var tt : transactions) {
+      // Config parsed = BridgeUtils.getJsonDeserializer().parse(tt.);
+      trxId.add(tt.get("id").toString());
     }
     return trxId;
   }

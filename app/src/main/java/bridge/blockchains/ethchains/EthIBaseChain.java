@@ -1,7 +1,7 @@
 package bridge.blockchains.ethchains;
 
+import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
-import bridge.common.IBaseChain;
 import com.electronwill.nightconfig.core.Config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -82,7 +82,7 @@ class EthIBaseChain<K> implements IBaseChain {
 
   @Override
   @SneakyThrows
-  public Number getBlockHeight() {
+  public BigInteger getBlockHeight() {
     EthBlockNumber ethBlockNumber = web3j.ethBlockNumber().send();
     return ethBlockNumber.getBlockNumber();
   }

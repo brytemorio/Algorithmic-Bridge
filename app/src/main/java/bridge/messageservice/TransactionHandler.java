@@ -9,6 +9,6 @@ public class TransactionHandler implements EventHandler<ArrayList<String>> {
 
   @Override
   public void onEvent(ArrayList<String> event, long sequence, boolean endOfBatch) throws Exception {
-    event.forEach(log::info);
+    // implementation for later
   }
 }

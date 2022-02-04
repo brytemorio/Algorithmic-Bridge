@@ -1,6 +1,6 @@
 package bridge.blockchains.bitcoinchains;
 
-import bridge.common.IBaseChain;
+import bridge.blockchains.IBaseChain;
 import com.electronwill.nightconfig.core.Config;
 import java.math.BigInteger;
 import java.net.URL;
@@ -68,8 +68,9 @@ class BitcoinIBaseChain implements IBaseChain {
   }
 
   @Override
-  public Number getBlockHeight() {
-    return rpcClient.getBlockCount();
+  public BigInteger getBlockHeight() {
+    Integer height = rpcClient.getBlockCount();
+    return BigInteger.valueOf(height.intValue());
   }
 
   @Override

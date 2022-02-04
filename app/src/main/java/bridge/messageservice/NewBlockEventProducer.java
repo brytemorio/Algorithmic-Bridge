@@ -1,10 +1,12 @@
 package bridge.messageservice;
 
-import bridge.common.IBaseChain;
+import bridge.blockchains.IBaseChain;
 import bridge.exceptions.BridgeExceptions.ObjectCreationException;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.RingBuffer;
+import java.math.BigInteger;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.SneakyThrows;
@@ -23,7 +25,7 @@ public final class NewBlockEventProducer {
 
   /**
    * The parameter passed to {@code getNewBlockEventProducer} are instance of (Classes or the
-   * SubClasses of Classes) that implements the interface {@link bridge.common.IBaseChain}
+   * SubClasses of Classes) that implements the interface {@link bridge.blockchains.IBaseChain}
    *
    * @param blockchains instances of IBaseChain
    */
@@ -46,10 +48,10 @@ public final class NewBlockEventProducer {
     return newBlockEventProducer;
   }
 
-  public void start() {
+  public void start() throws InterruptedException, ExecutionException {
     Extractor dispatchService = Extractor.getExtractorObj(blockChains);
     NewBlockEventFactory blockEventFactory = new NewBlockEventFactory();
-    Integer bufferSize = 1 * 1024 * 1024;
+    Integer bufferSize = 1024;
     DisruptorObjFactory<BlockProp> disruptor =
         new DisruptorObjFactory<>(dispatchService, blockEventFactory, bufferSize, true);
     disruptor.start();
@@ -72,6 +74,7 @@ public final class NewBlockEventProducer {
       this.blockchain = blockchain;
     }
 
+    @SuppressWarnings("static-access")
     @Override
     public void run() {
 
@@ -80,11 +83,20 @@ public final class NewBlockEventProducer {
        * using (CTRL-C)
        */
       for (; ; ) {
+        String chainIdentifier = blockchain.getChainIdentifier();
+        BigInteger chainHeight = blockchain.getBlockHeight();
         long sequence = ringBuffer.next();
         BlockProp newBlockHeight = ringBuffer.get(sequence);
-        newBlockHeight.setChainIdentifier(blockchain.getChainIdentifier());
-        newBlockHeight.setBlockHeight(blockchain.getBlockHeight());
+        newBlockHeight.setChainIdentifier(chainIdentifier);
+        newBlockHeight.setBlockHeight(chainHeight);
+        log.info("Got Block: " + chainHeight + " with ID: " + chainIdentifier);
         ringBuffer.publish(sequence);
+        try {
+          Thread.currentThread().sleep(2000);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+          Thread.currentThread().interrupt();
+        }
       }
     }
   }

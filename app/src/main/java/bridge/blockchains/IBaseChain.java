@@ -1,4 +1,4 @@
-package bridge.common;
+package bridge.blockchains;
 
 import bridge.exceptions.BridgeExceptions.ChainNodeException;
 import com.electronwill.nightconfig.core.Config;
@@ -30,7 +30,7 @@ import java.util.concurrent.ExecutionException;
 public interface IBaseChain {
   // void init();
 
-  <T> T getBlockHeight();
+  BigInteger getBlockHeight();
 
   <T> T getChainIdentifier();
 
