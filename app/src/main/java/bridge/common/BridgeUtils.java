@@ -7,8 +7,8 @@ import com.electronwill.nightconfig.core.conversion.ObjectConverter;
 import com.electronwill.nightconfig.core.io.ConfigParser;
 import com.electronwill.nightconfig.json.JsonFormat;
 import com.lmax.disruptor.BlockingWaitStrategy;
-import com.lmax.disruptor.BusySpinWaitStrategy;
 import com.lmax.disruptor.WaitStrategy;
+import com.lmax.disruptor.YieldingWaitStrategy;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Objects;
@@ -67,10 +67,11 @@ public class BridgeUtils {
     return configfileStream;
   }
 
-  public static WaitStrategy determineWaitStrategy(IBaseChain[] blockchainList) {
+  // Assumptions: Total blockchain objects
+  public static <T> WaitStrategy determineWaitStrategy(T[] eventHandlerThreads) {
     int processorCount = Runtime.getRuntime().availableProcessors();
-    return (processorCount > blockchainList.length)
-        ? new BusySpinWaitStrategy()
+    return (processorCount > eventHandlerThreads.length)
+        ? new YieldingWaitStrategy()
         : new BlockingWaitStrategy();
   }
 }
