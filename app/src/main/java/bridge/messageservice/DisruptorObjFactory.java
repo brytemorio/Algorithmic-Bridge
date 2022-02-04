@@ -14,7 +14,7 @@ final class DisruptorObjFactory<T> extends Disruptor<T> {
       final EventFactory<T> eventFactory,
       final Integer bufferSize) {
     super(eventFactory, bufferSize, DaemonThreadFactory.INSTANCE);
-    super.handleEventsWith(eventHandler);
+    super.handleEventsWith(eventHandler).then(new EventHelpers.ClearBufferSlot());
   }
 
   public DisruptorObjFactory(
@@ -23,6 +23,6 @@ final class DisruptorObjFactory<T> extends Disruptor<T> {
       final Integer bufferSize,
       final WaitStrategy waitStrategy) {
     super(eventFactory, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.MULTI, waitStrategy);
-    super.handleEventsWith(eventHandler);
+    super.handleEventsWith(eventHandler).then(new EventHelpers.ClearBufferSlot());
   }
 }

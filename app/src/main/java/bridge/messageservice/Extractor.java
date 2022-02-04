@@ -19,6 +19,8 @@ final class Extractor implements EventHandler<BlockProp> {
   private final Object2ObjectHashMap<String, RingBuffer<ArrayList<String>>> chainRingBufferMapping =
       new Object2ObjectHashMap<>();
 
+  private BigInteger previousBlockHeight = BigInteger.ZERO;
+
   private static Extractor extractor;
 
   private Extractor(final IBaseChain... cBlockchains) {
@@ -59,13 +61,11 @@ final class Extractor implements EventHandler<BlockProp> {
 
   @Override
   public void onEvent(BlockProp event, long sequence, boolean endOfBatch) throws Exception {
-    BigInteger previousBlockHeight = BigInteger.ZERO;
     BigInteger currentBlockHeight = event.getBlockHeight();
     String currentBlockHeightChainID = event.getChainIdentifier();
     if (currentBlockHeight.compareTo(previousBlockHeight) > 0) {
       previousBlockHeight = currentBlockHeight;
     } else {
-      event = null;
       return;
     }
     log.info("Got Block: " + previousBlockHeight + " with ID: " + currentBlockHeightChainID);
