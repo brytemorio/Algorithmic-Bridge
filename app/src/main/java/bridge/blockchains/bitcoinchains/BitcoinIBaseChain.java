@@ -60,6 +60,10 @@ class BitcoinIBaseChain implements IBaseChain {
   @Getter(AccessLevel.NONE)
   private BitcoinJSONRPCClient rpcClient;
 
+  @Setter(AccessLevel.NONE)
+  @Getter(AccessLevel.NONE)
+  private BigInteger previousBlockHeight = BigInteger.ZERO;
+
   protected void init() {
     this.assetName = asset.get("name");
     this.assetTicker = asset.get("ticker");
@@ -69,8 +73,16 @@ class BitcoinIBaseChain implements IBaseChain {
 
   @Override
   public BigInteger getBlockHeight() {
-    Integer height = rpcClient.getBlockCount();
-    return BigInteger.valueOf(height.intValue());
+    boolean noNewBlockFound = true;
+    while (noNewBlockFound) {
+      Integer height = rpcClient.getBlockCount();
+      BigInteger currentHeight = BigInteger.valueOf(height.intValue());
+      if (currentHeight.compareTo(this.previousBlockHeight) > 0) {
+        previousBlockHeight = currentHeight;
+        noNewBlockFound = false;
+      }
+    }
+    return previousBlockHeight;
   }
 
   @Override

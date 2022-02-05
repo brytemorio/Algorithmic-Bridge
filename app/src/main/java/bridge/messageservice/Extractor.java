@@ -6,7 +6,6 @@ import bridge.exceptions.BridgeExceptions.ObjectCreationException;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Objects;
 import lombok.SneakyThrows;
@@ -18,8 +17,6 @@ final class Extractor implements EventHandler<BlockProp> {
   private IBaseChain[] blockChains;
   private final Object2ObjectHashMap<String, RingBuffer<ArrayList<String>>> chainRingBufferMapping =
       new Object2ObjectHashMap<>();
-
-  private BigInteger previousBlockHeight = BigInteger.ZERO;
 
   private static Extractor extractor;
 
@@ -61,20 +58,14 @@ final class Extractor implements EventHandler<BlockProp> {
 
   @Override
   public void onEvent(BlockProp event, long sequence, boolean endOfBatch) throws Exception {
-    BigInteger currentBlockHeight = event.getBlockHeight();
-    String currentBlockHeightChainID = event.getChainIdentifier();
-    if (currentBlockHeight.compareTo(previousBlockHeight) > 0) {
-      previousBlockHeight = currentBlockHeight;
-    } else {
-      return;
-    }
-    log.info("Got Block: " + previousBlockHeight + " with ID: " + currentBlockHeightChainID);
+
+    // log.info("Got Block: " + event.getBlockHeight() + " with ID: " + event.getChainIdentifier());
 
     String uniqueChainIdentifier = event.getChainIdentifier();
-    IBaseChain uniqueChain = Objects.requireNonNull(getUniqueChain(currentBlockHeightChainID));
+    IBaseChain uniqueChain = Objects.requireNonNull(getUniqueChain(event.getChainIdentifier()));
     RingBuffer<ArrayList<String>> uniqueChainBuffer =
         chainRingBufferMapping.get(uniqueChainIdentifier);
-    ArrayList<String> trxHashList = uniqueChain.getTrxIdsByBlockHeight(previousBlockHeight);
+    ArrayList<String> trxHashList = uniqueChain.getTrxIdsByBlockHeight(event.getBlockHeight());
     long uniqueChainBufferSequence = uniqueChainBuffer.next();
     ArrayList<String> nextSlot = uniqueChainBuffer.get(uniqueChainBufferSequence);
     nextSlot.addAll(trxHashList);

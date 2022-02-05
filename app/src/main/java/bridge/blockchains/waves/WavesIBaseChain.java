@@ -40,6 +40,10 @@ class WavesIBaseChain<K> implements IBaseChain {
   @Getter(AccessLevel.NONE)
   private Node rpcClient;
 
+  @Setter(AccessLevel.NONE)
+  @Getter(AccessLevel.NONE)
+  private BigInteger previousBlockHeight = BigInteger.ZERO;
+
   public String getAssetID(String assetConfigName) {
     WavesAssets assetInfo = assetInfoFactory(assetConfigName);
     return assetInfo.getAssetID();
@@ -76,8 +80,16 @@ class WavesIBaseChain<K> implements IBaseChain {
   @Override
   @SneakyThrows
   public BigInteger getBlockHeight() {
-    Integer height = rpcClient.getHeight();
-    return BigInteger.valueOf(height.intValue());
+    boolean noNewblockFound = true;
+    while (noNewblockFound) {
+      Integer height = rpcClient.getHeight();
+      BigInteger currentBlockHeight = BigInteger.valueOf(height.intValue());
+      if (currentBlockHeight.compareTo(this.previousBlockHeight) > 0) {
+        previousBlockHeight = currentBlockHeight;
+        noNewblockFound = false;
+      }
+    }
+    return previousBlockHeight;
   }
 
   @Override

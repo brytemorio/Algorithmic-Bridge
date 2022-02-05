@@ -27,6 +27,10 @@ class EthIBaseChain<K> implements IBaseChain {
   @Getter(AccessLevel.NONE)
   private final Gson gsonParser = new GsonBuilder().create();
 
+  @Setter(AccessLevel.NONE)
+  @Getter(AccessLevel.NONE)
+  private BigInteger previousBlockHeight = BigInteger.ZERO;
+
   @Setter(AccessLevel.PROTECTED)
   @Getter(AccessLevel.PROTECTED)
   Object2ObjectHashMap<String, Config> asset;
@@ -83,8 +87,18 @@ class EthIBaseChain<K> implements IBaseChain {
   @Override
   @SneakyThrows
   public BigInteger getBlockHeight() {
-    EthBlockNumber ethBlockNumber = web3j.ethBlockNumber().send();
-    return ethBlockNumber.getBlockNumber();
+    EthBlockNumber ethBlockNumber;
+    boolean noNewBlockFound = true;
+    BigInteger currentHeight;
+    while (noNewBlockFound) {
+      ethBlockNumber = web3j.ethBlockNumber().send();
+      currentHeight = ethBlockNumber.getBlockNumber();
+      if (currentHeight.compareTo(this.previousBlockHeight) > 0) {
+        this.previousBlockHeight = currentHeight;
+        noNewBlockFound = false;
+      }
+    }
+    return this.previousBlockHeight;
   }
 
   @Override
