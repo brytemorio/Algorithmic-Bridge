@@ -3,6 +3,7 @@ package bridge.blockchains.waves;
 import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
 import com.electronwill.nightconfig.core.Config;
+import com.wavesplatform.wavesj.Block;
 import com.wavesplatform.wavesj.Node;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -95,16 +96,13 @@ class WavesIBaseChain<K> implements IBaseChain {
   @Override
   @SneakyThrows
   public ArrayList<String> getTrxIdsByBlockHeight(BigInteger height) {
-    // Block block = rpcClient.getBlock(height.intValue());
-    String endpoint = getNetworkNode() + "/blocks/at/" + height.intValue();
-    Config response = BridgeUtils.getJsonDeserializer().parse(getNodeResponse(endpoint));
-    ArrayList<String> trxId = new ArrayList<>();
-    ArrayList<Config> transactions = response.get("transactions");
-    for (var tt : transactions) {
-      // Config parsed = BridgeUtils.getJsonDeserializer().parse(tt.);
-      trxId.add(tt.get("id").toString());
+    Block block = rpcClient.getBlock(height.intValue());
+    ArrayList<String> trxIDs = new ArrayList<>();
+    for (var eachTrxDS : block.transactions()) {
+      Config trx = BridgeUtils.getJsonDeserializer().parse(eachTrxDS.tx().toJson());
+      trxIDs.add(trx.get("id"));
     }
-    return trxId;
+    return trxIDs;
   }
 
   @Override

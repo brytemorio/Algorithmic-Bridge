@@ -93,7 +93,6 @@ public final class NewBlockEventProducer {
         BlockProp newBlockHeight = ringBuffer.get(sequence);
         newBlockHeight.setChainIdentifier(chainIdentifier);
         newBlockHeight.setBlockHeight(chainHeight);
-        log.info("Got Block: " + chainHeight + " with ID: " + chainIdentifier);
         ringBuffer.publish(sequence);
         try {
           Thread.currentThread().sleep(100);

@@ -10,6 +10,12 @@ final class BlockProp {
 
   private BigInteger blockHeight;
 
-  // TODO: implement logic that updates the block height in the Database Registry
+  public BlockProp() {}
+
+  /* TODO: When it becomes necessary, implement a preventive
+   * measure for accidentally overriding states for an instance
+   * of this once they have been initialized via the constructor
+   * or the state's respective setter methods
+   * */
 
 }

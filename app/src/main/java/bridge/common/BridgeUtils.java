@@ -50,8 +50,7 @@ public class BridgeUtils {
 
   public static ConfigParser<Config> getJsonDeserializer() {
     ConfigFormat<Config> jsonFormat = JsonFormat.fancyInstance();
-    ConfigParser<Config> jsonParser = jsonFormat.createParser();
-    return jsonParser;
+    return jsonFormat.createParser();
   }
 
   public static InputStream readResourceAsStream(String filename) throws NullPointerException {
@@ -67,7 +66,7 @@ public class BridgeUtils {
     return configfileStream;
   }
 
-  // Assumptions: Total blockchain objects
+  // Assumption: HyperThreading is enabled on the machine
   public static <T> WaitStrategy determineWaitStrategy(T[] eventHandlerThreads) {
     int processorCount = Runtime.getRuntime().availableProcessors();
     return (processorCount > eventHandlerThreads.length)
