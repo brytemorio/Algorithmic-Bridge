@@ -18,7 +18,7 @@ public class App {
     BinanceSmartChainI<?> binanceSmartChain = new BinanceSmartChainI<>("qnode_defi");
     NewBlockEventProducer producer =
         NewBlockEventProducer.getNewBlockEventProducer(
-            qnodecoinChain, wavesChain, polygonChain, binanceSmartChain);
+            qnodecoinChain, polygonChain, wavesChain, binanceSmartChain);
     producer.start();
   }
 }

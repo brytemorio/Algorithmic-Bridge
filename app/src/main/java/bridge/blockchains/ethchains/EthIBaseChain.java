@@ -1,23 +1,24 @@
 package bridge.blockchains.ethchains;
 
-import bridge.blockchains.IBaseChain;
-import bridge.common.BridgeUtils;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import org.agrona.collections.Object2ObjectHashMap;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.methods.response.EthBlock;
+import org.web3j.protocol.core.methods.response.EthBlock.Block;
+import org.web3j.protocol.core.methods.response.EthBlockNumber;
+import org.web3j.protocol.http.HttpService;
 import com.electronwill.nightconfig.core.Config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import java.math.BigInteger;
-import java.util.ArrayList;
+import bridge.blockchains.IBaseChain;
+import bridge.common.BridgeUtils;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import org.agrona.collections.Object2ObjectHashMap;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.DefaultBlockParameter;
-import org.web3j.protocol.core.methods.response.EthBlock;
-import org.web3j.protocol.core.methods.response.EthBlockNumber;
-import org.web3j.protocol.http.HttpService;
 
 @SuppressWarnings("unchecked")
 @Data
@@ -114,8 +115,9 @@ class EthIBaseChain<K> implements IBaseChain {
   }
 
   @Override
-  public String getTrxByID(String trxID) {
-    return null;
+  @SneakyThrows
+  public Block getTrxByID(String trxID) {
+    return web3j.ethGetBlockByHash(trxID, true).send().getBlock();
   }
 
   @Override

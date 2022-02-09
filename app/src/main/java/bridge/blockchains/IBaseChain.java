@@ -1,12 +1,5 @@
 package bridge.blockchains;
 
-import bridge.exceptions.BridgeExceptions.ChainNodeException;
-import com.electronwill.nightconfig.core.Config;
-import com.electronwill.nightconfig.core.ConfigFormat;
-import com.electronwill.nightconfig.core.io.ConfigParser;
-import com.electronwill.nightconfig.core.io.ParsingException;
-import com.electronwill.nightconfig.json.JsonFormat;
-import com.google.common.base.Supplier;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -26,6 +19,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import com.electronwill.nightconfig.core.Config;
+import com.electronwill.nightconfig.core.ConfigFormat;
+import com.electronwill.nightconfig.core.io.ConfigParser;
+import com.electronwill.nightconfig.core.io.ParsingException;
+import com.electronwill.nightconfig.json.JsonFormat;
+import com.google.common.base.Supplier;
+import bridge.exceptions.BridgeExceptions.ChainNodeException;
 
 public interface IBaseChain {
   // void init();
@@ -36,7 +36,7 @@ public interface IBaseChain {
 
   ArrayList<String> getTrxIdsByBlockHeight(BigInteger height);
 
-  String getTrxByID(String trxID);
+  <T> T getTrxByID(String trxID);
 
   <T> ArrayList<String> getTrxHash(T blockHeight);
 
