@@ -1,11 +1,11 @@
 package bridge.common;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import org.bson.types.ObjectId;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -16,7 +16,9 @@ public class TransactionModels {
 
   @Data
   public static class TransactionSender {
-    @Setter(AccessLevel.NONE)
+
+    private ObjectId id;
+
     private String address;
 
     public TransactionSender(String address) {
@@ -25,7 +27,7 @@ public class TransactionModels {
   }
 
   @Data
-  public static class TransactionReceiver implements Serializable {
+  public static class TransactionReceiver {
 
     @Setter(AccessLevel.NONE)
     private String address;
@@ -68,6 +70,7 @@ public class TransactionModels {
 
   @Data
   public static class TransactionAttemptReceiver {
+
     @Setter(AccessLevel.NONE)
     private String address;
 
@@ -82,6 +85,7 @@ public class TransactionModels {
 
   @Data
   public static class TransactionAttempt {
+
     @Setter(AccessLevel.NONE)
     private String sender;
 

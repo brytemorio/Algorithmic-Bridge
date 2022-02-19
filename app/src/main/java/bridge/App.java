@@ -5,6 +5,7 @@ import bridge.blockchains.ethchains.BinanceSmartChainI;
 import bridge.blockchains.ethchains.PolygonChainI;
 import bridge.blockchains.waves.WavesChainI;
 import bridge.messageservice.NewBlockEventProducer;
+import bridge.mongoservices.MongoStorageService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,6 +20,9 @@ public class App {
     NewBlockEventProducer producer =
         NewBlockEventProducer.getNewBlockEventProducer(
             qnodecoinChain, polygonChain, wavesChain, binanceSmartChain);
-    producer.start();
+    // producer.start();
+
+    var db = new MongoStorageService();
+    log.info(db.getConnectionURL());
   }
 }

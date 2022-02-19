@@ -1,18 +1,20 @@
 package bridge.blockchains.bitcoinchains;
 
-import bridge.blockchains.IBaseChain;
-import com.electronwill.nightconfig.core.Config;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
+import org.agrona.collections.Object2ObjectHashMap;
+import com.electronwill.nightconfig.core.Config;
+import bridge.blockchains.IBaseChain;
+import bridge.common.TransactionModels.TransactionReceiver;
+import bridge.common.TransactionModels.TransactionSender;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.agrona.collections.Object2ObjectHashMap;
 import wf.bitcoin.javabitcoindrpcclient.BitcoinJSONRPCClient;
-import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient;
 import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient.Block;
+import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient.RawTransaction;
 
 @SuppressWarnings("unchecked")
 @Data
@@ -71,8 +73,19 @@ class BitcoinIBaseChain implements IBaseChain {
     this.rpcClient = new BitcoinJSONRPCClient(jasonRPCUrl);
   }
 
+  public void extractTrxInfo(String trxID) {
+    var transaction = getTrxByID(trxID);
+    ArrayList<TransactionSender> senders = new ArrayList<>();
+    ArrayList<TransactionReceiver> receivers = new ArrayList<>();
+
+    for (var iter : transaction.vOut()) {
+      if (iter.scriptPubKey().addresses().isEmpty()) continue;
+    }
+  }
+
   @Override
   public BigInteger getBlockHeight() {
+
     boolean noNewBlockFound = true;
     while (noNewBlockFound) {
       Integer height = rpcClient.getBlockCount();
@@ -95,10 +108,9 @@ class BitcoinIBaseChain implements IBaseChain {
   }
 
   @Override
-  public String getTrxByID(String trxID) {
+  public RawTransaction getTrxByID(String trxID) {
     String rawTrx = rpcClient.getRawTransactionHex(trxID);
-    BitcoindRpcClient.RawTransaction trx = rpcClient.decodeRawTransaction(rawTrx);
-    return trx.toString();
+    return rpcClient.decodeRawTransaction(rawTrx);
   }
 
   @Override

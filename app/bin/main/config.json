@@ -1,10 +1,10 @@
 {
   "Blockchain": {
     "Qnodecoin": {
-      "host": "127.0.0.1",
-      "rpc_user": "orion",
+      "host": "164.68.112.62",
+      "rpc_user": "explorer",
       "rpc_port": 20611,
-      "rpc_password": "orion.net",
+      "rpc_password": "explorer_Speak2joshua",
       "network": "mainnet",
       "chain_identifier": "QCN",
       "control_wallet": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
@@ -87,8 +87,9 @@
     "database": {
       "name": "database-name",
       "host": "host-name",
-      "socket": "optional-socket-uri",
-      "port": 12121
+      "port": 12121,
+      "username": "learningNmae",
+      "password": "satlinggrande" 
     }
   }
 }
