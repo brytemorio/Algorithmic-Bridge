@@ -88,8 +88,8 @@
       "name": "database-name",
       "host": "host-name",
       "port": 12121,
-      "username": "learningNmae",
-      "password": "satlinggrande" 
+      "username": null,
+      "password": null 
     }
   }
 }
