@@ -23,22 +23,5 @@ public class App {
     // producer.start();
 
     var db = new MongoStorageService();
-    log.info(collectionNames.MAPPING.toString());
-  }
-
-  enum collectionNames {
-    WALLET("wallet"),
-    MAPPING("mapping-string");
-
-    private String collectionName;
-
-    collectionNames(final String collectionName) {
-      this.collectionName = collectionName;
-    }
-
-    @Override
-    public String toString() {
-      return collectionName;
-    }
   }
 }
