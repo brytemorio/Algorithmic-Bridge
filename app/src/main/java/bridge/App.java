@@ -23,5 +23,12 @@ public class App {
     // producer.start();
 
     var db = new MongoStorageService();
+    db.setBlockHeightStorage(polygonChain.getChainIdentifier(), polygonChain.getBlockHeight());
+
+    for (; ; ) {
+      // db.updateBlockHeightStorage(polygonChain.getChainIdentifier(),
+      // polygonChain.getBlockHeight());
+      db.getBlockHeightStorage(polygonChain.getChainIdentifier());
+    }
   }
 }

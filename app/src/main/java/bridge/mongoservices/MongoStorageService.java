@@ -8,7 +8,10 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 import java.math.BigInteger;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
+import org.bson.BsonDocumentReader;
 import org.bson.Document;
+import org.bson.codecs.DecoderContext;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.conversions.Bson;
@@ -28,19 +31,19 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-// Going reactive was just an experiment, nothing more;
 @Slf4j
 public class MongoStorageService {
 
-  private static UnmodifiableConfig configfile = CONFIG;
+  private static final UnmodifiableConfig configfile = CONFIG;
+  private static AtomicReference<Object> fromBsonToPojoObj;
 
   // the name of database to be used in MongoDB
-  @Getter private String databaseName;
-
-  @Getter private String dbHostName;
-  @Getter private int dbPort;
-  @Getter private String username;
-  @Getter private String password;
+  private String databaseName;
+  private String dbHostName;
+  private int dbPort;
+  private String username;
+  private String password;
+  private CodecRegistry codecRegistry;
 
   @Getter private String connectionURL;
 
@@ -74,7 +77,7 @@ public class MongoStorageService {
               + this.dbPort;
     }
 
-    CodecRegistry pojoCodecRegistry =
+    this.codecRegistry =
         fromRegistries(
             MongoClientSettings.getDefaultCodecRegistry(),
             fromProviders(PojoCodecProvider.builder().automatic(true).build()));
@@ -86,14 +89,14 @@ public class MongoStorageService {
             .applyConnectionString(connectionString)
             .retryReads(false)
             .retryWrites(false)
-            .codecRegistry(pojoCodecRegistry)
+            .codecRegistry(codecRegistry)
             .serverApi(serverApi)
             .build();
     this.mongoClient = MongoClients.create(mongoSettings);
     this.dataBase = this.mongoClient.getDatabase(this.databaseName);
   }
 
-  public void setBlockHeight(String chainIdentifier, BigInteger height) {
+  public void setBlockHeightStorage(String chainIdentifier, BigInteger height) {
     MongoCollection<BlockHeightStorage> collection =
         dataBase.getCollection(
             CollectionNames.BlOCK_HEIGHT_STORAGE.toString(), BlockHeightStorage.class);
@@ -106,28 +109,39 @@ public class MongoStorageService {
     MongoCollection<Document> collection =
         dataBase.getCollection(CollectionNames.BlOCK_HEIGHT_STORAGE.toString());
     Bson filter = eq("blockChainIdentifier", chainIdentifier);
-    Bson update = set("blockHeight", height);
+    Bson update = set("blockHeight", height.longValue());
     collection.updateOne(filter, update).subscribe(new StorageOperationSubscriber<>());
+  }
+
+  public void getBlockHeightStorage(String chainIdentifier) {
+    MongoCollection<Document> collection =
+        dataBase.getCollection(CollectionNames.BlOCK_HEIGHT_STORAGE.toString());
+    Bson filter = eq("blockChainIdentifier", chainIdentifier);
+    collection
+        .find(filter)
+        .first()
+        .subscribe(new FromBSONtoPOJOSubscriber<BlockHeightStorage>(BlockHeightStorage.class));
+    System.out.println(MongoStorageService.fromBsonToPojoObj);
   }
 
   // ========================POJOs=================================//
   @Data
-  final class BlockHeightStorage {
+  public final class BlockHeightStorage {
 
     private ObjectId id;
     private String blockChainIdentifier;
-    private BigInteger blockHeight;
+    private Long blockHeight;
 
     public BlockHeightStorage() {}
 
-    BlockHeightStorage(final String blockChainIdentifier, final BigInteger blockHeight) {
+    public BlockHeightStorage(final String blockChainIdentifier, final BigInteger blockHeight) {
       this.blockChainIdentifier = blockChainIdentifier;
-      this.blockHeight = blockHeight;
+      this.blockHeight = blockHeight.longValue();
     }
   }
 
   @Data
-  final class AddressMappingStorage {
+  protected final class AddressMappingStorage {
     private ObjectId id;
 
     // Wallet Address on the blockchain asset is been sent from
@@ -167,26 +181,14 @@ public class MongoStorageService {
   }
 
   /* ============================Subscribers======================= */
-  /* See  Here: https://bit.ly/3H3eIif
-   * The sample code from above link uses
-   * a list to store events and  errors
-   * from the Publishers (MongoDB Operations).
-   *
-   * But since this MongoDB Client  instance is configure to
-   * not retry Reads and Write operations and Inserts and Updates
-   * Operations are singular(Single Entry) it therefore follows that
-   * publishers results should be immediately consumed the moment
-   * they are available
-   *
-   * */
+  /* See  Here: https://bit.ly/3H3eIif */
+  class StorageOperationSubscriber<T> implements Subscriber<T> {
 
-  final class StorageOperationSubscriber<T> implements Subscriber<T> {
-
-    @Getter private T receivedEvent;
-    private Throwable error;
+    @Getter private volatile T receivedEvent;
     @Getter private volatile Subscription subscription;
-    private CountDownLatch countDownLatch;
+    private volatile Throwable error;
     private volatile boolean completed;
+    private CountDownLatch countDownLatch;
 
     StorageOperationSubscriber() {
       this.countDownLatch = new CountDownLatch(1);
@@ -196,12 +198,13 @@ public class MongoStorageService {
     @Override
     public void onSubscribe(Subscription s) {
       subscription = s;
+      subscription.request(Long.MAX_VALUE);
     }
 
     @Override
     public void onNext(T event) {
       receivedEvent = event;
-      log.info("Event: ", receivedEvent);
+      log.info("Event: " + receivedEvent.toString());
     }
 
     @Override
@@ -215,6 +218,31 @@ public class MongoStorageService {
     public void onComplete() {
       completed = true;
       countDownLatch.countDown();
+    }
+  }
+
+  final class FromBSONtoPOJOSubscriber<T extends Object> extends StorageOperationSubscriber<Bson> {
+    private Class<T> obj;
+
+    public FromBSONtoPOJOSubscriber(Class<T> object) {
+      this.obj = object;
+    }
+
+    @Override
+    public void onNext(Bson document) {
+      super.onNext(document);
+      MongoStorageService.fromBsonToPojoObj.set(decodeDocuemnt(document));
+    }
+
+    private T decodeDocuemnt(Bson document) {
+      var pojo = PojoCodecProvider.builder().automatic(true).build();
+      return pojo.get(obj, codecRegistry)
+          .decode(
+              new BsonDocumentReader(document.toBsonDocument()), DecoderContext.builder().build());
+      /* return codecRegistry
+      .get(obj, PojoCodecProvider.builder().automatic(true).build())
+      .decode(
+          new BsonDocumentReader(document.toBsonDocument()), DecoderContext.builder().build())*/
     }
   }
 }

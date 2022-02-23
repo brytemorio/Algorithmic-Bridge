@@ -85,9 +85,9 @@
       "port": "port-name"
     },
     "database": {
-      "name": "database-name",
-      "host": "host-name",
-      "port": 12121,
+      "name": "State-Of-Chain",
+      "host": "localhost",
+      "port": 27017,
       "username": null,
       "password": null 
     }
