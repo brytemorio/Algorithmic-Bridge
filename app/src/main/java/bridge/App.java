@@ -1,11 +1,12 @@
 package bridge;
 
+import static bridge.common.BridgeUtils.createChainName2AddressMap;
 import bridge.blockchains.bitcoinchains.QnodecoinChainI;
 import bridge.blockchains.ethchains.BinanceSmartChainI;
 import bridge.blockchains.ethchains.PolygonChainI;
 import bridge.blockchains.waves.WavesChainI;
+import bridge.common.MongoStorageService;
 import bridge.messageservice.NewBlockEventProducer;
-import bridge.mongoservices.MongoStorageService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,12 +24,16 @@ public class App {
     // producer.start();
 
     var db = new MongoStorageService();
-    db.setBlockHeightStorage(polygonChain.getChainIdentifier(), polygonChain.getBlockHeight());
 
-    for (; ; ) {
-      // db.updateBlockHeightStorage(polygonChain.getChainIdentifier(),
-      // polygonChain.getBlockHeight());
-      db.getBlockHeightStorage(polygonChain.getChainIdentifier());
-    }
+    // db.setBlockHeightStorage(polygonChain.getChainIdentifier(), polygonChain.getBlockHeight());
+    var fromAddress =
+        createChainName2AddressMap(
+            polygonChain.getAssetName("fishfactory_p"), polygonChain.getChainIdentifier());
+    var toAddress =
+        createChainName2AddressMap(
+            binanceSmartChain.getAssetName("qnode_defi"), binanceSmartChain.getChainIdentifier());
+    // db.saveAddressMapping(fromAddress, toAddress);
+    String address = db.getAddressFromSavedMapping(toAddress, "Fishfactory P");
+    log.info(address);
   }
 }

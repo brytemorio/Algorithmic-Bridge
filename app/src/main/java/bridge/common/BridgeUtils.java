@@ -1,6 +1,9 @@
 package bridge.common;
 
-import bridge.blockchains.IBaseChain;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Objects;
+import org.agrona.collections.Object2ObjectHashMap;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.ConfigFormat;
 import com.electronwill.nightconfig.core.conversion.ObjectConverter;
@@ -9,10 +12,7 @@ import com.electronwill.nightconfig.json.JsonFormat;
 import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.YieldingWaitStrategy;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Objects;
-import org.agrona.collections.Object2ObjectHashMap;
+import bridge.blockchains.IBaseChain;
 
 public class BridgeUtils {
   private BridgeUtils() {}
@@ -72,5 +72,12 @@ public class BridgeUtils {
     return (processorCount > eventHandlerThreads.length)
         ? new YieldingWaitStrategy()
         : new BlockingWaitStrategy();
+  }
+
+  public static Object2ObjectHashMap<String, String> createChainName2AddressMap(
+      String blockChainName, String Address) {
+    Object2ObjectHashMap<String, String> mapping = new Object2ObjectHashMap<>();
+    mapping.put(Objects.requireNonNull(blockChainName), Objects.requireNonNull(Address));
+    return mapping;
   }
 }

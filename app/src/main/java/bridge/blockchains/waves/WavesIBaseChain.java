@@ -1,18 +1,18 @@
 package bridge.blockchains.waves;
 
-import bridge.blockchains.IBaseChain;
-import bridge.common.BridgeUtils;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import org.agrona.collections.Object2ObjectHashMap;
 import com.electronwill.nightconfig.core.Config;
 import com.wavesplatform.wavesj.Block;
 import com.wavesplatform.wavesj.Node;
-import java.math.BigInteger;
-import java.util.ArrayList;
+import bridge.blockchains.IBaseChain;
+import bridge.common.BridgeUtils;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import org.agrona.collections.Object2ObjectHashMap;
 
 @SuppressWarnings("unchecked")
 @Data
