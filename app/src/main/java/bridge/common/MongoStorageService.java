@@ -6,14 +6,7 @@ import static com.mongodb.client.model.Filters.or;
 import static com.mongodb.client.model.Updates.set;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
-import java.math.BigInteger;
-import java.util.Objects;
-import org.agrona.collections.Object2ObjectHashMap;
-import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.codecs.pojo.ClassModel;
-import org.bson.codecs.pojo.PojoCodecProvider;
-import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
+
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -23,9 +16,17 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import java.math.BigInteger;
+import java.util.Objects;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.agrona.collections.Object2ObjectHashMap;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.ClassModel;
+import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 @Slf4j
 public class MongoStorageService {
@@ -92,8 +93,8 @@ public class MongoStorageService {
     MongoClientSettings mongoSettings =
         MongoClientSettings.builder()
             .codecRegistry(codecRegistry)
-            .retryReads(false)
-            .retryWrites(false)
+            .retryReads(true)
+            .retryWrites(true)
             .serverApi(serverApi)
             .applyConnectionString(connectionString)
             .build();
@@ -148,10 +149,10 @@ public class MongoStorageService {
    * depening on the one that is passed to the function (first parameter). That is if the sending
    * address is passed then the receiving address is retrieved and vice versa.
    *
-   * @param targetBlockChainName - is the name of the blockchain the wallet to be retrieved belongs
-   *     to.
    * @param address - either the sending or receiving the address. It a hashMap containing the a
    *     mapping of the name of the BlockChain to the Address.
+   * @param targetBlockChainName - is the name of the blockchain the wallet to be retrieved belongs
+   *     to.
    * @return - returns the mappedAddress
    */
   public String getAddressFromSavedMapping(
@@ -160,16 +161,18 @@ public class MongoStorageService {
     MongoCollection<AddressMappingStorage> collection =
         dataBase.getCollection(
             CollectionNames.ADDRESS_MAPPING_STORAGE.toString(), AddressMappingStorage.class);
-    String key = getKey(address);
+    String key = Objects.requireNonNull(getKey(address));
     String keyValue = address.get(key);
-    String pairedAddress = null;
+    String pairedAddress = " ";
 
     Bson[] filters = {
       eq("fromBlockChainAddress" + "." + key, keyValue),
       eq("toBlockChainAddress" + "." + key, keyValue)
     };
+
     Bson queryString = or(filters);
-    var result = collection.find().filter(queryString);
+    var result = collection.find(queryString);
+
     for (var iter : result) {
       if (key.equals(getKey(iter.getFromBlockChainAddress()))
           && (targetBlockChainName.equals(getKey(iter.getToBlockChainAddress()))))
@@ -177,7 +180,8 @@ public class MongoStorageService {
 
       if (key.equals(getKey(iter.getToBlockChainAddress()))
           && (targetBlockChainName.equals(getKey(iter.getFromBlockChainAddress()))))
-        pairedAddress = iter.getFromBlockChainAddress().get(targetBlockChainName);
+        pairedAddress =
+            Objects.requireNonNull(iter.getFromBlockChainAddress().get(targetBlockChainName));
     }
 
     return pairedAddress;
@@ -212,11 +216,12 @@ public class MongoStorageService {
      */
 
     // Wallet Address on the blockchain asset is been sent from
-    private Object2ObjectHashMap<String, String> fromBlockChainAddress =
-        new Object2ObjectHashMap<>();
+    private Object2ObjectHashMap<String, String>
+        fromBlockChainAddress; // =new Object2ObjectHashMap<>();
 
     // Wallet Address on the target blockchain asset is been sent to
-    private Object2ObjectHashMap<String, String> toBlockChainAddress = new Object2ObjectHashMap<>();
+    private Object2ObjectHashMap<String, String>
+        toBlockChainAddress; // = new Object2ObjectHashMap<>();
 
     public AddressMappingStorage() {}
 

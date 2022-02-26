@@ -1,6 +1,7 @@
 package bridge;
 
 import static bridge.common.BridgeUtils.createChainName2AddressMap;
+
 import bridge.blockchains.bitcoinchains.QnodecoinChainI;
 import bridge.blockchains.ethchains.BinanceSmartChainI;
 import bridge.blockchains.ethchains.PolygonChainI;
@@ -31,7 +32,7 @@ public class App {
             polygonChain.getAssetName("fishfactory_p"), polygonChain.getChainIdentifier());
     var toAddress =
         createChainName2AddressMap(
-            binanceSmartChain.getAssetName("qnode_defi"), binanceSmartChain.getChainIdentifier());
+            qnodecoinChain.getAssetName(), binanceSmartChain.getChainIdentifier());
     // db.saveAddressMapping(fromAddress, toAddress);
     String address = db.getAddressFromSavedMapping(toAddress, "Fishfactory P");
     log.info(address);
