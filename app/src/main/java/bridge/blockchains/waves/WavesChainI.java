@@ -7,12 +7,10 @@ import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import java.util.Objects;
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.agrona.collections.Object2ObjectHashMap;
 
-@Data
 public final class WavesChainI<K> extends WavesIBaseChain<K> {
   @Getter(AccessLevel.NONE)
   @Setter(AccessLevel.NONE)

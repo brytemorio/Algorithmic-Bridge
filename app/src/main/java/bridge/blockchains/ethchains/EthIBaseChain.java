@@ -1,7 +1,15 @@
 package bridge.blockchains.ethchains;
 
+import bridge.blockchains.IBaseChain;
+import bridge.common.BridgeUtils;
+import com.electronwill.nightconfig.core.Config;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.SneakyThrows;
 import org.agrona.collections.Object2ObjectHashMap;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
@@ -9,47 +17,32 @@ import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthBlock.Block;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.http.HttpService;
-import com.electronwill.nightconfig.core.Config;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import bridge.blockchains.IBaseChain;
-import bridge.common.BridgeUtils;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.SneakyThrows;
 
 @SuppressWarnings("unchecked")
-@Data
 class EthIBaseChain<K> implements IBaseChain {
 
-  @Setter(AccessLevel.NONE)
-  @Getter(AccessLevel.NONE)
-  private final Gson gsonParser = new GsonBuilder().create();
-
-  @Setter(AccessLevel.NONE)
-  @Getter(AccessLevel.NONE)
   private BigInteger previousBlockHeight = BigInteger.ZERO;
 
   @Setter(AccessLevel.PROTECTED)
   @Getter(AccessLevel.PROTECTED)
   Object2ObjectHashMap<String, Config> asset;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   private String networkNode;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   private String network;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   private K networkID;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   private String chainIdentifier;
 
-  @Setter(AccessLevel.NONE)
-  @Getter(AccessLevel.NONE)
   private Web3j web3j;
 
   public String getAssetID(String assetConfigName) {

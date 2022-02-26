@@ -94,7 +94,7 @@ public class MongoStorageService {
         MongoClientSettings.builder()
             .codecRegistry(codecRegistry)
             .retryReads(true)
-            .retryWrites(true)
+            .retryWrites(false)
             .serverApi(serverApi)
             .applyConnectionString(connectionString)
             .build();
@@ -146,7 +146,7 @@ public class MongoStorageService {
 
   /**
    * Retrieves either the sending address or the receiving address from the saved mapping of both,
-   * depening on the one that is passed to the function (first parameter). That is if the sending
+   * depending on the one that is passed to the function (first parameter). That is if the sending
    * address is passed then the receiving address is retrieved and vice versa.
    *
    * @param address - either the sending or receiving the address. It a hashMap containing the a
@@ -183,9 +183,9 @@ public class MongoStorageService {
         pairedAddress =
             Objects.requireNonNull(iter.getFromBlockChainAddress().get(targetBlockChainName));
     }
-
     return pairedAddress;
   }
+
   // ========================POJOs=================================//
   @Data
   protected static final class BlockHeightStorage {

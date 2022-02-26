@@ -1,69 +1,71 @@
 package bridge.blockchains.bitcoinchains;
 
-import java.math.BigInteger;
-import java.net.URL;
-import java.util.ArrayList;
-import org.agrona.collections.Object2ObjectHashMap;
-import com.electronwill.nightconfig.core.Config;
 import bridge.blockchains.IBaseChain;
 import bridge.common.TransactionModels.TransactionReceiver;
 import bridge.common.TransactionModels.TransactionSender;
+import com.electronwill.nightconfig.core.Config;
+import java.math.BigInteger;
+import java.net.URL;
+import java.util.ArrayList;
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.agrona.collections.Object2ObjectHashMap;
 import wf.bitcoin.javabitcoindrpcclient.BitcoinJSONRPCClient;
 import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient.Block;
 import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient.RawTransaction;
 
 @SuppressWarnings("unchecked")
-@Data
 class BitcoinIBaseChain implements IBaseChain {
+
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   private Config asset;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   private String hostName;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   private int rpcPort;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   private String rpcPassword;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   private String controlWalletAddress;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   private String network;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   private String chainIdentifier;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   private String rpcUser;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   private URL jasonRPCUrl;
 
-  @Setter(AccessLevel.NONE)
-  private String assetName;
+  @Getter private String assetName;
 
-  @Setter(AccessLevel.NONE)
-  private String assetTicker;
+  @Getter private String assetTicker;
 
-  @Setter(AccessLevel.NONE)
-  private double assetTransferFee;
+  @Getter private double assetTransferFee;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   Object2ObjectHashMap<String, Object> chain2IdentifierMapping;
 
-  @Setter(AccessLevel.NONE)
-  @Getter(AccessLevel.NONE)
   private BitcoinJSONRPCClient rpcClient;
 
-  @Setter(AccessLevel.NONE)
-  @Getter(AccessLevel.NONE)
   private BigInteger previousBlockHeight = BigInteger.ZERO;
 
   protected void init() {
@@ -73,6 +75,7 @@ class BitcoinIBaseChain implements IBaseChain {
     this.rpcClient = new BitcoinJSONRPCClient(jasonRPCUrl);
   }
 
+  // Todo: Complete this function
   public void extractTrxInfo(String trxID) {
     var transaction = getTrxByID(trxID);
     ArrayList<TransactionSender> senders = new ArrayList<>();

@@ -1,32 +1,35 @@
 package bridge.blockchains.waves;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import org.agrona.collections.Object2ObjectHashMap;
+import bridge.blockchains.IBaseChain;
+import bridge.common.BridgeUtils;
 import com.electronwill.nightconfig.core.Config;
 import com.wavesplatform.wavesj.Block;
 import com.wavesplatform.wavesj.Node;
-import bridge.blockchains.IBaseChain;
-import bridge.common.BridgeUtils;
+import java.math.BigInteger;
+import java.util.ArrayList;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import org.agrona.collections.Object2ObjectHashMap;
 
 @SuppressWarnings("unchecked")
-@Data
 class WavesIBaseChain<K> implements IBaseChain {
 
   @Setter(AccessLevel.PROTECTED)
+  @Getter
   private String networkNode;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   private String network;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   private K networkID;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   private String chainIdentifier;
 
@@ -34,15 +37,12 @@ class WavesIBaseChain<K> implements IBaseChain {
   @Getter(AccessLevel.PROTECTED)
   private Object2ObjectHashMap<String, Config> asset;
 
+  @Getter
   @Setter(AccessLevel.PROTECTED)
   Object2ObjectHashMap<String, Object> chain2IdentifierMapping;
 
-  @Setter(AccessLevel.NONE)
-  @Getter(AccessLevel.NONE)
   private Node rpcClient;
 
-  @Setter(AccessLevel.NONE)
-  @Getter(AccessLevel.NONE)
   private BigInteger previousBlockHeight = BigInteger.ZERO;
 
   public String getAssetID(String assetConfigName) {
