@@ -6,18 +6,12 @@ import bridge.exceptions.BridgeExceptions.AssetNotFoundException;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import java.util.Objects;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 import org.agrona.collections.Object2ObjectHashMap;
 
 public final class WavesChainI<K> extends WavesIBaseChain<K> {
-  @Getter(AccessLevel.NONE)
-  @Setter(AccessLevel.NONE)
+
   private static final UnmodifiableConfig configObject = ConfigFileObj.CONFIG;
 
-  @Getter(AccessLevel.NONE)
-  @Setter(AccessLevel.NONE)
   private String[] assetConfigName;
 
   public WavesChainI(String... assetConfigName) throws AssetNotFoundException, RuntimeException {

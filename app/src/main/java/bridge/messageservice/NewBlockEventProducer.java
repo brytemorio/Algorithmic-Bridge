@@ -33,7 +33,7 @@ public final class NewBlockEventProducer {
   public static synchronized NewBlockEventProducer getNewBlockEventProducer(
       final IBaseChain... cblockChains) {
     String className = NewBlockEventProducer.class.getName();
-    if (!Objects.nonNull(newBlockEventProducer)) {
+    if (newBlockEventProducer == null) {
       newBlockEventProducer =
           new NewBlockEventProducer(
               Objects.requireNonNull(

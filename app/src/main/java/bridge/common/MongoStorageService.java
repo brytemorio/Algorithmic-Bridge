@@ -126,7 +126,8 @@ public class MongoStorageService {
             CollectionNames.BlOCK_HEIGHT_STORAGE.toString(), BlockHeightStorage.class);
     Bson filter = eq("blockChainIdentifier", chainIdentifier);
 
-    // since BSON can't handle BigInteger Type directly, hence height.longValue()
+    /* Serialization problems passing in BigInteger Type directly,
+     * hence height.longValue() conversion*/
     Bson update = set("blockHeight", height.longValue());
     collection.updateOne(filter, update);
   }

@@ -65,14 +65,14 @@ final class Extractor implements EventHandler<BlockProp> {
 
     // log.info("Got Block: " + event.getBlockHeight() + " with ID: " + event.getChainIdentifier());
 
-    String uniqueChainIdentifier = event.getChainIdentifier();
-    BigInteger uniqueChainHeight = event.getBlockHeight();
+    // String uniqueChainIdentifier = event.getChainIdentifier();
+    // BigInteger uniqueChainHeight = event.getBlockHeight();
     IBaseChain uniqueChain = Objects.requireNonNull(getUniqueChain(event.getChainIdentifier()));
-    var uniqueChainBuffer = chainRingBufferMapping.get(uniqueChainIdentifier);
+    var uniqueChainBuffer = chainRingBufferMapping.get(event.getChainIdentifier());
     ArrayList<String> trxHashList = uniqueChain.getTrxIdsByBlockHeight(event.getBlockHeight());
     long uniqueChainBufferSequence = uniqueChainBuffer.next();
     var nextSlot = uniqueChainBuffer.get(uniqueChainBufferSequence);
-    nextSlot.put(uniqueChainHeight, trxHashList);
+    nextSlot.put(event.getBlockHeight(), trxHashList);
     uniqueChainBuffer.publish(uniqueChainBufferSequence);
   }
 
