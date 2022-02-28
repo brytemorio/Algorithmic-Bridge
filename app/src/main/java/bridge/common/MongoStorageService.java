@@ -116,7 +116,7 @@ public class MongoStorageService {
             CollectionNames.BlOCK_HEIGHT_STORAGE.toString(), BlockHeightStorage.class);
     Bson filter = eq("blockChainIdentifier", chainIdentifier);
     var height = collection.find(filter).first();
-    log.info(BigInteger.valueOf(height.getBlockHeight()).toString());
+    if (height == null) return null;
     return BigInteger.valueOf(height.getBlockHeight());
   }
 
@@ -186,6 +186,8 @@ public class MongoStorageService {
     }
     return pairedAddress;
   }
+
+  public void saveTransactionAttempt() {}
 
   // ========================POJOs=================================//
   @Data

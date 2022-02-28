@@ -5,10 +5,10 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import org.bson.types.ObjectId;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 
 public class TransactionModels {
 
@@ -29,13 +29,13 @@ public class TransactionModels {
   @Data
   public static class TransactionReceiver {
 
-    @Setter(AccessLevel.NONE)
+    private ObjectId id;
+
     private String address;
 
-    @Setter(AccessLevel.NONE)
-    private Double amount;
+    private double amount;
 
-    public TransactionReceiver(String address, Double amount) {
+    public TransactionReceiver(String address, double amount) {
       this.address = address;
       this.amount = amount;
     }
@@ -44,13 +44,12 @@ public class TransactionModels {
   @Data
   public static class Transaction {
 
-    @Setter(AccessLevel.NONE)
+    private ObjectId id;
+
     private String transactionID;
 
-    @Setter(AccessLevel.NONE)
     private List<TransactionReceiver> receivers;
 
-    @Setter(AccessLevel.NONE)
     private List<TransactionSender> senders;
 
     public Transaction(

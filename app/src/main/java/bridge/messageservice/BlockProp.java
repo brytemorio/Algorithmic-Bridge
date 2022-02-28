@@ -17,5 +17,4 @@ final class BlockProp {
    * of this once they have been initialized via the constructor
    * or the state's respective setter methods
    * */
-
 }

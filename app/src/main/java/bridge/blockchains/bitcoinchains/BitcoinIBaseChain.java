@@ -125,4 +125,48 @@ class BitcoinIBaseChain implements IBaseChain {
   public boolean validateAddress(String address) {
     return false;
   }
+
+  public void getTransaction(String trx) {
+    var rawTrx = getTrxByID(trx);
+  }
+
+  // ====================== Helper Functions=====================/
+
+  // TODO: Change to Private
+  // TODO: better concurrent than parallel;
+  public ArrayList<TransactionReceiver> getTrxReceivers(RawTransaction decodedTrx) {
+    ArrayList<TransactionReceiver> receivers = new ArrayList<>();
+    for (var iter : decodedTrx.vOut()) {
+      if (iter.scriptPubKey().addresses().isEmpty()) continue;
+      iter.scriptPubKey()
+          .addresses()
+          .forEach(
+              receiverAddress ->
+                  receivers.add(
+                      new TransactionReceiver(receiverAddress, iter.value().doubleValue())));
+    }
+    return receivers;
+  }
+
+  // TODO: Change to private
+  public ArrayList<TransactionSender> getTrxSenders(RawTransaction decodedTrx) {
+    ArrayList<TransactionSender> senders = new ArrayList<>();
+    // for (var iter : decodedTrx.vIn()) {}
+    decodedTrx.vIn().parallelStream()
+        .forEach(
+            vin -> {
+              if (vin.txid().isEmpty() || vin.txid().isBlank() || vin.vout() == null) return;
+              RawTransaction vInTrx = getTrxByID(vin.txid());
+              var vinAddresses = vInTrx.vOut().get(vin.vout()).scriptPubKey().addresses();
+              if (vinAddresses.isEmpty()) return;
+              vinAddresses.parallelStream()
+                  .forEach(
+                      address -> {
+                        var trxSenders = new TransactionSender(address);
+                        if (!senders.contains(trxSenders)) senders.add(trxSenders);
+                      });
+            });
+    // TODO: Lookup for the most efficient means is removing duplicates from a List
+    return senders;
+  }
 }
