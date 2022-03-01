@@ -1,16 +1,17 @@
 package bridge.blockchains.bitcoinchains;
 
-import bridge.blockchains.IBaseChain;
-import bridge.common.TransactionModels.TransactionReceiver;
-import bridge.common.TransactionModels.TransactionSender;
-import com.electronwill.nightconfig.core.Config;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
+import org.agrona.collections.Object2ObjectHashMap;
+import com.electronwill.nightconfig.core.Config;
+import bridge.blockchains.IBaseChain;
+import bridge.common.TransactionModels;
+import bridge.common.TransactionModels.TransactionReceiver;
+import bridge.common.TransactionModels.TransactionSender;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.agrona.collections.Object2ObjectHashMap;
 import wf.bitcoin.javabitcoindrpcclient.BitcoinJSONRPCClient;
 import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient.Block;
 import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient.RawTransaction;
@@ -126,15 +127,14 @@ class BitcoinIBaseChain implements IBaseChain {
     return false;
   }
 
-  public void getTransaction(String trx) {
-    var rawTrx = getTrxByID(trx);
+  public TransactionModels.Transaction getTransaction(String trxId, RawTransaction decodedTrx) {
+    return new TransactionModels.Transaction(
+        trxId, getTrxReceivers(decodedTrx), getTrxSenders(decodedTrx));
   }
 
   // ====================== Helper Functions=====================/
 
-  // TODO: Change to Private
-  // TODO: better concurrent than parallel;
-  public ArrayList<TransactionReceiver> getTrxReceivers(RawTransaction decodedTrx) {
+  private ArrayList<TransactionReceiver> getTrxReceivers(RawTransaction decodedTrx) {
     ArrayList<TransactionReceiver> receivers = new ArrayList<>();
     for (var iter : decodedTrx.vOut()) {
       if (iter.scriptPubKey().addresses().isEmpty()) continue;
@@ -148,10 +148,8 @@ class BitcoinIBaseChain implements IBaseChain {
     return receivers;
   }
 
-  // TODO: Change to private
-  public ArrayList<TransactionSender> getTrxSenders(RawTransaction decodedTrx) {
+  private ArrayList<TransactionSender> getTrxSenders(RawTransaction decodedTrx) {
     ArrayList<TransactionSender> senders = new ArrayList<>();
-    // for (var iter : decodedTrx.vIn()) {}
     decodedTrx.vIn().parallelStream()
         .forEach(
             vin -> {
@@ -166,7 +164,7 @@ class BitcoinIBaseChain implements IBaseChain {
                         if (!senders.contains(trxSenders)) senders.add(trxSenders);
                       });
             });
-    // TODO: Lookup for the most efficient means is removing duplicates from a List
+
     return senders;
   }
 }

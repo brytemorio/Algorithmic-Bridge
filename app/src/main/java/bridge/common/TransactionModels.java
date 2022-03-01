@@ -5,10 +5,10 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import org.bson.types.ObjectId;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
-import org.bson.types.ObjectId;
 
 public class TransactionModels {
 
@@ -16,8 +16,6 @@ public class TransactionModels {
 
   @Data
   public static class TransactionSender {
-
-    private ObjectId id;
 
     private String address;
 
@@ -28,8 +26,6 @@ public class TransactionModels {
 
   @Data
   public static class TransactionReceiver {
-
-    private ObjectId id;
 
     private String address;
 

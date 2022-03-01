@@ -21,17 +21,5 @@ public class App {
             qnodecoinChain, polygonChain, wavesChain, binanceSmartChain);
     log.info("Starting Up Bridge...");
     // producer.start();
-
-    System.out.println(
-        qnodecoinChain.getTrxReceivers(
-            qnodecoinChain.getTrxByID(
-                "c529dee97ac7836fedaa0241464a1c7ee1eb9880f9c33214e1d193f599f6b8d4")));
-
-    for (; ; ) {
-      System.out.println(
-          qnodecoinChain.getTrxSenders(
-              qnodecoinChain.getTrxByID(
-                  "c529dee97ac7836fedaa0241464a1c7ee1eb9880f9c33214e1d193f599f6b8d4")));
-    }
   }
 }
