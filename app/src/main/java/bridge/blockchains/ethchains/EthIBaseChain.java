@@ -127,6 +127,9 @@ class EthIBaseChain<K> implements IBaseChain {
     var assetId = getAssetID(assetName);
     var transaction = getTrxByID(trxID);
     if (!assetId.equals(transaction.getTo())) return null;
+
+    // TODO: Complete this function
+    return null;
   }
 
   class EthAssets {

@@ -1,18 +1,18 @@
 package bridge.blockchains.waves;
 
-import bridge.blockchains.IBaseChain;
-import bridge.common.BridgeUtils;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import org.agrona.collections.Object2ObjectHashMap;
 import com.electronwill.nightconfig.core.Config;
 import com.wavesplatform.wavesj.Block;
 import com.wavesplatform.wavesj.Node;
-import java.math.BigInteger;
-import java.util.ArrayList;
+import bridge.blockchains.IBaseChain;
+import bridge.common.BridgeUtils;
+import bridge.common.TransactionModels.Transaction;
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import org.agrona.collections.Object2ObjectHashMap;
 
 @SuppressWarnings("unchecked")
 class WavesIBaseChain<K> implements IBaseChain {
@@ -120,26 +120,24 @@ class WavesIBaseChain<K> implements IBaseChain {
     return false;
   }
 
-  @Data
+  @Override
+  public Transaction getTransaction(String trxID, String assetName) {
+    // TODO: Complete this function;
+    return null;
+  }
+
   class WavesAssets {
 
-    @Setter(AccessLevel.NONE)
-    private String assetID;
+    @Getter private String assetID;
 
-    @Setter(AccessLevel.NONE)
-    private String assetName;
+    @Getter private String assetName;
 
-    @Setter(AccessLevel.NONE)
-    private String assetTicker;
+    @Getter private String assetTicker;
 
-    @Setter(AccessLevel.NONE)
-    private Double transferFee;
+    @Getter private Double transferFee;
 
-    @Setter(AccessLevel.NONE)
-    private Config assetControlWallet;
+    @Getter private Config assetControlWallet;
 
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
     private Config asset;
 
     public WavesAssets(final Config asset) {
