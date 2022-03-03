@@ -29,7 +29,7 @@ import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
 
 /**
- * Auto generated code.
+ * Auto generated code
  *
  * <p><strong>Do not modify!</strong>
  *
@@ -82,17 +82,14 @@ public class QnodeCoinABI extends Contract {
               new TypeReference<Address>(true) {},
               new TypeReference<Address>(true) {},
               new TypeReference<Uint256>() {}));
-  ;
 
   public static final Event MINTERADDED_EVENT =
       new Event(
           "MinterAdded", Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {}));
-  ;
 
   public static final Event MINTERREMOVED_EVENT =
       new Event(
           "MinterRemoved", Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {}));
-  ;
 
   public static final Event SENDSTOCONTRACTADDRESS_EVENT =
       new Event(
@@ -101,7 +98,6 @@ public class QnodeCoinABI extends Contract {
               new TypeReference<Address>() {},
               new TypeReference<Address>() {},
               new TypeReference<Uint256>() {}));
-  ;
 
   public static final Event TRANSFER_EVENT =
       new Event(
@@ -110,7 +106,6 @@ public class QnodeCoinABI extends Contract {
               new TypeReference<Address>(true) {},
               new TypeReference<Address>(true) {},
               new TypeReference<Uint256>() {}));
-  ;
 
   @Deprecated
   protected QnodeCoinABI(
