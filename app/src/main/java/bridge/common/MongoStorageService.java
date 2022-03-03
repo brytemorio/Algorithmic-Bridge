@@ -6,7 +6,15 @@ import static com.mongodb.client.model.Filters.or;
 import static com.mongodb.client.model.Updates.set;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
-
+import java.math.BigInteger;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.StreamSupport;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.ClassModel;
+import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -16,17 +24,10 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import java.math.BigInteger;
-import java.util.Objects;
+import bridge.common.TransactionModels.MappedAddress;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.agrona.collections.Object2ObjectHashMap;
-import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.codecs.pojo.ClassModel;
-import org.bson.codecs.pojo.PojoCodecProvider;
-import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
 
 @Slf4j
 public class MongoStorageService {
@@ -133,8 +134,8 @@ public class MongoStorageService {
   }
 
   public void saveAddressMapping(
-      Object2ObjectHashMap<String, String> fromBlockChainAddress,
-      Object2ObjectHashMap<String, String> toBlockChainAddress) {
+      Map<String, MappedAddress> fromBlockChainAddress,
+      Map<String, MappedAddress> toBlockChainAddress) {
     MongoCollection<AddressMappingStorage> collection =
         dataBase.getCollection(
             CollectionNames.ADDRESS_MAPPING_STORAGE.toString(), AddressMappingStorage.class);
@@ -157,34 +158,44 @@ public class MongoStorageService {
    * @return - returns the mappedAddress
    */
   public String getAddressFromSavedMapping(
-      Object2ObjectHashMap<String, String> address, String targetBlockChainName) {
+      Map<String, MappedAddress> address, String targetBlockChainName) {
     // Todo: Find a more efficient method for retrieving valid Address Mappings
     MongoCollection<AddressMappingStorage> collection =
         dataBase.getCollection(
             CollectionNames.ADDRESS_MAPPING_STORAGE.toString(), AddressMappingStorage.class);
-    String key = Objects.requireNonNull(getKey(address));
-    String keyValue = address.get(key);
-    String pairedAddress = " ";
+    String key = getKey(address);
+    MappedAddress keyValue = address.get(key);
+
+    // since variable cannot be directly modified in lambda expressions
+    var pairedAddress =
+        new Object() {
+          String address;
+        };
 
     Bson[] filters = {
-      eq("fromBlockChainAddress" + "." + key, keyValue),
-      eq("toBlockChainAddress" + "." + key, keyValue)
+      eq("fromBlockChainAddress" + "." + key + "." + "address", keyValue.getAddress()),
+      eq("toBlockChainAddress" + "." + key + "." + "address", keyValue.getAddress())
     };
 
     Bson queryString = or(filters);
-    var result = collection.find(queryString);
 
-    for (var iter : result) {
-      if (key.equals(getKey(iter.getFromBlockChainAddress()))
-          && (targetBlockChainName.equals(getKey(iter.getToBlockChainAddress()))))
-        pairedAddress = iter.getToBlockChainAddress().get(targetBlockChainName);
+    StreamSupport.stream(collection.find(queryString).spliterator(), false)
+        .parallel()
+        .forEach(
+            mappedAddress -> {
+              if (key.equals(getKey(mappedAddress.getFromBlockChainAddress()))
+                  && (targetBlockChainName.equals(getKey(mappedAddress.getToBlockChainAddress()))))
+                pairedAddress.address =
+                    mappedAddress.getToBlockChainAddress().get(targetBlockChainName).getAddress();
 
-      if (key.equals(getKey(iter.getToBlockChainAddress()))
-          && (targetBlockChainName.equals(getKey(iter.getFromBlockChainAddress()))))
-        pairedAddress =
-            Objects.requireNonNull(iter.getFromBlockChainAddress().get(targetBlockChainName));
-    }
-    return pairedAddress;
+              if (key.equals(getKey(mappedAddress.getToBlockChainAddress()))
+                  && (targetBlockChainName.equals(
+                      getKey(mappedAddress.getFromBlockChainAddress()))))
+                pairedAddress.address =
+                    mappedAddress.getFromBlockChainAddress().get(targetBlockChainName).getAddress();
+            });
+
+    return pairedAddress.address;
   }
 
   public void saveTransactionAttempt() {}
@@ -219,18 +230,16 @@ public class MongoStorageService {
      */
 
     // Wallet Address on the blockchain asset is been sent from
-    private Object2ObjectHashMap<String, String>
-        fromBlockChainAddress; // =new Object2ObjectHashMap<>();
+    private Map<String, MappedAddress> fromBlockChainAddress;
 
     // Wallet Address on the target blockchain asset is been sent to
-    private Object2ObjectHashMap<String, String>
-        toBlockChainAddress; // = new Object2ObjectHashMap<>();
+    private Map<String, MappedAddress> toBlockChainAddress;
 
     public AddressMappingStorage() {}
 
     AddressMappingStorage(
-        final Object2ObjectHashMap<String, String> fromBlockChainAddress,
-        final Object2ObjectHashMap<String, String> toBlockChainAddress) {
+        final Map<String, MappedAddress> fromBlockChainAddress,
+        final Map<String, MappedAddress> toBlockChainAddress) {
       this.fromBlockChainAddress = fromBlockChainAddress;
       this.toBlockChainAddress = toBlockChainAddress;
     }
@@ -262,9 +271,9 @@ public class MongoStorageService {
 
   // =========================Helper Functions=======================//
 
-  // the parameter:Hashmap  passed into this function has only one key
-  private String getKey(Object2ObjectHashMap<String, String> hashMapObj) {
-    String key = null;
+  // Assumption: The Map passed into this function has only one entry
+  private <K, V> K getKey(Map<K, V> hashMapObj) {
+    K key = null;
     for (var iter : hashMapObj.keySet()) {
       key = iter;
     }

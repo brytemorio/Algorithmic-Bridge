@@ -1,22 +1,21 @@
 package bridge.blockchains.ethchains;
 
-import bridge.blockchains.IBaseChain;
-import bridge.common.BridgeUtils;
-import com.electronwill.nightconfig.core.Config;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.SneakyThrows;
 import org.agrona.collections.Object2ObjectHashMap;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthBlock;
-import org.web3j.protocol.core.methods.response.EthBlock.Block;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.http.HttpService;
+import com.electronwill.nightconfig.core.Config;
+import bridge.blockchains.IBaseChain;
+import bridge.common.BridgeUtils;
+import bridge.common.TransactionModels.Transaction;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.SneakyThrows;
 
 @SuppressWarnings("unchecked")
 class EthIBaseChain<K> implements IBaseChain {
@@ -109,8 +108,8 @@ class EthIBaseChain<K> implements IBaseChain {
 
   @Override
   @SneakyThrows
-  public Block getTrxByID(String trxID) {
-    return web3j.ethGetBlockByHash(trxID, true).send().getBlock();
+  public org.web3j.protocol.core.methods.response.Transaction getTrxByID(String trxID) {
+    return web3j.ethGetTransactionByHash(trxID).send().getResult();
   }
 
   @Override
@@ -123,26 +122,25 @@ class EthIBaseChain<K> implements IBaseChain {
     return false;
   }
 
-  @Data
+  @Override
+  public Transaction getTransaction(String trxID, String assetName) {
+    var assetId = getAssetID(assetName);
+    var transaction = getTrxByID(trxID);
+    if (!assetId.equals(transaction.getTo())) return null;
+  }
+
   class EthAssets {
 
-    @Setter(AccessLevel.NONE)
-    private String assetID;
+    @Getter private String assetID;
 
-    @Setter(AccessLevel.NONE)
-    private String assetName;
+    @Getter private String assetName;
 
-    @Setter(AccessLevel.NONE)
-    private String assetTicker;
+    @Getter private String assetTicker;
 
-    @Setter(AccessLevel.NONE)
-    private Double transferFee;
+    @Getter private Double transferFee;
 
-    @Setter(AccessLevel.NONE)
-    private Config assetControlWallet;
+    @Getter private Config assetControlWallet;
 
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
     private Config asset;
 
     public EthAssets(final Config asset) {

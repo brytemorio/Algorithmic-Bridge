@@ -1,17 +1,17 @@
 package bridge.blockchains.bitcoinchains;
 
+import java.math.BigInteger;
+import java.net.URL;
+import java.util.ArrayList;
+import org.agrona.collections.Object2ObjectHashMap;
+import com.electronwill.nightconfig.core.Config;
 import bridge.blockchains.IBaseChain;
 import bridge.common.TransactionModels;
 import bridge.common.TransactionModels.TransactionReceiver;
 import bridge.common.TransactionModels.TransactionSender;
-import com.electronwill.nightconfig.core.Config;
-import java.math.BigInteger;
-import java.net.URL;
-import java.util.ArrayList;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.agrona.collections.Object2ObjectHashMap;
 import wf.bitcoin.javabitcoindrpcclient.BitcoinJSONRPCClient;
 import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient.Block;
 import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient.RawTransaction;
@@ -127,7 +127,9 @@ class BitcoinIBaseChain implements IBaseChain {
     return false;
   }
 
-  public TransactionModels.Transaction getTransaction(String trxId, RawTransaction decodedTrx) {
+  @Override
+  public TransactionModels.Transaction getTransaction(String trxId, String assetName) {
+    RawTransaction decodedTrx = getTrxByID(trxId);
     return new TransactionModels.Transaction(
         trxId, getTrxReceivers(decodedTrx), getTrxSenders(decodedTrx));
   }

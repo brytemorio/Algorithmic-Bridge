@@ -5,14 +5,30 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import org.bson.types.ObjectId;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
-import org.bson.types.ObjectId;
 
 public class TransactionModels {
 
   private TransactionModels() {}
+
+  @Data
+  public static class MappedAddress {
+    /* object used internally by the bridge in creating tunnels across blockchains*/
+
+    ObjectId id;
+    private String address;
+    private String assetName;
+
+    public MappedAddress() {}
+
+    public MappedAddress(final String Address, final String assetName) {
+      this.address = Address;
+      this.assetName = assetName;
+    }
+  }
 
   @Data
   public static class TransactionSender {

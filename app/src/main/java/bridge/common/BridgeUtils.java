@@ -13,6 +13,7 @@ import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.YieldingWaitStrategy;
 import bridge.blockchains.IBaseChain;
+import bridge.common.TransactionModels.MappedAddress;
 
 public class BridgeUtils {
   private BridgeUtils() {}
@@ -74,10 +75,10 @@ public class BridgeUtils {
         : new BlockingWaitStrategy();
   }
 
-  public static Object2ObjectHashMap<String, String> createChainName2AddressMap(
-      String blockChainName, String Address) {
-    Object2ObjectHashMap<String, String> mapping = new Object2ObjectHashMap<>();
-    mapping.put(Objects.requireNonNull(blockChainName), Objects.requireNonNull(Address));
+  public static Object2ObjectHashMap<String, MappedAddress> createChainName2AddressMap(
+      String blockChainName, MappedAddress Address) {
+    Object2ObjectHashMap<String, MappedAddress> mapping = new Object2ObjectHashMap<>();
+    mapping.put(blockChainName, Address);
     return mapping;
   }
 }

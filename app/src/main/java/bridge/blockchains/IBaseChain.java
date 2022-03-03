@@ -25,6 +25,7 @@ import com.electronwill.nightconfig.core.io.ConfigParser;
 import com.electronwill.nightconfig.core.io.ParsingException;
 import com.electronwill.nightconfig.json.JsonFormat;
 import com.google.common.base.Supplier;
+import bridge.common.TransactionModels.Transaction;
 import bridge.exceptions.BridgeExceptions.ChainNodeException;
 
 public interface IBaseChain {
@@ -39,6 +40,8 @@ public interface IBaseChain {
   <T> T getTrxByID(String trxID);
 
   <T> ArrayList<String> getTrxHash(T blockHeight);
+
+  Transaction getTransaction(String trxId, String asseId);
 
   boolean validateAddress(String address);
 
