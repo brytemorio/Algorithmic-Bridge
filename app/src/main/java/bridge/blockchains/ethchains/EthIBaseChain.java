@@ -10,6 +10,7 @@ import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.http.HttpService;
 import com.electronwill.nightconfig.core.Config;
 import bridge.blockchains.IBaseChain;
+import bridge.common.AssetABI;
 import bridge.common.BridgeUtils;
 import bridge.common.TransactionModels.Transaction;
 import lombok.AccessLevel;
@@ -25,6 +26,10 @@ class EthIBaseChain<K> implements IBaseChain {
   @Setter(AccessLevel.PROTECTED)
   @Getter(AccessLevel.PROTECTED)
   Object2ObjectHashMap<String, Config> asset;
+
+  @Setter(AccessLevel.PROTECTED)
+  @Getter(AccessLevel.PROTECTED)
+  Object2ObjectHashMap<String, AssetABI> assetABI;
 
   @Getter
   @Setter(AccessLevel.PROTECTED)
@@ -64,8 +69,9 @@ class EthIBaseChain<K> implements IBaseChain {
     return assetInfo.getTransferFee();
   }
 
-  private EthAssets assetInfoFactory(String assetConfigName) {
-    return new EthAssets(asset.get(assetConfigName));
+  public AssetABI getAssetABI(String assetConfigName) {
+    EthAssets assetInfo = assetInfoFactory(assetConfigName);
+    return assetInfo.getAssetABI();
   }
 
   protected void init() {
@@ -144,15 +150,23 @@ class EthIBaseChain<K> implements IBaseChain {
 
     @Getter private Config assetControlWallet;
 
+    @Getter private AssetABI assetABI;
+
     private Config asset;
 
-    public EthAssets(final Config asset) {
+    public EthAssets(final Config asset, final AssetABI assetABI) {
       this.asset = asset;
       this.assetID = this.asset.get("asset_id");
       this.assetName = this.asset.get("name");
       this.assetTicker = this.asset.get("ticker");
       this.transferFee = this.asset.get("transfer_fee");
       this.assetControlWallet = this.asset.get("wallet");
+      this.assetABI = assetABI;
     }
+  }
+
+  // ========================= Helper Functions ================//
+  private EthAssets assetInfoFactory(String assetConfigName) {
+    return new EthAssets(asset.get(assetConfigName), assetABI.get(assetConfigName));
   }
 }
