@@ -81,4 +81,10 @@ public class BridgeUtils {
     mapping.put(blockChainName, Address);
     return mapping;
   }
+
+  // parameter dp => Decimal Place
+  public static double roundUp(double val, int dp) {
+    double multiplier = Math.pow(10, dp);
+    return Math.ceil(val * multiplier) / multiplier;
+  }
 }

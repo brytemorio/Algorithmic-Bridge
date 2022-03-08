@@ -40,7 +40,7 @@ import io.reactivex.functions.Function;
  * <p>Generated with web3j version 1.4.1.
  */
 @SuppressWarnings("rawtypes")
-public class QnodeCoinABI extends Contract {
+public class ERC20ABI extends Contract {
   public static final String BINARY = "Bin file was not provided";
 
   public static final String FUNC_ADDMINTER = "addMinter";
@@ -108,7 +108,7 @@ public class QnodeCoinABI extends Contract {
               new TypeReference<Uint256>() {}));
 
   @Deprecated
-  protected QnodeCoinABI(
+  protected ERC20ABI(
       String contractAddress,
       Web3j web3j,
       Credentials credentials,
@@ -117,7 +117,7 @@ public class QnodeCoinABI extends Contract {
     super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
   }
 
-  protected QnodeCoinABI(
+  protected ERC20ABI(
       String contractAddress,
       Web3j web3j,
       Credentials credentials,
@@ -126,7 +126,7 @@ public class QnodeCoinABI extends Contract {
   }
 
   @Deprecated
-  protected QnodeCoinABI(
+  protected ERC20ABI(
       String contractAddress,
       Web3j web3j,
       TransactionManager transactionManager,
@@ -135,7 +135,7 @@ public class QnodeCoinABI extends Contract {
     super(BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
   }
 
-  protected QnodeCoinABI(
+  protected ERC20ABI(
       String contractAddress,
       Web3j web3j,
       TransactionManager transactionManager,
@@ -516,39 +516,39 @@ public class QnodeCoinABI extends Contract {
   }
 
   @Deprecated
-  public static QnodeCoinABI load(
+  public static ERC20ABI load(
       String contractAddress,
       Web3j web3j,
       Credentials credentials,
       BigInteger gasPrice,
       BigInteger gasLimit) {
-    return new QnodeCoinABI(contractAddress, web3j, credentials, gasPrice, gasLimit);
+    return new ERC20ABI(contractAddress, web3j, credentials, gasPrice, gasLimit);
   }
 
   @Deprecated
-  public static QnodeCoinABI load(
+  public static ERC20ABI load(
       String contractAddress,
       Web3j web3j,
       TransactionManager transactionManager,
       BigInteger gasPrice,
       BigInteger gasLimit) {
-    return new QnodeCoinABI(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
+    return new ERC20ABI(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
   }
 
-  public static QnodeCoinABI load(
+  public static ERC20ABI load(
       String contractAddress,
       Web3j web3j,
       Credentials credentials,
       ContractGasProvider contractGasProvider) {
-    return new QnodeCoinABI(contractAddress, web3j, credentials, contractGasProvider);
+    return new ERC20ABI(contractAddress, web3j, credentials, contractGasProvider);
   }
 
-  public static QnodeCoinABI load(
+  public static ERC20ABI load(
       String contractAddress,
       Web3j web3j,
       TransactionManager transactionManager,
       ContractGasProvider contractGasProvider) {
-    return new QnodeCoinABI(contractAddress, web3j, transactionManager, contractGasProvider);
+    return new ERC20ABI(contractAddress, web3j, transactionManager, contractGasProvider);
   }
 
   public static class ApprovalEventResponse extends BaseEventResponse {

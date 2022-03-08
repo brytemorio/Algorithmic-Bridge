@@ -124,7 +124,7 @@ class BitcoinIBaseChain implements IBaseChain {
 
   @Override
   public boolean validateAddress(String address) {
-    return false;
+    return rpcClient.validateAddress(address).isValid();
   }
 
   @Override

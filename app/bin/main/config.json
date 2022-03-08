@@ -25,6 +25,7 @@
           "ticker": "QNC",
           "asset_id": "MFW1SBXgPYxP32RfmDFkHQ3N7sGzU7YEAeUBYBxrJeC",
           "transfer_fee": 0.00001,
+          "decimals": 8,
           "wallet": {
             "private_key": "F2Lb67ooGdS2UiXU2PkdFZEhRv18PKX2NqoDMd1BNg9s",
             "public_key": "HnHMx5Dbnd9ikFacnXBr79nHBNAzRgxtDz3QZmLPNaQN"

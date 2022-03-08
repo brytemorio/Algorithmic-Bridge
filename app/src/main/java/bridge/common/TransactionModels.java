@@ -56,8 +56,6 @@ public class TransactionModels {
   @Data
   public static class Transaction {
 
-    private ObjectId id;
-
     private String transactionID;
 
     private List<TransactionReceiver> receivers;

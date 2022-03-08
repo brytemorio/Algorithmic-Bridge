@@ -1,4 +1,4 @@
-package bridge.blockchains.waves;
+package bridge.blockchains.waveschains;
 
 import bridge.common.BridgeUtils;
 import bridge.common.ConfigFileObj;
