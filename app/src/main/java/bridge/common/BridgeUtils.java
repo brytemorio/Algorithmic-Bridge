@@ -2,6 +2,8 @@ package bridge.common;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import org.agrona.collections.Object2ObjectHashMap;
 import com.electronwill.nightconfig.core.Config;
@@ -86,5 +88,17 @@ public class BridgeUtils {
   public static double roundUp(double val, int dp) {
     double multiplier = Math.pow(10, dp);
     return Math.ceil(val * multiplier) / multiplier;
+  }
+
+  public static <T> List<T> filterNulls(List<T> inputArrayList) {
+
+    List<T> nonNullList = new ArrayList<>();
+
+    inputArrayList.parallelStream()
+        .forEach(
+            value -> {
+              if (value != null) nonNullList.add(value);
+            });
+    return nonNullList;
   }
 }

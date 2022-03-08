@@ -1,6 +1,9 @@
 package bridge;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import bridge.blockchains.waveschains.WavesChainI;
+import bridge.common.BridgeUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,9 +29,8 @@ public class App {
 
     // System.out.println(result.get("amount").toString());
 
-    log.info(
-        wavesChain
-            .getTransaction("4zUvfUS7NWAquqh9yaKoVGg2ARteuVukkKJjorNKcQyQ", "qnodecoin")
-            .toString());
+    ArrayList<Integer> testArray = new ArrayList<Integer>();
+    testArray.addAll(Arrays.asList(1, 2, 3, 5, 6, null, 20, null, null, 59, 69));
+    System.out.println(BridgeUtils.filterNulls(testArray).toString());
   }
 }
