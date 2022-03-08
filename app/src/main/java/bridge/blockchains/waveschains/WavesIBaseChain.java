@@ -120,11 +120,6 @@ class WavesIBaseChain<K> implements IBaseChain {
   }
 
   @Override
-  public <T> ArrayList<String> getTrxHash(T blockHeight) {
-    return new ArrayList<>();
-  }
-
-  @Override
   public boolean validateAddress(String address) {
     return Address.isValid(address);
   }

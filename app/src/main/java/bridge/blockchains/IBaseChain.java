@@ -39,8 +39,6 @@ public interface IBaseChain {
 
   <T> T getTrxByID(String trxID);
 
-  <T> ArrayList<String> getTrxHash(T blockHeight);
-
   Transaction getTransaction(String trxId, String asseId);
 
   boolean validateAddress(String address);

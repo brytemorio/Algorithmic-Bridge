@@ -78,12 +78,25 @@ public class TransactionModels {
   }
 
   @Data
+  public static class TransactionState {
+    private boolean affirmTransaction = false;
+    private int retries = 0;
+
+    public TransactionState() {}
+
+    public void mark_as_done() {
+      affirmTransaction = true;
+    }
+
+    public void increment_retries() {
+      retries += 1;
+    }
+  }
+
+  @Data
   public static class TransactionAttemptReceiver {
 
-    @Setter(AccessLevel.NONE)
     private String address;
-
-    @Setter(AccessLevel.NONE)
     private Double amount;
 
     TransactionAttemptReceiver(String address, Double amount) {
@@ -124,16 +137,9 @@ public class TransactionModels {
   @Data
   public static class TransactionAttemptListTrigger {
 
-    @Setter(AccessLevel.NONE)
     private String transactionID;
-
-    @Setter(AccessLevel.NONE)
     private Integer receiver; // number of receivers? maybe
-
-    @Setter(AccessLevel.NONE)
     private List<TransactionSender> senders;
-
-    @Setter(AccessLevel.NONE)
     private String currency;
 
     TransactionAttemptListTrigger(
@@ -154,25 +160,12 @@ public class TransactionModels {
   @Data
   public static class TransactionAttemptList {
 
-    @Setter(AccessLevel.NONE)
     private TransactionAttemptListTrigger trigger;
-
-    @Setter(AccessLevel.NONE)
     private List<TransactionAttempt> attempts;
-
-    @Setter(AccessLevel.NONE)
     private List<?> transactions;
-
-    @Setter(AccessLevel.NONE)
     private ZonedDateTime createdOn;
-
-    @Setter(AccessLevel.NONE)
     private ZonedDateTime lastModifiedOn;
-
-    @Setter(AccessLevel.NONE)
     private Integer tries;
-
-    @Setter(AccessLevel.NONE)
     private String transactionAttemptID;
 
     TransactionAttemptList(
