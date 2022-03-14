@@ -1,4 +1,4 @@
-package bridge.common;
+package bridge.storagservice;
 
 import static bridge.common.ConfigFileObj.CONFIG;
 import static com.mongodb.client.model.Filters.eq;
@@ -14,7 +14,6 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.ClassModel;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -25,12 +24,14 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import bridge.common.TransactionModels.MappedAddress;
-import lombok.Data;
+import bridge.common.TransactionModels.TransactionAttemptList;
+import bridge.storagservice.DataObjects.AddressMappingStorage;
+import bridge.storagservice.DataObjects.BlockHeightStorage;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class MongoStorageService {
+public class MongoStorageService implements IStorageService {
 
   private static final UnmodifiableConfig configfile = CONFIG;
 
@@ -50,7 +51,7 @@ public class MongoStorageService {
   public MongoStorageService() {
     this.databaseName =
         Objects.requireNonNullElse(
-            MongoStorageService.configfile.get("Bridge.database.name"), "Algo-bridge");
+            MongoStorageService.configfile.get("Bridge.database.name"), "Algo-Bridge");
     this.dbHostName =
         Objects.requireNonNullElse(
             MongoStorageService.configfile.get("Bridge.database.hostname"), "localhost");
@@ -103,6 +104,7 @@ public class MongoStorageService {
     this.dataBase = this.mongoClient.getDatabase(this.databaseName);
   }
 
+  @Override
   public void setBlockHeightStorage(String chainIdentifier, BigInteger height) {
     MongoCollection<BlockHeightStorage> collection =
         dataBase.getCollection(
@@ -111,6 +113,7 @@ public class MongoStorageService {
     log.info(result.toString());
   }
 
+  @Override
   public BigInteger getBlockHeightFromStorage(String chainIdentifier) {
     MongoCollection<BlockHeightStorage> collection =
         dataBase.getCollection(
@@ -121,6 +124,7 @@ public class MongoStorageService {
     return BigInteger.valueOf(height.getBlockHeight());
   }
 
+  @Override
   public void updateBlockHeightStorage(String chainIdentifier, BigInteger height) {
     MongoCollection<BlockHeightStorage> collection =
         dataBase.getCollection(
@@ -133,30 +137,18 @@ public class MongoStorageService {
     collection.updateOne(filter, update);
   }
 
-  public void saveAddressMapping(
-      Map<String, MappedAddress> fromBlockChainAddress,
-      Map<String, MappedAddress> toBlockChainAddress) {
+  @Override
+  public void saveAddressMapping(AddressMappingStorage addressMappingStorage) {
     MongoCollection<AddressMappingStorage> collection =
         dataBase.getCollection(
             CollectionNames.ADDRESS_MAPPING_STORAGE.toString(), AddressMappingStorage.class);
-    var result =
-        collection.insertOne(new AddressMappingStorage(fromBlockChainAddress, toBlockChainAddress));
+    var result = collection.insertOne(addressMappingStorage);
 
-    // Todo: Change to log.Debug
+    // TODO: Change to log.Debug
     log.info(result.toString());
   }
 
-  /**
-   * Retrieves either the sending address or the receiving address from the saved mapping of both,
-   * depending on the one that is passed to the function (first parameter). That is if the sending
-   * address is passed then the receiving address is retrieved and vice versa.
-   *
-   * @param address - either the sending or receiving the address. It a hashMap containing the a
-   *     mapping of the name of the BlockChain to the Address.
-   * @param targetBlockChainName - is the name of the blockchain the wallet to be retrieved belongs
-   *     to.
-   * @return - returns the mappedAddress
-   */
+  @Override
   public String getAddressFromSavedMapping(
       Map<String, MappedAddress> address, String targetBlockChainName) {
     // Todo: Find a more efficient method for retrieving valid Address Mappings
@@ -198,64 +190,51 @@ public class MongoStorageService {
     return pairedAddress.address;
   }
 
-  public void saveTransactionAttempt() {}
+  public void saveTransactionAttempt(TransactionAttemptList transactionAttemptList) {
 
-  // ========================POJOs=================================//
-  @Data
-  protected static final class BlockHeightStorage {
+    MongoCollection<TransactionAttemptList> collection =
+        dataBase.getCollection(
+            CollectionNames.VALID_TRASANCTION_STORAGE.toString(), TransactionAttemptList.class);
+    var result = collection.insertOne(transactionAttemptList);
 
-    private ObjectId id;
-    private String blockChainIdentifier;
-
-    // since BSON can't handle BigInteger Type directly, we default to long
-    private long blockHeight;
-
-    public BlockHeightStorage() {}
-
-    public BlockHeightStorage(final String blockChainIdentifier, final BigInteger blockHeight) {
-      this.blockChainIdentifier = blockChainIdentifier;
-      this.blockHeight = blockHeight.longValue();
-    }
+    // TODO: Change to Debug
+    log.info(result.toString());
   }
 
-  @Data
-  protected static final class AddressMappingStorage {
-    private ObjectId id;
+  public void updateTransactionAttempt(TransactionAttemptList transactionAttemptList) {
+    MongoCollection<TransactionAttemptList> collection =
+        dataBase.getCollection(
+            CollectionNames.VALID_TRASANCTION_STORAGE.toString(), TransactionAttemptList.class);
+    Bson filter = eq("Id", transactionAttemptList.getId());
+    var result = collection.findOneAndReplace(filter, transactionAttemptList);
 
-    /*
-     * The fields fromBlockChainAddress and toBlockChainAddress
-     * are Hashmaps containing the  mapping of the blockchain
-     * ChainName as key to the users WalletAddress as value:
-     * BlockChiainName => Address
-     */
-
-    // Wallet Address on the blockchain asset is been sent from
-    private Map<String, MappedAddress> fromBlockChainAddress;
-
-    // Wallet Address on the target blockchain asset is been sent to
-    private Map<String, MappedAddress> toBlockChainAddress;
-
-    public AddressMappingStorage() {}
-
-    AddressMappingStorage(
-        final Map<String, MappedAddress> fromBlockChainAddress,
-        final Map<String, MappedAddress> toBlockChainAddress) {
-      this.fromBlockChainAddress = fromBlockChainAddress;
-      this.toBlockChainAddress = toBlockChainAddress;
-    }
+    // TODO: Change to Debug
+    log.info(result.toString());
   }
+
+  public void findTransactionAttemptById(final String attemptListId) {
+    MongoCollection<TransactionAttemptList> collection =
+        dataBase.getCollection(
+            CollectionNames.VALID_TRASANCTION_STORAGE.toString(), TransactionAttemptList.class);
+    Bson filter = eq("id", attemptListId);
+    return collection.find(filter);
+
+    // TODO: Change to Debug
+    log.info(result.toString());
+  }
+  
+  public v
 
   // ==============CollectionNames=====================//
   public enum CollectionNames {
     BlOCK_HEIGHT_STORAGE("Block_Height_Store"),
     ADDRESS_MAPPING_STORAGE("Address_Mapping_Store"),
+    VALID_TRASANCTION_STORAGE("Transaction_List_Store"),
 
     /*Bridge internal wallets(public and private Keys pairs
      *  per blockchains supported  used for handling
      *  transactions */
-    WALLET_STORAGE("Wallet_Store"),
-
-    VALID_TRASANCTION_STORAGE("Transaction_List_Store");
+    WALLET_STORAGE("Wallet_Store");
 
     private String name;
 

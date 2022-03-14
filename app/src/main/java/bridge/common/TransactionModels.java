@@ -5,10 +5,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 import org.bson.types.ObjectId;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Setter;
 
 public class TransactionModels {
 
@@ -35,6 +34,8 @@ public class TransactionModels {
 
     private String address;
 
+    public TransactionSender() {}
+
     public TransactionSender(String address) {
       this.address = address;
     }
@@ -44,8 +45,9 @@ public class TransactionModels {
   public static class TransactionReceiver {
 
     private String address;
-
     private double amount;
+
+    public TransactionReceiver() {}
 
     public TransactionReceiver(String address, double amount) {
       this.address = address;
@@ -57,10 +59,13 @@ public class TransactionModels {
   public static class Transaction {
 
     private String transactionID;
-
     private List<TransactionReceiver> receivers;
-
     private List<TransactionSender> senders;
+
+    private boolean afffirmTransaction;
+    private int retries;
+
+    public Transaction() {}
 
     public Transaction(
         String transactionID,
@@ -75,21 +80,42 @@ public class TransactionModels {
       this.transactionID = transactionID;
       this.receivers = receivers;
     }
+
+    public void markAsDone() {
+      setAfffirmTransaction(true);
+    }
+
+    public void incrementRetries() {
+      this.retries += 1;
+    }
   }
 
   @Data
-  public static class TransactionState {
-    private boolean affirmTransaction = false;
-    private int retries = 0;
+  public static class TransactionAttemptListTrigger {
 
-    public TransactionState() {}
+    private String trxId;
+    private int receiver;
+    private String assetTickerSymbol;
+    private List<TransactionSender> senders;
 
-    public void mark_as_done() {
-      affirmTransaction = true;
+    public TransactionAttemptListTrigger() {}
+
+    public TransactionAttemptListTrigger(
+        String transactionId,
+        int receiver,
+        String assetTickerSymbol,
+        List<TransactionSender> senders) {
+      this.trxId = transactionId;
+      this.receiver = receiver;
+      this.assetTickerSymbol = assetTickerSymbol;
+      this.senders = senders;
     }
 
-    public void increment_retries() {
-      retries += 1;
+    public TransactionAttemptListTrigger(
+        String transactionId, int receiver, String assetTickerSymbol) {
+      this.trxId = transactionId;
+      this.receiver = receiver;
+      this.assetTickerSymbol = assetTickerSymbol;
     }
   }
 
@@ -98,6 +124,8 @@ public class TransactionModels {
 
     private String address;
     private Double amount;
+
+    public TransactionAttemptReceiver() {}
 
     TransactionAttemptReceiver(String address, Double amount) {
       this.address = address;
@@ -108,20 +136,15 @@ public class TransactionModels {
   @Data
   public static class TransactionAttempt {
 
-    @Setter(AccessLevel.NONE)
     private String sender;
-
-    @Setter(AccessLevel.NONE)
     private List<TransactionAttemptReceiver> receivers;
-
-    @Setter(AccessLevel.NONE)
-    private Double fee;
-
-    @Setter(AccessLevel.NONE)
+    private double fee;
     private String currency;
 
+    public TransactionAttempt() {}
+
     TransactionAttempt(
-        String sender, List<TransactionAttemptReceiver> receivers, Double fee, String currency) {
+        String sender, List<TransactionAttemptReceiver> receivers, double fee, String currency) {
       this.sender = sender;
       this.receivers = receivers;
       this.fee = fee;
@@ -135,31 +158,9 @@ public class TransactionModels {
   }
 
   @Data
-  public static class TransactionAttemptListTrigger {
-
-    private String transactionID;
-    private Integer receiver; // number of receivers? maybe
-    private List<TransactionSender> senders;
-    private String currency;
-
-    TransactionAttemptListTrigger(
-        String transactionID, Integer receiver, List<TransactionSender> senders, String currency) {
-      this.receiver = receiver;
-      this.senders = senders;
-      this.currency = currency;
-      this.transactionID = transactionID;
-    }
-
-    TransactionAttemptListTrigger(String transactionID, Integer receiver, String currency) {
-      this.receiver = receiver;
-      this.currency = currency;
-      this.transactionID = transactionID;
-    }
-  }
-
-  @Data
   public static class TransactionAttemptList {
 
+    private String Id;
     private TransactionAttemptListTrigger trigger;
     private List<TransactionAttempt> attempts;
     private List<?> transactions;
@@ -167,6 +168,8 @@ public class TransactionModels {
     private ZonedDateTime lastModifiedOn;
     private Integer tries;
     private String transactionAttemptID;
+
+    public TransactionAttemptList() {}
 
     TransactionAttemptList(
         TransactionAttemptListTrigger trigger,
@@ -176,6 +179,7 @@ public class TransactionModels {
         ZonedDateTime lastModifiedOn,
         Integer tries,
         String transactionAttemptID) {
+      this.Id = UUID.randomUUID().toString();
       this.trigger = trigger;
       this.attempts = attempts;
       this.transactions = transactions;
@@ -187,12 +191,13 @@ public class TransactionModels {
 
     TransactionAttemptList(
         TransactionAttemptListTrigger trigger, List<TransactionAttempt> attempts, Integer tries) {
+      this.Id = UUID.randomUUID().toString();
       this.trigger = trigger;
       this.attempts = attempts;
       this.tries = tries;
     }
 
-    /**
+    /*
      * marks the next transaction attempt in the list of transactions to be handled as completed,
      * once the transaction has been successful handled
      *
@@ -203,7 +208,7 @@ public class TransactionModels {
       // TODO: Implementation details later
     }
 
-    /**
+    /*
      * Increments the retry counter for a failing transaction until the maximum number of retries is
      * reached, at which point the transaction is abandoned and stored as a failed transaction in
      * the transaction history.
@@ -216,10 +221,10 @@ public class TransactionModels {
           .format(DateTimeFormatter.RFC_1123_DATE_TIME); // Todo:
     }
 
-    /**
+    /*
      * Retrieve the next transaction from the list of transactions to be handled.
      *
-     * @return TransactionAttempt
+     *
      */
     public TransactionAttempt nextIncompleteAttempt() {
       // : TODO: Implementation detatils for later
