@@ -1,6 +1,7 @@
 package bridge.storagservice;
 
 import static bridge.common.ConfigFileObj.CONFIG;
+import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.or;
 import static com.mongodb.client.model.Updates.set;
@@ -25,6 +26,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import bridge.common.TransactionModels.MappedAddress;
 import bridge.common.TransactionModels.TransactionAttemptList;
+import bridge.common.TransactionModels.TransactionAttemptListTrigger;
 import bridge.storagservice.DataObjects.AddressMappingStorage;
 import bridge.storagservice.DataObjects.BlockHeightStorage;
 import lombok.Getter;
@@ -131,8 +133,10 @@ public class MongoStorageService implements IStorageService {
             CollectionNames.BlOCK_HEIGHT_STORAGE.toString(), BlockHeightStorage.class);
     Bson filter = eq("blockChainIdentifier", chainIdentifier);
 
-    /* Serialization problems passing in BigInteger Type directly,
-     * hence height.longValue() conversion*/
+    /*
+     * Serialization problems passing in BigInteger Type directly, hence height.longValue()
+     * conversion
+     */
     Bson update = set("blockHeight", height.longValue());
     collection.updateOne(filter, update);
   }
@@ -212,18 +216,27 @@ public class MongoStorageService implements IStorageService {
     log.info(result.toString());
   }
 
-  public void findTransactionAttemptById(final String attemptListId) {
+  public TransactionAttemptList findTransactionAttemptById(final String attemptListId) {
     MongoCollection<TransactionAttemptList> collection =
         dataBase.getCollection(
             CollectionNames.VALID_TRASANCTION_STORAGE.toString(), TransactionAttemptList.class);
     Bson filter = eq("id", attemptListId);
-    return collection.find(filter);
-
-    // TODO: Change to Debug
-    log.info(result.toString());
+    return collection.find(filter).first();
   }
-  
-  public v
+
+  public TransactionAttemptList findTransactionAttemptByTrigger(
+      TransactionAttemptListTrigger trigger) {
+    MongoCollection<TransactionAttemptList> collection =
+        dataBase.getCollection(
+            CollectionNames.VALID_TRASANCTION_STORAGE.toString(), TransactionAttemptList.class);
+    Bson[] query = {
+      eq("trigger.receiver", trigger.getReceiver()),
+      eq("trigger.currency", trigger.getCurrency()),
+      eq("trigger.trxId", trigger.getTrxId())
+    };
+    Bson filter = and(query);
+    return collection.find(filter).first();
+  }
 
   // ==============CollectionNames=====================//
   public enum CollectionNames {
@@ -231,9 +244,10 @@ public class MongoStorageService implements IStorageService {
     ADDRESS_MAPPING_STORAGE("Address_Mapping_Store"),
     VALID_TRASANCTION_STORAGE("Transaction_List_Store"),
 
-    /*Bridge internal wallets(public and private Keys pairs
-     *  per blockchains supported  used for handling
-     *  transactions */
+    /*
+     * Bridge internal wallets(public and private Keys pairs per blockchains supported used for
+     * handling transactions
+     */
     WALLET_STORAGE("Wallet_Store");
 
     private String name;

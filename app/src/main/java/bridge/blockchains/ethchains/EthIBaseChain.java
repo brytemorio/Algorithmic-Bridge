@@ -36,7 +36,7 @@ class EthIBaseChain<K> implements IBaseChain {
   @Getter(AccessLevel.PROTECTED)
   Object2ObjectHashMap<String, Config> asset;
 
- 
+
 
   @Getter
   @Setter(AccessLevel.PROTECTED)
@@ -76,7 +76,7 @@ class EthIBaseChain<K> implements IBaseChain {
     return assetInfo.getTransferFee();
   }
 
- 
+
 
   public Config getAssetWallet(String assetConfigName) {
     EthAssets assetInfo = assetInfoFactory(assetConfigName);
@@ -127,10 +127,6 @@ class EthIBaseChain<K> implements IBaseChain {
     return web3j.ethGetTransactionByHash(trxID).send().getResult();
   }
 
-  @Override
-  public <Integer> ArrayList<String> getTrxHash(Integer blockHeight) {
-    return new ArrayList<>();
-  }
 
   @Override
   public boolean validateAddress(String address) {
@@ -154,17 +150,22 @@ class EthIBaseChain<K> implements IBaseChain {
 
   class EthAssets {
 
-    @Getter private String assetID;
+    @Getter
+    private String assetID;
 
-    @Getter private String assetName;
+    @Getter
+    private String assetName;
 
-    @Getter private String assetTicker;
+    @Getter
+    private String assetTicker;
 
-    @Getter private Double transferFee;
+    @Getter
+    private Double transferFee;
 
-    @Getter private Config assetControlWallet;
+    @Getter
+    private Config assetControlWallet;
 
-    
+
 
     private Config asset;
 
@@ -175,7 +176,7 @@ class EthIBaseChain<K> implements IBaseChain {
       this.assetTicker = this.asset.get("ticker");
       this.transferFee = this.asset.get("transfer_fee");
       this.assetControlWallet = this.asset.get("wallet");
-      
+
     }
   }
 
@@ -187,14 +188,12 @@ class EthIBaseChain<K> implements IBaseChain {
   @SneakyThrows
   private ERC20ABI getABIWrapper(String assetName) {
     String assetId = getAssetID(assetName);
-    Credentials assetWalletCredential =
-        Credentials.create(
-            getAssetWallet(assetName).get("private_key"),
-            getAssetWallet(assetName).get("public_key"));
+    Credentials assetWalletCredential = Credentials.create(
+        getAssetWallet(assetName).get("private_key"), getAssetWallet(assetName).get("public_key"));
     return ERC20ABI.load(assetId, web3j, assetWalletCredential, new DefaultGasProvider());
   }
-  
-  class Address implements Type<String>{
+
+  class Address implements Type<String> {
 
     @Override
     public String getValue() {
@@ -207,10 +206,10 @@ class EthIBaseChain<K> implements IBaseChain {
       // TODO Auto-generated method stub
       return new String().toString();
     }
-    
+
   }
-  
-  class Unit256 implements Type<BigInteger>{
+
+  class Unit256 implements Type<BigInteger> {
 
     @Override
     public BigInteger getValue() {
@@ -223,7 +222,7 @@ class EthIBaseChain<K> implements IBaseChain {
       // TODO Auto-generated method stub
       return null;
     }
-    
+
   }
-    
+
 }

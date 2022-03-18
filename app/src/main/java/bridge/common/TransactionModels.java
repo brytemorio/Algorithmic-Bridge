@@ -15,7 +15,7 @@ public class TransactionModels {
 
   @Data
   public static class MappedAddress {
-    /* object used internally by the bridge in creating tunnels across blockchains*/
+    /* object used internally by the bridge in creating tunnels across blockchains */
 
     ObjectId id;
     private String address;
@@ -95,27 +95,23 @@ public class TransactionModels {
 
     private String trxId;
     private int receiver;
-    private String assetTickerSymbol;
+    private String currency;
     private List<TransactionSender> senders;
 
     public TransactionAttemptListTrigger() {}
 
     public TransactionAttemptListTrigger(
-        String transactionId,
-        int receiver,
-        String assetTickerSymbol,
-        List<TransactionSender> senders) {
+        String transactionId, int receiver, String currency, List<TransactionSender> senders) {
       this.trxId = transactionId;
       this.receiver = receiver;
-      this.assetTickerSymbol = assetTickerSymbol;
+      this.currency = currency;
       this.senders = senders;
     }
 
-    public TransactionAttemptListTrigger(
-        String transactionId, int receiver, String assetTickerSymbol) {
+    public TransactionAttemptListTrigger(String transactionId, int receiver, String currency) {
       this.trxId = transactionId;
       this.receiver = receiver;
-      this.assetTickerSymbol = assetTickerSymbol;
+      this.currency = currency;
     }
   }
 
@@ -202,6 +198,7 @@ public class TransactionModels {
      * once the transaction has been successful handled
      *
      * @param attempt The list of transactions to be handled
+     *
      * @param transactionID The corresponding transaction ID for each transaction in list
      */
     public void markAsCompleted(TransactionAttempt attempt, String transactionID) {
