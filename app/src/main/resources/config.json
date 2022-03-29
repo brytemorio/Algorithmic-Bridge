@@ -7,11 +7,16 @@
       "rpc_password": "southern_light",
       "network": "mainnet",
       "chain_identifier": "QCN",
-      "control_wallet": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
       "asset": {
         "name": "Qnodecoin",
         "ticker": "QNC",
-        "transfer_fee": 0.00001
+        "asset_id": null,
+        "transfer_fee": 0.00001,
+        "decimals": 8,
+        "wallet":{
+        	"private_key": null,
+        	"public_key": null
+      }  
       }
     },
     "Waves": {

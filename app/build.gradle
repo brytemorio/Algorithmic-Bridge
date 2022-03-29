@@ -35,6 +35,7 @@ dependencies {
     implementation 'wf.bitcoin:bitcoin-rpc-client:1.1.0'
     implementation 'com.lmax:disruptor:3.4.4'
     implementation 'org.agrona:agrona:1.14.0'
+    implementation 'com.konghq:unirest-java:3.11.09'
 
     
    

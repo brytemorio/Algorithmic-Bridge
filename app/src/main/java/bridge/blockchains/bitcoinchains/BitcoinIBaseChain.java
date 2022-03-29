@@ -7,6 +7,7 @@ import org.agrona.collections.Object2ObjectHashMap;
 import com.electronwill.nightconfig.core.Config;
 import bridge.blockchains.IBaseChain;
 import bridge.common.TransactionModels;
+import bridge.common.TransactionModels.MappedAddress;
 import bridge.common.TransactionModels.TransactionReceiver;
 import bridge.common.TransactionModels.TransactionSender;
 import lombok.AccessLevel;
@@ -117,8 +118,6 @@ class BitcoinIBaseChain implements IBaseChain {
     return rpcClient.decodeRawTransaction(rawTrx);
   }
 
-  
-
   @Override
   public boolean validateAddress(String address) {
     return rpcClient.validateAddress(address).isValid();
@@ -142,7 +141,9 @@ class BitcoinIBaseChain implements IBaseChain {
           .forEach(
               receiverAddress ->
                   receivers.add(
-                      new TransactionReceiver(receiverAddress, iter.value().doubleValue())));
+                      new TransactionReceiver(
+                          new MappedAddress(receiverAddress, getAssetName()),
+                          iter.value().doubleValue())));
     }
     return receivers;
   }
@@ -159,7 +160,8 @@ class BitcoinIBaseChain implements IBaseChain {
               vinAddresses.parallelStream()
                   .forEach(
                       address -> {
-                        var trxSenders = new TransactionSender(address);
+                        var trxSenders =
+                            new TransactionSender(new MappedAddress(address, getAssetName()));
                         if (!senders.contains(trxSenders)) senders.add(trxSenders);
                       });
             });

@@ -32,11 +32,11 @@ public class TransactionModels {
   @Data
   public static class TransactionSender {
 
-    private String address;
+    private MappedAddress address;
 
     public TransactionSender() {}
 
-    public TransactionSender(String address) {
+    public TransactionSender(MappedAddress address) {
       this.address = address;
     }
   }
@@ -44,12 +44,12 @@ public class TransactionModels {
   @Data
   public static class TransactionReceiver {
 
-    private String address;
+    private MappedAddress address;
     private double amount;
 
     public TransactionReceiver() {}
 
-    public TransactionReceiver(String address, double amount) {
+    public TransactionReceiver(MappedAddress address, double amount) {
       this.address = address;
       this.amount = amount;
     }
