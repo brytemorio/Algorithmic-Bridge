@@ -1,10 +1,10 @@
 {
   "Blockchain": {
     "Qnodecoin": {
-      "host": "127.0.0.1",
-      "rpc_user": "southerner",
+      "host": " ",
+      "rpc_user": " ",
       "rpc_port": 20611,
-      "rpc_password": "southern_light",
+      "rpc_password": " ",
       "network": "mainnet",
       "chain_identifier": "QCN",
       "asset": {
@@ -32,8 +32,8 @@
           "transfer_fee": 0.00001,
           "decimals": 8,
           "wallet": {
-            "private_key": "F2Lb67ooGdS2UiXU2PkdFZEhRv18PKX2NqoDMd1BNg9s",
-            "public_key": "HnHMx5Dbnd9ikFacnXBr79nHBNAzRgxtDz3QZmLPNaQN"
+            "private_key": " ",
+            "public_key": " "
           }
         },
         "fishfactory_p": {
@@ -42,8 +42,8 @@
           "asset_id": "51x7v7eg4aRzzeDTnR2CcMyrTprDyDt9sYCGcZJ6Xpp3",
           "transfer_fee": 0.00001,
           "wallet": {
-            "private_key": "F2Lb67ooGdS2UiXU2PkdFZEhRv18PKX2NqoDMd1BNg9s",
-            "public_key": "HnHMx5Dbnd9ikFacnXBr79nHBNAzRgxtDz3QZmLPNaQN"
+            "private_key": " ",
+            "public_key": " "
           }
         }
       }
@@ -60,8 +60,8 @@
           "asset_id": "asset-id",
           "transfer_fee": 0.00001,
           "wallet": {
-            "private_key": "09856de4c8f218ffe18c229afd04235be11958358bdd0aaea128f6bbb4bdc77c",
-            "public_key": "0x96E47ED942a933484d79DC8A6F447FCDB6966c97"
+            "private_key": " ",
+            "public_key": " "
           }
         }
       }
@@ -78,8 +78,8 @@
           "asset_id": "0x34f1BD5aBC180df218631278a249d7C606B2E89d",
           "transfer_fee": 0.00001,
           "wallet": {
-            "private_key": "09856de4c8f218ffe18c229afd04235be11958358bdd0aaea128f6bbb4bdc77c",
-            "public_key": "0x96E47ED942a933484d79DC8A6F447FCDB6966c97"
+            "private_key": "",
+            "public_key": ""
           }
         }
       }
