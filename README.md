@@ -1,6 +1,10 @@
-# The Algorithmic Bridge
+# The Algorithmic Bridge [Incomplete]
 A Bridge for transfers of crypto assets between different blockchains
 It is based on ideas picked from the [Xclaim paper](https://github.com/brytemorio/Algorithmic-Bride/blob/main/XCLAIM(research%20paper).pdf).
+
+## Overview
+![image](https://user-images.githubusercontent.com/61395900/212017691-86c4c9df-c96e-43e5-b8a7-258d8d6f00f4.png)
+
 
 ## Usage
 ```java -jar algo-bridge.jar```
