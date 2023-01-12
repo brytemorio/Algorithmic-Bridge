@@ -11,7 +11,7 @@ It is based on ideas picked from the [Xclaim paper](https://github.com/brytemori
 
 <br/>
 
-The bridge internally uses a default config file in [TOML](https://toml.io) format.
+The bridge internally uses a default config file.
 To override the default config file. Use the System Property ***configfile***. That is:
 
 ``` java -Dconfigfile="path/to/toml/configfile" -jar algo-bridge.jar```
