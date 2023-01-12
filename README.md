@@ -17,7 +17,7 @@ To override the default config file. Use the System Property ***configfile***. T
 ``` java -Dconfigfile="path/to/toml/configfile" -jar algo-bridge.jar```
 
 
-Ideally you should supply your own config file using the pattern given [here]( https://github.com/brytemorio/Algorithmic-Bride/blob/main/config.example.toml)
+Ideally you should supply your own config file using the pattern given [here]( https://github.com/brytemorio/Algorithmic-Bridge/blob/main/app/src/main/resources/config.json)
 
 
 <br/>
