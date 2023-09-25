@@ -19,7 +19,7 @@ import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.YieldingWaitStrategy;
 import bridge.blockchains.IBaseChain;
-import bridge.transactionservice.TransactionModels.MappedAddress;
+import bridge.services.transactionservice.TransactionModels.MappedAddress;
 
 public class BridgeUtils {
   private BridgeUtils() {}

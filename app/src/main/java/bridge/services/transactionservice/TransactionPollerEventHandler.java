@@ -1,6 +1,6 @@
-package bridge.transactionservice;
+package bridge.services.transactionservice;
 
-import static bridge.transactionservice.TransactionModels.Transaction;
+import static bridge.services.transactionservice.TransactionModels.Transaction;
 
 import com.lmax.disruptor.EventHandler;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bridge.blockchains.IBaseChain;
-import bridge.storagservice.MongoStorageService;
+import bridge.services.storagservice.MongoStorageService;
 
 
 public class TransactionPollerEventHandler implements EventHandler<ArrayList<String>>

@@ -2,8 +2,10 @@ package bridge.blockchains.waveschains;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.List;
 
-import bridge.transactionservice.TransactionModels;
+import bridge.services.storagservice.MongoStorageService;
+import bridge.services.transactionservice.TransactionModels;
 import org.agrona.collections.Object2ObjectHashMap;
 import com.electronwill.nightconfig.core.Config;
 import com.wavesplatform.transactions.account.Address;
@@ -13,13 +15,14 @@ import com.wavesplatform.wavesj.Node;
 import com.wavesplatform.wavesj.info.TransactionInfo;
 import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
-import bridge.transactionservice.TransactionModels.Transaction;
-import bridge.transactionservice.TransactionModels.TransactionReceiver;
-import bridge.transactionservice.TransactionModels.TransactionSender;
+import bridge.services.transactionservice.TransactionModels.Transaction;
+import bridge.services.transactionservice.TransactionModels.TransactionReceiver;
+import bridge.services.transactionservice.TransactionModels.TransactionSender;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import org.web3j.abi.datatypes.Int;
 
 @SuppressWarnings("unchecked")
 class WavesIBaseChain<K> implements IBaseChain {
@@ -50,12 +53,14 @@ class WavesIBaseChain<K> implements IBaseChain {
 
   private Node wavesRpcClient;
 
+  private MongoStorageService mongoStorageService;
   private BigInteger previousBlockHeight;
 
   protected void init()
   {
     this.wavesRpcClient = getNodeObj();
     this.previousBlockHeight = BigInteger.ZERO;
+    this.mongoStorageService = new MongoStorageService();
   }
 
   public String getAssetID(String assetConfigName) {
@@ -153,6 +158,22 @@ class WavesIBaseChain<K> implements IBaseChain {
   }
 
   @Override
+  public Boolean filterTransactions(Transaction trx)
+  {
+     List<Integer> filterTransactions = (Transaction trxi) -> {
+       for(int i = 0; i <= trxi.getReceivers().size())
+    }
+   if(this.mongoStorageService.gatewayTransactionExists(trx.getTransactionID()));
+   return false;
+  }
+
+  @Override
+  public void handleTransaction(Transaction trx)
+  {
+    //TOdo: implement this function
+  }
+
+  @Override
   public Transaction getTransaction(String trxID, String assetName) {
     String assetID = getAssetID(assetName);
     Config transaction = BridgeUtils.getJsonDeserializer().parse(getTrxByID(trxID));
@@ -222,5 +243,14 @@ class WavesIBaseChain<K> implements IBaseChain {
 
   private WavesAssets assetInfoFactory(String assetConfigName) {
     return new WavesAssets(asset.get(assetConfigName));
+  }
+
+  @SneakyThrows
+  private String getTokenReceiverFromTransaction(String transactionID)
+  {
+    TransactionInfo trxInfo =
+        this.wavesRpcClient.getTransactionInfo(Id.as(transactionID));
+    Config attachment  = BridgeUtils.getJsonDeserializer().parse(trxInfo.tx().toJson());
+    return attachment.get("attachment");
   }
 }

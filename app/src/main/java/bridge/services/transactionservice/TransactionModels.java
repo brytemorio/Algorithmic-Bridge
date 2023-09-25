@@ -1,4 +1,4 @@
-package bridge.transactionservice;
+package bridge.services.transactionservice;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -192,15 +192,6 @@ public class TransactionModels
   @Data
   public static class TransactionAttemptList
   {
-
-    public static final String KEY_ID = "attempt_list_id";
-    public static final String KEY_TRANSACTIONS = "transactions";
-    public static final String KEY_ATTEMPTS = "attempts";
-    public static final String KEY_TRIGGER = "trigger";
-    public static final String KEY_LAST_MODIFIED = "last_modified";
-    public static final String KEY_CREATED_AT = "created_at";
-    public static final String KEY_TRIES = "tries";
-    public static final int DEFAULT_TRIES = 0;
 
     private String Id;
     private TransactionAttemptListTrigger trigger;

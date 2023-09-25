@@ -3,7 +3,7 @@ package bridge.messageservice;
 import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
 import bridge.exceptions.BridgeExceptions.ObjectCreationException;
-import bridge.storagservice.MongoStorageService;
+import bridge.services.storagservice.MongoStorageService;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;

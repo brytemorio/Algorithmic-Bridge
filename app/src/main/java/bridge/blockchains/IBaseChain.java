@@ -20,14 +20,14 @@ import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import bridge.transactionservice.TransactionModels;
+import bridge.services.transactionservice.TransactionModels;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.ConfigFormat;
 import com.electronwill.nightconfig.core.io.ConfigParser;
 import com.electronwill.nightconfig.core.io.ParsingException;
 import com.electronwill.nightconfig.json.JsonFormat;
 import com.google.common.base.Supplier;
-import bridge.transactionservice.TransactionModels.Transaction;
+import bridge.services.transactionservice.TransactionModels.Transaction;
 import bridge.exceptions.BridgeExceptions.ChainNodeException;
 
 public interface IBaseChain {
@@ -44,6 +44,14 @@ public interface IBaseChain {
   Transaction getTransaction(String trxId, String asseId);
 
   boolean validateAddress(String address);
+
+
+  Transaction sendCoin(TransactionModels.TransactionAttempt attempt) throws Exception;
+  Boolean filterTransactions(Transaction trx);
+  void handleTransaction(Transaction trx);
+
+
+
 
   /* This default method is broken */
   default String getNodeResponse(String nodeEndpoint)
@@ -72,8 +80,6 @@ public interface IBaseChain {
     return response.body();
   }
 
-
-  Transaction sendCoin(TransactionModels.TransactionAttempt attempt);
 
   /**/
   class JsonresponseHandler implements BodyHandler<Supplier<Config>> {

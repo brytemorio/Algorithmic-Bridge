@@ -3,8 +3,8 @@ package bridge.blockchains.ethchains;
 import bridge.abiwrapper.ERC20ABI;
 import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
-import bridge.transactionservice.TransactionModels;
-import bridge.transactionservice.TransactionModels.Transaction;
+import bridge.services.transactionservice.TransactionModels;
+import bridge.services.transactionservice.TransactionModels.Transaction;
 import com.electronwill.nightconfig.core.Config;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -133,6 +133,18 @@ class EthIBaseChain<K> implements IBaseChain {
   public Transaction sendCoin(TransactionModels.TransactionAttempt attempt)
   {
     return null;
+  }
+
+  @Override
+  public Boolean filterTransactions(Transaction trx)
+  {
+    return null;
+  }
+
+  @Override
+  public void handleTransaction(Transaction trx)
+  {
+
   }
 
   @Override

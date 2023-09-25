@@ -1,9 +1,9 @@
-package bridge.storagservice;
+package bridge.services.storagservice;
 
 import java.math.BigInteger;
 import java.util.Map;
 import org.bson.types.ObjectId;
-import bridge.transactionservice.TransactionModels.MappedAddress;
+import bridge.services.transactionservice.TransactionModels.MappedAddress;
 import lombok.Data;
 
 public class DataObjects {
@@ -52,5 +52,11 @@ public class DataObjects {
       this.fromBlockChainAddress = fromBlockChainAddress;
       this.toBlockChainAddress = toBlockChainAddress;
     }
+  }
+
+  @Data
+  protected static final class TransactionAttemptReceiver
+  {
+
   }
 }

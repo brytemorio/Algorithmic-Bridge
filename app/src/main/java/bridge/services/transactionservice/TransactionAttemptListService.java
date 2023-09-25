@@ -1,8 +1,9 @@
-package bridge.transactionservice;
+package bridge.services.transactionservice;
 
 import bridge.blockchains.IBaseChain;
-import bridge.storagservice.MongoStorageService;
+import bridge.services.storagservice.MongoStorageService;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -18,6 +19,7 @@ public class TransactionAttemptListService
     this.dbService = new MongoStorageService();
   }
 
+  @SneakyThrows
   public void continueTrxAttemptList(TransactionModels.TransactionAttemptList trxAttemptList)
   {
     log.info("Tyring to complete attempt_list '%s'" + trxAttemptList.getTransactionAttemptID());

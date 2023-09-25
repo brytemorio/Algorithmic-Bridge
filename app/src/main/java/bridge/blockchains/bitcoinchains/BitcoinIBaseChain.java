@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import org.agrona.collections.Object2ObjectHashMap;
 import com.electronwill.nightconfig.core.Config;
 import bridge.blockchains.IBaseChain;
-import bridge.transactionservice.TransactionModels;
-import bridge.transactionservice.TransactionModels.MappedAddress;
-import bridge.transactionservice.TransactionModels.TransactionReceiver;
-import bridge.transactionservice.TransactionModels.TransactionSender;
+import bridge.services.transactionservice.TransactionModels;
+import bridge.services.transactionservice.TransactionModels.MappedAddress;
+import bridge.services.transactionservice.TransactionModels.TransactionReceiver;
+import bridge.services.transactionservice.TransactionModels.TransactionSender;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -127,6 +127,18 @@ class BitcoinIBaseChain implements IBaseChain {
   public TransactionModels.Transaction sendCoin(TransactionModels.TransactionAttempt attempt)
   {
     return null;
+  }
+
+  @Override
+  public Boolean filterTransactions(TransactionModels.Transaction trx)
+  {
+    return null;
+  }
+
+  @Override
+  public void handleTransaction(TransactionModels.Transaction trx)
+  {
+
   }
 
   @Override
