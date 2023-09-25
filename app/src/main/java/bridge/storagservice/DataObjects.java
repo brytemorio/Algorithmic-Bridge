@@ -3,7 +3,7 @@ package bridge.storagservice;
 import java.math.BigInteger;
 import java.util.Map;
 import org.bson.types.ObjectId;
-import bridge.common.TransactionModels.MappedAddress;
+import bridge.transactionservice.TransactionModels.MappedAddress;
 import lombok.Data;
 
 public class DataObjects {

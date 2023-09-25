@@ -1,4 +1,4 @@
-package bridge.common;
+package bridge.transactionservice;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -235,7 +235,7 @@ public class TransactionModels {
      */
     public boolean hasCompleted() {
       // : Todo: Implementation details for later
-      return true;
+      return this.transactions.size() >= this.attempts.size();
     }
   }
 }

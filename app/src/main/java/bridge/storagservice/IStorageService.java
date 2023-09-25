@@ -2,7 +2,7 @@ package bridge.storagservice;
 
 import java.math.BigInteger;
 import java.util.Map;
-import bridge.common.TransactionModels.MappedAddress;
+import bridge.transactionservice.TransactionModels.MappedAddress;
 import bridge.storagservice.DataObjects.AddressMappingStorage;
 
 public interface IStorageService {

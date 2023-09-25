@@ -25,7 +25,7 @@ import com.electronwill.nightconfig.core.io.ConfigParser;
 import com.electronwill.nightconfig.core.io.ParsingException;
 import com.electronwill.nightconfig.json.JsonFormat;
 import com.google.common.base.Supplier;
-import bridge.common.TransactionModels.Transaction;
+import bridge.transactionservice.TransactionModels.Transaction;
 import bridge.exceptions.BridgeExceptions.ChainNodeException;
 
 public interface IBaseChain {

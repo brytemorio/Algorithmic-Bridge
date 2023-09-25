@@ -20,7 +20,7 @@ public final class WavesChainI<K> extends WavesIBaseChain<K> {
         "Atleast one token name should be passed to "
             + getClass().getSimpleName()
             + " constructor");
-    this.assetConfigName = Objects.requireNonNull(assetConfigName);
+    this.assetConfigName = Objects.requireNonNull(assetConfigName); //NO need for this check
     Object2ObjectHashMap<String, Config> assets = new Object2ObjectHashMap<>();
     Config assetList = configObject.get("Blockchain.Waves.asset");
     for (String configName : this.assetConfigName) {

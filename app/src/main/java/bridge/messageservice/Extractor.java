@@ -28,7 +28,7 @@ final class Extractor implements EventHandler<BlockProp> {
 
       var disruptor =
           new DisruptorObjFactory<ArrayList<String>>(
-              new TransactionHandler(chain.getChainIdentifier()),
+              new TransactionHandler(chain),
               new TrxHashListFactory(),
               bufferSize);
       disruptor.start();

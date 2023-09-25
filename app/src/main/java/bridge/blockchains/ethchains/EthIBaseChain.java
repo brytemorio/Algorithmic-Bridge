@@ -3,7 +3,7 @@ package bridge.blockchains.ethchains;
 import bridge.abiwrapper.ERC20ABI;
 import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
-import bridge.common.TransactionModels.Transaction;
+import bridge.transactionservice.TransactionModels.Transaction;
 import com.electronwill.nightconfig.core.Config;
 import lombok.AccessLevel;
 import lombok.Getter;

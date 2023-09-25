@@ -3,7 +3,7 @@ package bridge.blockchains.waveschains;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
-import bridge.common.TransactionModels;
+import bridge.transactionservice.TransactionModels;
 import org.agrona.collections.Object2ObjectHashMap;
 import com.electronwill.nightconfig.core.Config;
 import com.wavesplatform.transactions.account.Address;
@@ -13,9 +13,9 @@ import com.wavesplatform.wavesj.Node;
 import com.wavesplatform.wavesj.info.TransactionInfo;
 import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
-import bridge.common.TransactionModels.Transaction;
-import bridge.common.TransactionModels.TransactionReceiver;
-import bridge.common.TransactionModels.TransactionSender;
+import bridge.transactionservice.TransactionModels.Transaction;
+import bridge.transactionservice.TransactionModels.TransactionReceiver;
+import bridge.transactionservice.TransactionModels.TransactionSender;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,10 +50,12 @@ class WavesIBaseChain<K> implements IBaseChain {
 
   private Node wavesRpcClient;
 
-  private BigInteger previousBlockHeight = BigInteger.ZERO;
+  private BigInteger previousBlockHeight;
 
-  protected void init() {
+  protected void init()
+  {
     this.wavesRpcClient = getNodeObj();
+    this.previousBlockHeight = BigInteger.ZERO;
   }
 
   public String getAssetID(String assetConfigName) {
@@ -177,7 +179,7 @@ class WavesIBaseChain<K> implements IBaseChain {
     return new Transaction(trxID, recipients, senders);
   }
 
-  class WavesAssets {
+  static class WavesAssets {
 
     @Getter private String assetID;
 
@@ -191,7 +193,7 @@ class WavesIBaseChain<K> implements IBaseChain {
 
     @Getter private Config assetControlWallet;
 
-    private Config asset;
+    private final Config asset;
 
     public WavesAssets(final Config asset) {
       this.asset = asset;
