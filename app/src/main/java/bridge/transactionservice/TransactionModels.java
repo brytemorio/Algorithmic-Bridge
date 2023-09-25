@@ -6,57 +6,75 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
+
+import lombok.SneakyThrows;
 import org.bson.types.ObjectId;
 import lombok.Data;
 
-public class TransactionModels {
+public class TransactionModels
+{
 
-  private TransactionModels() {}
+  private TransactionModels()
+  {
+  }
 
   @Data
-  public static class MappedAddress {
+  public static class MappedAddress
+  {
     /* object used internally by the bridge in creating tunnels across blockchains */
 
     ObjectId id;
     private String address;
     private String assetName;
 
-    public MappedAddress() {}
+    public MappedAddress()
+    {
+    }
 
-    public MappedAddress(final String Address, final String assetName) {
+    public MappedAddress(final String Address, final String assetName)
+    {
       this.address = Address;
       this.assetName = assetName;
     }
   }
 
   @Data
-  public static class TransactionSender {
+  public static class TransactionSender
+  {
 
     private MappedAddress address;
 
-    public TransactionSender() {}
+    public TransactionSender()
+    {
+    }
 
-    public TransactionSender(MappedAddress address) {
+    public TransactionSender(MappedAddress address)
+    {
       this.address = address;
     }
   }
 
   @Data
-  public static class TransactionReceiver {
+  public static class TransactionReceiver
+  {
 
     private MappedAddress address;
     private double amount;
 
-    public TransactionReceiver() {}
+    public TransactionReceiver()
+    {
+    }
 
-    public TransactionReceiver(MappedAddress address, double amount) {
+    public TransactionReceiver(MappedAddress address, double amount)
+    {
       this.address = address;
       this.amount = amount;
     }
   }
 
   @Data
-  public static class Transaction {
+  public static class Transaction
+  {
 
     private String transactionID;
     private List<TransactionReceiver> receivers;
@@ -65,50 +83,59 @@ public class TransactionModels {
     private boolean afffirmTransaction;
     private int retries;
 
-    public Transaction() {}
+    public Transaction()
+    {
+    }
 
-    public Transaction(
-        String transactionID,
-        List<TransactionReceiver> receivers,
-        List<TransactionSender> senders) {
+    public Transaction(String transactionID, List<TransactionReceiver> receivers,
+                       List<TransactionSender> senders)
+    {
       this.transactionID = transactionID;
       this.receivers = receivers;
       this.senders = senders;
     }
 
-    public Transaction(String transactionID, List<TransactionReceiver> receivers) {
+    public Transaction(String transactionID, List<TransactionReceiver> receivers)
+    {
       this.transactionID = transactionID;
       this.receivers = receivers;
     }
 
-    public void markAsDone() {
+    public void markAsDone()
+    {
       setAfffirmTransaction(true);
     }
 
-    public void incrementRetries() {
+    public void incrementRetries()
+    {
       this.retries += 1;
     }
   }
 
   @Data
-  public static class TransactionAttemptListTrigger {
+  public static class TransactionAttemptListTrigger
+  {
 
     private String trxId;
     private int receiver;
     private String currency;
     private List<TransactionSender> senders;
 
-    public TransactionAttemptListTrigger() {}
+    public TransactionAttemptListTrigger()
+    {
+    }
 
-    public TransactionAttemptListTrigger(
-        String transactionId, int receiver, String currency, List<TransactionSender> senders) {
+    public TransactionAttemptListTrigger(String transactionId, int receiver, String currency,
+                                         List<TransactionSender> senders)
+    {
       this.trxId = transactionId;
       this.receiver = receiver;
       this.currency = currency;
       this.senders = senders;
     }
 
-    public TransactionAttemptListTrigger(String transactionId, int receiver, String currency) {
+    public TransactionAttemptListTrigger(String transactionId, int receiver, String currency)
+    {
       this.trxId = transactionId;
       this.receiver = receiver;
       this.currency = currency;
@@ -116,77 +143,86 @@ public class TransactionModels {
   }
 
   @Data
-  public static class TransactionAttemptReceiver {
+  public static class TransactionAttemptReceiver
+  {
 
     private String address;
     private Double amount;
 
-    public TransactionAttemptReceiver() {}
+    public TransactionAttemptReceiver()
+    {
+    }
 
-    TransactionAttemptReceiver(String address, Double amount) {
+    TransactionAttemptReceiver(String address, Double amount)
+    {
       this.address = address;
       this.amount = amount;
     }
   }
 
   @Data
-  public static class TransactionAttempt {
+  public static class TransactionAttempt
+  {
 
     private String sender;
     private List<TransactionAttemptReceiver> receivers;
     private double fee;
     private String currency;
 
-    public TransactionAttempt() {}
+    public TransactionAttempt()
+    {
+    }
 
-    TransactionAttempt(
-        String sender, List<TransactionAttemptReceiver> receivers, double fee, String currency) {
+    TransactionAttempt(String sender, List<TransactionAttemptReceiver> receivers, double fee,
+                       String currency)
+    {
       this.sender = sender;
       this.receivers = receivers;
       this.fee = fee;
       this.currency = currency;
     }
 
-    public Double overallAmount() {
+    public Double overallAmount()
+    {
       // TODO: Implement overallAmount() if turns out to be necessary
       return null;
     }
   }
 
   @Data
-  public static class TransactionAttemptList {
+  public static class TransactionAttemptList
+  {
 
     private String Id;
     private TransactionAttemptListTrigger trigger;
     private List<TransactionAttempt> attempts;
-    private List<?> transactions;
+    private List<String> transactions;
     private ZonedDateTime createdOn;
     private ZonedDateTime lastModifiedOn;
     private Integer tries;
     private String transactionAttemptID;
 
-    public TransactionAttemptList() {}
+    public TransactionAttemptList()
+    {
+    }
 
-    TransactionAttemptList(
-        TransactionAttemptListTrigger trigger,
-        List<TransactionAttempt> attempts,
-        List<?> transactions,
-        ZonedDateTime createdOn,
-        ZonedDateTime lastModifiedOn,
-        Integer tries,
-        String transactionAttemptID) {
+    TransactionAttemptList(TransactionAttemptListTrigger trigger, List<TransactionAttempt> attempts,
+                           List<?> transactions, ZonedDateTime createdOn,
+                           ZonedDateTime lastModifiedOn, Integer tries, String transactionAttemptID)
+    {
       this.Id = UUID.randomUUID().toString();
       this.trigger = trigger;
       this.attempts = attempts;
-      this.transactions = transactions;
+      this.transactions = (List<String>) transactions;
       this.createdOn = createdOn;
       this.lastModifiedOn = lastModifiedOn;
       this.tries = tries;
       this.transactionAttemptID = transactionAttemptID;
     }
 
-    TransactionAttemptList(
-        TransactionAttemptListTrigger trigger, List<TransactionAttempt> attempts, Integer tries) {
+    TransactionAttemptList(TransactionAttemptListTrigger trigger, List<TransactionAttempt> attempts,
+                           Integer tries)
+    {
       this.Id = UUID.randomUUID().toString();
       this.trigger = trigger;
       this.attempts = attempts;
@@ -201,8 +237,19 @@ public class TransactionModels {
      *
      * @param transactionID The corresponding transaction ID for each transaction in list
      */
-    public void markAsCompleted(TransactionAttempt attempt, String transactionID) {
-      // TODO: Implementation details later
+    public void markNextAttemptAsCompleted(TransactionAttempt attempt, String transactionID)
+    {
+      for (int i = 0; i < this.attempts.size(); i++)
+      {
+        if (this.attempts.get(i) == attempt)
+        {
+          if (this.transactions.size() != i)
+            throw new RuntimeException(
+                "Trying to mark an attempt as complete that is not the next " + "attempt");
+        }
+        this.transactions.add(transactionID);
+        this.lastModifiedOn = ZonedDateTime.from(LocalDateTime.now());
+      }
     }
 
     /*
@@ -210,12 +257,10 @@ public class TransactionModels {
      * reached, at which point the transaction is abandoned and stored as a failed transaction in
      * the transaction history.
      */
-    public void incrementRetries() {
+    public void incrementRetries()
+    {
       tries = tries + 1;
-      ZoneId zoneId = ZoneId.of("Etc/Zulu");
-      lastModifiedOn
-          .of(LocalDateTime.now(), zoneId)
-          .format(DateTimeFormatter.RFC_1123_DATE_TIME); // Todo:
+      lastModifiedOn = ZonedDateTime.now(ZoneId.of("Etc/Zulu"));
     }
 
     /*
@@ -223,9 +268,9 @@ public class TransactionModels {
      *
      *
      */
-    public TransactionAttempt nextIncompleteAttempt() {
-      // : TODO: Implementation detatils for later
-      return null;
+    public TransactionAttempt nextIncompleteAttempt()
+    {
+      return this.attempts.get(this.transactions.size());
     }
 
     /**
@@ -233,8 +278,8 @@ public class TransactionModels {
      *
      * @return true|false
      */
-    public boolean hasCompleted() {
-      // : Todo: Implementation details for later
+    public boolean hasCompleted()
+    {
       return this.transactions.size() >= this.attempts.size();
     }
   }
