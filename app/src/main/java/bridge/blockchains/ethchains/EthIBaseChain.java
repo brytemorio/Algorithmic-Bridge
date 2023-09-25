@@ -1,12 +1,15 @@
 package bridge.blockchains.ethchains;
 
-import java.lang.reflect.Method;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
+import bridge.abiwrapper.ERC20ABI;
+import bridge.blockchains.IBaseChain;
+import bridge.common.BridgeUtils;
+import bridge.common.TransactionModels.Transaction;
+import com.electronwill.nightconfig.core.Config;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.SneakyThrows;
 import org.agrona.collections.Object2ObjectHashMap;
-import org.web3j.abi.FunctionReturnDecoder;
-import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -15,17 +18,9 @@ import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.DefaultGasProvider;
-import com.electronwill.nightconfig.core.Config;
-import bridge.abiwrapper.ERC20ABI;
-import bridge.abiwrapper.QnodeCoinABI;
-import bridge.blockchains.IBaseChain;
-import bridge.common.AssetABI;
-import bridge.common.BridgeUtils;
-import bridge.common.TransactionModels.Transaction;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.SneakyThrows;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
 class EthIBaseChain<K> implements IBaseChain {
@@ -135,14 +130,14 @@ class EthIBaseChain<K> implements IBaseChain {
 
   @Override
   public Transaction getTransaction(String trxID, String assetName) {
-    String assetId = getAssetID(assetName);
+    /*String assetId = getAssetID(assetName);
     ERC20ABI erc20abi = getABIWrapper(assetName);
     var transaction = getTrxByID(trxID);
     if (!assetId.equals(transaction.getTo())) return null;
     Function transferFunction = new Function((erc20abi.FUNC_TRANSFER,
         Arrays.asList(erc20abi. ),
         erc20abi.TRANSFER_EVENT.getParameters());
-    System.out.println(FunctionReturnDecoder.decode(transaction.getTo(), erc20abi.TRANSFER_EVENT.));
+    System.out.println(FunctionReturnDecoder.decode(transaction.getTo(), erc20abi.TRANSFER_EVENT.));*/
 
     // TODO: Complete this function
     return null;
@@ -209,7 +204,7 @@ class EthIBaseChain<K> implements IBaseChain {
 
   }
 
-  class Unit256 implements Type<BigInteger> {
+ /* class Unit256 implements Type<BigInteger> {
 
     @Override
     public BigInteger getValue() {
@@ -223,6 +218,6 @@ class EthIBaseChain<K> implements IBaseChain {
       return null;
     }
 
-  }
+  }*/
 
 }

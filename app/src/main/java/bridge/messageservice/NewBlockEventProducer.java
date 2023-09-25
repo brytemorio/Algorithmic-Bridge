@@ -27,7 +27,7 @@ public final class NewBlockEventProducer {
    * The parameter passed to {@code getNewBlockEventProducer} are instance of (Classes or the
    * SubClasses of Classes) that implements the interface {@link bridge.blockchains.IBaseChain}
    *
-   * @param blockchains instances of IBaseChain
+   * @param cblockChains instances of IBaseChain
    */
   @SneakyThrows
   public static synchronized NewBlockEventProducer getNewBlockEventProducer(

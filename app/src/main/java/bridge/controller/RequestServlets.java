@@ -60,7 +60,7 @@ public class RequestServlets {
       String param = request.getParameter("name");
       PrintWriter writer = response.getWriter();
       // response.setHeader("Content-Type", "application/json");
-      writer.write(gson.toJson(new TransactionReceiver("xxxxxxxxxxxxxxxxx", 23.45)));
+      // writer.write(gson.toJson(new TransactionReceiver("xxxxxxxxxxxxxxxxx", 23.45)));
       // writer.flush();
     }
 

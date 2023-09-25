@@ -1,5 +1,7 @@
 package bridge.transactionservice;
 import static bridge.common.TransactionModels.Transaction;
+
+import bridge.common.TransactionModels;
 import com.lmax.disruptor.EventHandler;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,18 +43,19 @@ public class TransactionPoller implements EventHandler<ArrayList<String>>{
    
   }
   
-  private ArrayList<Integer> filterReceivers(Transaction trx){
+ /* private ArrayList<Integer> filterReceivers(Transaction trx){
       for( int i = 0; i < trx.getReceivers().size() - 1; i++) {
         MappedAddress address = trx.getReceivers().get(i).getAddress();
       mappedAddress.put(fromBlockChainName, address);
       String savedMappingForAddress = storageService.getAddressFromSavedMapping(mappedAddress, toBlockchainName);
       if(null != savedMappingForAddress && !trx.getAddress().getAddress().equals("placeholder")) {
-        var attemptList = storageService.findTransactionAttemptByTrigger(new TransactionAttemptListTrigger(trans))
+        var attemptList =
+            storageService.findTransactionAttemptByTrigger(new TransactionModels.TransactionAttemptListTrigger(trans));
       }
       }
      
     
-  }
+  }*/
   
   //============================Helper functions====================================//
   

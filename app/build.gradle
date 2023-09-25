@@ -13,6 +13,7 @@ plugins {
     id 'java'
     id 'war'
     id 'idea'
+    id "com.github.ben-manes.versions" version "0.48.0"
     // id 'eclipse'
 
 }
@@ -30,11 +31,11 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.web3j:web3j-maven-plugin:4.8.7'
-    implementation 'com.wavesplatform:wavesj:1.2.3'
+    implementation 'org.web3j:web3j-maven-plugin:4.10.0'
+    implementation 'com.wavesplatform:wavesj:1.3.0'
     implementation 'wf.bitcoin:bitcoin-rpc-client:1.1.0'
-    implementation 'com.lmax:disruptor:3.4.4'
-    implementation 'org.agrona:agrona:1.14.0'
+    implementation 'com.lmax:disruptor:4.0.0.RC1'
+    implementation 'org.agrona:agrona:1.19.2'
     implementation 'com.konghq:unirest-java:3.11.09'
 
     
@@ -43,15 +44,15 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
     //implementation 'org.mongodb:mongodb-driver-reactivestreams:4.5.0'
     //implementation 'io.reactivex.rxjava3:rxjava:3.1.3'
-    implementation 'org.mongodb:mongodb-driver-sync:4.5.0'
+    implementation 'org.mongodb:mongodb-driver-sync:4.10.2'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'io.undertow:undertow-servlet:2.2.14.Final'
     implementation 'io.undertow:undertow-core:2.2.14.Final'
     implementation 'com.electronwill.night-config:json:3.6.5'
-    compileOnly 'org.projectlombok:lombok:1.18.22'
-    annotationProcessor 'org.projectlombok:lombok:1.18.22'
-    testCompileOnly 'org.projectlombok:lombok:1.18.22'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    testCompileOnly 'org.projectlombok:lombok:1.18.30'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 
 
 

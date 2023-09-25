@@ -17,6 +17,7 @@ public class TransactionHandler implements EventHandler<ArrayList<String>> {
 
   @Override
   public void onEvent(ArrayList<String> event, long sequence, boolean endOfBatch) throws Exception {
-    log.info(chainIdentifier + ":" + " List of transactions Id => " + event.toString());
+    //log.info(chainIdentifier + ":" + " List of transactions Id => " + event.toString());
+    log.info(chainIdentifier + ":" + " Number of transactions in block => " + event.toArray().length);
   }
 }

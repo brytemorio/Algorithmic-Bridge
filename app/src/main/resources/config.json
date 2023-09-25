@@ -32,8 +32,8 @@
           "transfer_fee": 0.00001,
           "decimals": 8,
           "wallet": {
-            "private_key": " ",
-            "public_key": " "
+            "private_key": "private-key",
+            "public_key": "public-key"
           }
         },
         "fishfactory_p": {

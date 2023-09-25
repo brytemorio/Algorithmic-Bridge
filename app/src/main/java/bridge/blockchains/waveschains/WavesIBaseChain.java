@@ -2,6 +2,8 @@ package bridge.blockchains.waveschains;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+
+import bridge.common.TransactionModels;
 import org.agrona.collections.Object2ObjectHashMap;
 import com.electronwill.nightconfig.core.Config;
 import com.wavesplatform.transactions.account.Address;
@@ -87,16 +89,33 @@ class WavesIBaseChain<K> implements IBaseChain {
   @Override
   @SneakyThrows
   public BigInteger getBlockHeight() {
+
+    int height = wavesRpcClient.getHeight();
+
+    while (height == wavesRpcClient.getHeight()){};
+
+    previousBlockHeight = BigInteger.valueOf(height);
+
+    return previousBlockHeight;
+    /*Integer height;
+    Integer refHeight;
+
     boolean noNewblockFound = true;
+
     while (noNewblockFound) {
-      Integer height = wavesRpcClient.getHeight();
+      height = wavesRpcClient.getHeight();
+      do
+      {
+         refHeight = wavesRpcClient.getHeight();
+      }while(height == refHeight);
       BigInteger currentBlockHeight = BigInteger.valueOf(height.intValue());
       if (currentBlockHeight.compareTo(this.previousBlockHeight) > 0) {
         previousBlockHeight = currentBlockHeight;
         noNewblockFound = false;
       }
     }
-    return previousBlockHeight;
+    //BridgeUtils.countDownTimer(200);
+    return previousBlockHeight;*/
   }
 
   @Override
@@ -152,8 +171,9 @@ class WavesIBaseChain<K> implements IBaseChain {
       receiver = transaction.get("recipient");
     }
 
-    senders.add(new TransactionSender(sender));
-    recipients.add(new TransactionReceiver(receiver, amount));
+    senders.add(new TransactionSender(new TransactionModels.MappedAddress(sender, assetName)));
+    recipients.add(new TransactionReceiver(new TransactionModels.MappedAddress(receiver,
+        assetName), amount));
     return new Transaction(trxID, recipients, senders);
   }
 

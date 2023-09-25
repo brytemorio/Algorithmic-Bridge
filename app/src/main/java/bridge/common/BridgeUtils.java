@@ -5,6 +5,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import org.agrona.collections.Object2ObjectHashMap;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.ConfigFormat;
@@ -100,5 +104,24 @@ public class BridgeUtils {
               if (value != null) nonNullList.add(value);
             });
     return nonNullList;
+  }
+
+  public static void countDownTimer(int time)
+  {
+    ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+    final int[] countDowmTime = {time};
+
+    // Use of array as a workaround for  Java's lambada finality
+    // restriction;
+    Runnable countDownTask = () -> {
+      if(countDowmTime[0] > 0)
+        countDowmTime[0] --;
+      else
+        executorService.shutdown();
+    };
+
+    //ScheduledFuture<?> coundownFuture =
+    executorService.scheduleAtFixedRate(countDownTask, 0, 1,
+        TimeUnit.SECONDS);
   }
 }
