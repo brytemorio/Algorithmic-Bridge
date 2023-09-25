@@ -124,6 +124,12 @@ class BitcoinIBaseChain implements IBaseChain {
   }
 
   @Override
+  public TransactionModels.Transaction sendCoin(TransactionModels.TransactionAttempt attempt)
+  {
+    return null;
+  }
+
+  @Override
   public TransactionModels.Transaction getTransaction(String trxId, String assetName) {
     RawTransaction decodedTrx = getTrxByID(trxId);
     return new TransactionModels.Transaction(

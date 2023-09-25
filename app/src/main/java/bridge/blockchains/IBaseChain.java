@@ -19,6 +19,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+
+import bridge.transactionservice.TransactionModels;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.ConfigFormat;
 import com.electronwill.nightconfig.core.io.ConfigParser;
@@ -69,6 +71,9 @@ public interface IBaseChain {
           response.uri().toString(), response.statusCode(), response.body().toString());
     return response.body();
   }
+
+
+  Transaction sendCoin(TransactionModels.TransactionAttempt attempt);
 
   /**/
   class JsonresponseHandler implements BodyHandler<Supplier<Config>> {

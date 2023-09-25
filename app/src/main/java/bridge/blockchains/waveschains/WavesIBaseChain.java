@@ -146,6 +146,13 @@ class WavesIBaseChain<K> implements IBaseChain {
   }
 
   @Override
+  public Transaction sendCoin(TransactionModels.TransactionAttempt attempt)
+  {
+    //Todo: implement this function
+    return null;
+  }
+
+  @Override
   public Transaction getTransaction(String trxID, String assetName) {
     String assetID = getAssetID(assetName);
     Config transaction = BridgeUtils.getJsonDeserializer().parse(getTrxByID(trxID));

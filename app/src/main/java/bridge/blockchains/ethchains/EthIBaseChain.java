@@ -3,6 +3,7 @@ package bridge.blockchains.ethchains;
 import bridge.abiwrapper.ERC20ABI;
 import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
+import bridge.transactionservice.TransactionModels;
 import bridge.transactionservice.TransactionModels.Transaction;
 import com.electronwill.nightconfig.core.Config;
 import lombok.AccessLevel;
@@ -126,6 +127,12 @@ class EthIBaseChain<K> implements IBaseChain {
   @Override
   public boolean validateAddress(String address) {
     return false;
+  }
+
+  @Override
+  public Transaction sendCoin(TransactionModels.TransactionAttempt attempt)
+  {
+    return null;
   }
 
   @Override
