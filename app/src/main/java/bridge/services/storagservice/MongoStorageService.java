@@ -30,7 +30,7 @@ import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 
-/*TODO: This class is in need of heavy refactoring*/
+/*FIXME: This class is in need of heavy refactoring*/
 @Slf4j
 public class MongoStorageService implements IStorageService
 {
@@ -80,11 +80,15 @@ public class MongoStorageService implements IStorageService
     ClassModel<TransactionAttemptList> transactionAttemptListStorageModel = ClassModel.builder(
         TransactionAttemptList.class).enableDiscriminator(true).build();
 
+    ClassModel<DataObjects.PollingState> transactionPolllingStateModel = ClassModel.builder(
+        DataObjects.PollingState.class).enableDiscriminator(true).build();
+
 
     this.codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
         fromProviders(PojoCodecProvider.builder()
             .register(blockHeightStorageModel, addressMappingStroageModel,
-                transactionAttemptListStorageModel).automatic(true).build()));
+                transactionAttemptListStorageModel, transactionPolllingStateModel).automatic(true)
+            .build()));
 
     ServerApi serverApi = ServerApi.builder().version(ServerApiVersion.V1).build();
     ConnectionString connectionString = new ConnectionString(this.connectionURL);
@@ -265,11 +269,30 @@ public class MongoStorageService implements IStorageService
     return false;
   }
 
+  public void setTransactionPollingState(DataObjects.PollingState pollingState)
+  {
+    MongoCollection<DataObjects.PollingState> collection = dataBase.getCollection(
+        CollectionNames.TRANSACTION_POLLING_STATE.toString(), DataObjects.PollingState.class);
+    collection.insertOne(pollingState);
+  }
+
+  public DataObjects.PollingState getTrnasactionPollingState(String chainIdentifier)
+  {
+    MongoCollection<DataObjects.PollingState> collection = dataBase.getCollection(
+        CollectionNames.TRANSACTION_POLLING_STATE.toString(), DataObjects.PollingState.class);
+    Bson query = eq("chainIdentifier", chainIdentifier);
+    return collection.find(query).first();
+  }
+
+
+
+
   // ==============CollectionNames=====================//
   public enum CollectionNames
   {
     BlOCK_HEIGHT_STORAGE("Block_Height_Store"), ADDRESS_MAPPING_STORAGE(
-      "Address_Mapping_Store"), VALID_TRASANCTION_STORAGE("Transaction_AttemptList_Store"),
+      "Address_Mapping_Store"), VALID_TRASANCTION_STORAGE(
+      "Transaction_AttemptList_Store"), TRANSACTION_POLLING_STATE("transaction_polling_state"),
 
     /*
      * Bridge internal wallets(public and private Keys pairs per blockchains supported used for

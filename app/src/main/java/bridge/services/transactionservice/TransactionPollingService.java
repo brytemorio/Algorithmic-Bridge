@@ -2,40 +2,58 @@ package bridge.services.transactionservice;
 
 import static bridge.services.transactionservice.TransactionModels.Transaction;
 
+import bridge.services.storagservice.DataObjects;
 import com.lmax.disruptor.EventHandler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import bridge.blockchains.IBaseChain;
 import bridge.services.storagservice.MongoStorageService;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 
-public class TransactionPollerEventHandler implements EventHandler<ArrayList<String>>
+@Slf4j
+@Getter
+@Setter
+@NoArgsConstructor
+public class TransactionPollingService
 {
   private final MongoStorageService storageService = new MongoStorageService();
-  private IBaseChain blockChain;
+  private  IBaseChain blockChain;
   private String assetName;
-
-  public TransactionPollerEventHandler(IBaseChain blockChain, String assetName)
+  private MongoStorageService mongoStorageService;
+  private DataObjects.PollingTransactionState pollingTransactionState;
+  private DataObjects.PollingState pollingState;
+  public TransactionPollingService(IBaseChain blockChain, String assetName)
   {
     this.blockChain = blockChain;
     this.assetName = assetName;
+    this.mongoStorageService = new MongoStorageService();
+    this.pollingTransactionState = new DataObjects.PollingTransactionState();
+    this.pollingState = new DataObjects.PollingState(this.blockChain.getChainIdentifier());
   }
 
-  public TransactionPollerEventHandler()
+
+  private void handleTransaction(Transaction trx)
   {
+    log.info("Handling transaction for " + this.blockChain.getChainIdentifier());
+    this.ensurePollingStateHasTransaction(trx);
+
+    TransactionModels.MappedAddress es;
+    this.blockChain.handleTransaction(trx, es);
   }
 
-  @Override
-  public void onEvent(ArrayList<String> event, long sequence, boolean endOfBatch) throws Exception
+  private void ensurePollingStateHasTransaction(Transaction trx)
   {
-    List<Transaction> transactionList = new ArrayList<>();
-
-    event.stream()
-        .forEach(trxId -> transactionList.add(blockChain.getTransaction(trxId, assetName)));
-
-
+    Map<String, DataObjects.PollingTransactionState> pollingTransactionStateMap = new HashMap<>();
+    pollingTransactionStateMap.put(trx.getTransactionID(), this.pollingTransactionState);
+    this.pollingState.setTransactionMap(pollingTransactionStateMap);
   }
 
 

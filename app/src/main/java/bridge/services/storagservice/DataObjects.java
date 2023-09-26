@@ -1,10 +1,12 @@
 package bridge.services.storagservice;
 
-import java.math.BigInteger;
-import java.util.Map;
-import org.bson.types.ObjectId;
 import bridge.services.transactionservice.TransactionModels.MappedAddress;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+
+import java.math.BigInteger;
+import java.util.Map;
 
 public class DataObjects {
 
@@ -46,7 +48,7 @@ public class DataObjects {
 
     public AddressMappingStorage() {}
 
-    AddressMappingStorage(
+    public AddressMappingStorage(
         final Map<String, MappedAddress> fromBlockChainAddress,
         final Map<String, MappedAddress> toBlockChainAddress) {
       this.fromBlockChainAddress = fromBlockChainAddress;
@@ -54,9 +56,38 @@ public class DataObjects {
     }
   }
 
-  @Data
-  protected static final class TransactionAttemptReceiver
-  {
 
+  /*Stores Information about a processed transaction*/
+  @Data
+  @NoArgsConstructor
+  public  static final class PollingTransactionState
+  {
+    ObjectId id;
+    private boolean ok;
+    private int tries;
+
+
+    public void incrementTries()
+    {
+      this.tries += 1;
+    }
+
+    public void markAsDone()
+    {
+      this.ok = true;
+    }
+  }
+
+  // Save information about the last poller execution
+  @Data
+  public static class PollingState
+  {
+    private String chainIdentifier;
+    private Map<String, PollingTransactionState> transactionMap;
+
+    public PollingState(String chainIdentifier)
+    {
+      this.chainIdentifier =chainIdentifier;
+    }
   }
 }
