@@ -1,5 +1,7 @@
 package bridge.exceptions;
 
+import java.io.Serial;
+
 public class BridgeExceptions {
 
   private BridgeExceptions() {}
@@ -20,7 +22,8 @@ public class BridgeExceptions {
     }
   }
 
-  public static class ChainAddressNotFoundException extends Exception {
+  public static class ChainAddressNotFoundException extends RuntimeException {
+    @Serial
     private static final long serialVersionUID = -7518046457242084859L;
 
     public ChainAddressNotFoundException(final String msg) {
@@ -28,7 +31,8 @@ public class BridgeExceptions {
     }
   }
 
-  public static class InvalidAssetIDException extends Exception {
+  public static class InvalidAssetIDException extends RuntimeException {
+    @Serial
     private static final long serialVersionUID = 8416989915174220244L;
 
     public InvalidAssetIDException(final String msg) {
@@ -36,11 +40,20 @@ public class BridgeExceptions {
     }
   }
 
-  public static class ObjectCreationException extends Exception {
+  public static class ObjectCreationException extends RuntimeException {
+    @Serial
     private static final long serialVersionUID = 8814384019065260156L;
 
     public ObjectCreationException(final String msg) {
       super(msg);
+    }
+  }
+
+  public static class MultipleGateWayReceiverException extends RuntimeException {
+    public MultipleGateWayReceiverException(final String trx)
+    {
+      super("Encountered a transaction (" + trx + ") with multiple receiver addresses. The " +
+          "Gateway cannot handle this.");
     }
   }
 }

@@ -24,6 +24,7 @@
       "network": "mainnet",
       "network_id": "W",
       "chain_identifier": "WAV",
+      "gateway_address": "GATEWAY_ADDRESS",
       "asset": {
         "qnodecoin": {
           "name": "Qnodecoin",

@@ -32,6 +32,7 @@ public final class WavesChainI<K> extends WavesIBaseChain<K> {
     }
     super.setAsset(assets);
     super.setNetworkNode(configObject.get("Blockchain.Waves.node"));
+    super.setWavesBridgeAddress(configObject.get("Blockchain.Waves.gateway_address"));
     super.setNetwork(configObject.get("Blockchain.Waves.network"));
     super.setNetworkID(configObject.get("Blockchain.Waves.network_id"));
     super.setChainIdentifier(configObject.get("Blockchain.Waves.chain_identifier"));

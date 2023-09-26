@@ -1,11 +1,15 @@
 package bridge.blockchains.waveschains;
 
 import java.math.BigInteger;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import bridge.exceptions.BridgeExceptions;
 import bridge.services.storagservice.MongoStorageService;
 import bridge.services.transactionservice.TransactionModels;
+import lombok.extern.slf4j.Slf4j;
 import org.agrona.collections.Object2ObjectHashMap;
 import com.electronwill.nightconfig.core.Config;
 import com.wavesplatform.transactions.account.Address;
@@ -22,10 +26,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import org.web3j.abi.datatypes.Int;
 
+@Slf4j
 @SuppressWarnings("unchecked")
-class WavesIBaseChain<K> implements IBaseChain {
+class WavesIBaseChain<K> implements IBaseChain
+{
 
   @Setter(AccessLevel.PROTECTED)
   @Getter
@@ -51,10 +56,14 @@ class WavesIBaseChain<K> implements IBaseChain {
   @Setter(AccessLevel.PROTECTED)
   Object2ObjectHashMap<String, Object> chain2IdentifierMapping;
 
+  @Getter
+  @Setter
+  private String wavesBridgeAddress;
   private Node wavesRpcClient;
 
   private MongoStorageService mongoStorageService;
   private BigInteger previousBlockHeight;
+
 
   protected void init()
   {
@@ -63,75 +72,66 @@ class WavesIBaseChain<K> implements IBaseChain {
     this.mongoStorageService = new MongoStorageService();
   }
 
-  public String getAssetID(String assetConfigName) {
+  public String getAssetID(String assetConfigName)
+  {
     WavesAssets assetInfo = assetInfoFactory(assetConfigName);
     return assetInfo.getAssetID();
   }
 
-  public String getAssetTicker(String assetConfigName) {
+  public String getAssetTicker(String assetConfigName)
+  {
     WavesAssets assetInfo = assetInfoFactory(assetConfigName);
     return assetInfo.getAssetTicker();
   }
 
-  public String getAssetName(String assetConfigName) {
+  public String getAssetName(String assetConfigName)
+  {
     WavesAssets assetInfo = assetInfoFactory(assetConfigName);
     return assetInfo.getAssetName();
   }
 
-  public double getAssetTransferFee(String assetConfigName) {
+  public double getAssetTransferFee(String assetConfigName)
+  {
     WavesAssets assetInfo = assetInfoFactory(assetConfigName);
     return assetInfo.getTransferFee();
   }
 
-  public int getAssetDecimals(String assetConfigName) {
+  public int getAssetDecimals(String assetConfigName)
+  {
     WavesAssets assetInfo = assetInfoFactory(assetConfigName);
     return assetInfo.getDecimals();
   }
 
   @SneakyThrows
-  public Node getNodeObj() {
+  public Node getNodeObj()
+  {
     return new Node(networkNode);
   }
 
   @Override
   @SneakyThrows
-  public BigInteger getBlockHeight() {
+  public BigInteger getBlockHeight()
+  {
 
     int height = wavesRpcClient.getHeight();
 
-    while (height == wavesRpcClient.getHeight()){};
-
-    previousBlockHeight = BigInteger.valueOf(height);
-
-    return previousBlockHeight;
-    /*Integer height;
-    Integer refHeight;
-
-    boolean noNewblockFound = true;
-
-    while (noNewblockFound) {
-      height = wavesRpcClient.getHeight();
-      do
-      {
-         refHeight = wavesRpcClient.getHeight();
-      }while(height == refHeight);
-      BigInteger currentBlockHeight = BigInteger.valueOf(height.intValue());
-      if (currentBlockHeight.compareTo(this.previousBlockHeight) > 0) {
-        previousBlockHeight = currentBlockHeight;
-        noNewblockFound = false;
-      }
+    while (height == wavesRpcClient.getHeight())
+    {
     }
-    //BridgeUtils.countDownTimer(200);
-    return previousBlockHeight;*/
+    ;
+    previousBlockHeight = BigInteger.valueOf(height);
+    return previousBlockHeight;
   }
 
   @Override
   @SneakyThrows
-  public ArrayList<String> getTrxIdsByBlockHeight(BigInteger height) {
+  public ArrayList<String> getTrxIdsByBlockHeight(BigInteger height)
+  {
     Block block = wavesRpcClient.getBlock(height.intValue());
     ArrayList<String> trxIDs = new ArrayList<>();
 
-    for (var eachTrxDS : block.transactions()) {
+    for (var eachTrxDS : block.transactions())
+    {
       Config trx = BridgeUtils.getJsonDeserializer().parse(eachTrxDS.tx().toJson());
       trxIDs.add(trx.get("id"));
     }
@@ -140,13 +140,15 @@ class WavesIBaseChain<K> implements IBaseChain {
 
   @Override
   @SneakyThrows
-  public String getTrxByID(String trxID) {
+  public String getTrxByID(String trxID)
+  {
     TransactionInfo trxInfo = wavesRpcClient.getTransactionInfo(Id.as(trxID));
     return trxInfo.tx().toJson();
   }
 
   @Override
-  public boolean validateAddress(String address) {
+  public boolean validateAddress(String address)
+  {
     return Address.isValid(address);
   }
 
@@ -158,72 +160,96 @@ class WavesIBaseChain<K> implements IBaseChain {
   }
 
   @Override
-  public Boolean filterTransactions(Transaction trx)
+  public Boolean filterTransactions(Transaction trx, TransactionModels.MappedAddress sender)
   {
-     List<Integer> filterTransactions = (Transaction trxi) -> {
-       for(int i = 0; i <= trxi.getReceivers().size())
-    }
-   if(this.mongoStorageService.gatewayTransactionExists(trx.getTransactionID()));
-   return false;
+    if (this.mongoStorageService.gatewayTransactionExists(trx.getTransactionID())) return false;
+    else return !_filterTransactionReceivers(trx, sender.getAddress()).isEmpty();
+  }
+
+
+  /*
+   * FIXME: Use TransactionSender Model from {bridge.services.transactionservice.TransactionModel}
+   * */
+  @Override
+  public void handleTransaction(Transaction trx, TransactionModels.MappedAddress sender)
+  {
+    var receivers = this._filterTransactionReceivers(trx, sender.getAssetName());
+
+    //FIXME: this may not  be necessary
+    if (receivers.size() > 1)
+      throw new BridgeExceptions.MultipleGateWayReceiverException(trx.getTransactionID());
+
+    //FIXME: senders should not be empty. senderAddress
+    for (var tx : receivers)
+      this._handleTransaction(trx.getTransactionID(), sender.getAddress(), trx.getReceivers().get(tx),
+          tx,  sender.getAssetName());
   }
 
   @Override
-  public void handleTransaction(Transaction trx)
+  public Transaction getTransaction(String trxID, String assetName)
   {
-    //TOdo: implement this function
-  }
-
-  @Override
-  public Transaction getTransaction(String trxID, String assetName) {
     String assetID = getAssetID(assetName);
     Config transaction = BridgeUtils.getJsonDeserializer().parse(getTrxByID(trxID));
 
-    if (!transaction.contains("assetId")
-        || transaction.get("assetId") != assetID
-        || Integer.parseInt(transaction.get("type")) != 4) return null;
+    if (!transaction.contains("assetId") || transaction.get(
+        "assetId") != assetID || Integer.parseInt(transaction.get("type")) != 4) return null;
 
     ArrayList<TransactionReceiver> recipients = new ArrayList<>();
     ArrayList<TransactionSender> senders = new ArrayList<>();
 
     String sender;
     String receiver;
-    double amount = waveAmount2Double(transaction.get("amount"), assetName);
+    int amount = transaction.get("amount");
 
-    try {
+    try
+    {
       sender = transaction.get("sender").toString().split(":")[1];
-    } catch (ArrayIndexOutOfBoundsException exp) {
+    }
+    catch (ArrayIndexOutOfBoundsException exp)
+    {
       sender = transaction.get("sender");
     }
 
-    try {
+    try
+    {
       receiver = transaction.get("recipient").toString().split(":")[1];
-    } catch (ArrayIndexOutOfBoundsException exp) {
+    }
+    catch (ArrayIndexOutOfBoundsException exp)
+    {
       receiver = transaction.get("recipient");
     }
 
     senders.add(new TransactionSender(new TransactionModels.MappedAddress(sender, assetName)));
-    recipients.add(new TransactionReceiver(new TransactionModels.MappedAddress(receiver,
-        assetName), amount));
+    recipients.add(
+        new TransactionReceiver(new TransactionModels.MappedAddress(receiver, assetName), amount));
     return new Transaction(trxID, recipients, senders);
   }
 
-  static class WavesAssets {
+  static class WavesAssets
+  {
 
-    @Getter private String assetID;
+    @Getter
+    private String assetID;
 
-    @Getter private String assetName;
+    @Getter
+    private String assetName;
 
-    @Getter private String assetTicker;
+    @Getter
+    private String assetTicker;
 
-    @Getter private double transferFee;
+    @Getter
+    private double transferFee;
 
-    @Getter private int decimals;
+    @Getter
+    private int decimals;
 
-    @Getter private Config assetControlWallet;
+    @Getter
+    private Config assetControlWallet;
 
     private final Config asset;
 
-    public WavesAssets(final Config asset) {
+    public WavesAssets(final Config asset)
+    {
       this.asset = asset;
       this.assetID = this.asset.get("asset_id");
       this.assetName = this.asset.get("name");
@@ -235,22 +261,78 @@ class WavesIBaseChain<K> implements IBaseChain {
   }
 
   // ======================Helper functions==============================//
-  private double waveAmount2Double(int val, String assetName) {
+  private double waveAmount2Double(int val, String assetName)
+  {
     int decimalPlace = getAssetDecimals(assetName);
     double result = (double) val / (double) decimalPlace;
     return BridgeUtils.roundUp(result, decimalPlace);
   }
 
-  private WavesAssets assetInfoFactory(String assetConfigName) {
+  private WavesAssets assetInfoFactory(String assetConfigName)
+  {
     return new WavesAssets(asset.get(assetConfigName));
   }
 
   @SneakyThrows
   private String getTokenReceiverFromTransaction(String transactionID)
   {
-    TransactionInfo trxInfo =
-        this.wavesRpcClient.getTransactionInfo(Id.as(transactionID));
-    Config attachment  = BridgeUtils.getJsonDeserializer().parse(trxInfo.tx().toJson());
+    TransactionInfo trxInfo = this.wavesRpcClient.getTransactionInfo(Id.as(transactionID));
+    Config attachment = BridgeUtils.getJsonDeserializer().parse(trxInfo.tx().toJson());
     return attachment.get("attachment");
+  }
+
+
+  /*ensure only transactions to the associated waves bridge address should be handled*/
+  private List<Integer> _filterTransactionReceivers(Transaction trx, String assetName)
+  {
+    List<Integer> result = new ArrayList<>();
+    List<TransactionReceiver> receivers = trx.getReceivers();
+    for (int i = 0; i <= receivers.size(); i++)
+    {
+      if (receivers.get(i).getAddress().getAddress().equals(this.wavesBridgeAddress))
+      {
+        var trx_attempt = this.mongoStorageService.findTransactionAttemptByTrigger(
+            new TransactionModels.TransactionAttemptListTrigger(trx.getTransactionID(), i,
+                assetName));
+        if (trx_attempt == null || trx_attempt.hasCompleted()) result.add(i);
+      }
+    }
+    return result;
+  }
+
+  private void _handleTransaction(String transactionId, String sendingAddress,
+                                  TransactionReceiver receiver, int index,
+                                   String assetName)
+  {
+    TransactionModels.TransactionAttemptList attempt_list;
+    TransactionModels.TransactionAttemptListTrigger trigger;
+
+
+    attempt_list = this.mongoStorageService.findTransactionAttemptByTrigger(
+        new TransactionModels.TransactionAttemptListTrigger(transactionId, index, assetName));
+
+
+    if (attempt_list == null)
+    {
+      trigger = new TransactionModels.TransactionAttemptListTrigger(transactionId, index,
+          assetName);
+
+      List<TransactionModels.TransactionAttempt> attempts = new ArrayList<>();
+      List<TransactionModels.TransactionAttemptReceiver> tokenReceiversList = new ArrayList<>();
+
+      String tokenReceiver = this.getTokenReceiverFromTransaction(transactionId);
+
+      tokenReceiversList.add(
+          new TransactionModels.TransactionAttemptReceiver(tokenReceiver, receiver.getAmount()));
+
+      attempts.add(new TransactionModels.TransactionAttempt(sendingAddress, 0, assetName,
+          tokenReceiversList));
+
+      attempt_list = new TransactionModels.TransactionAttemptList(trigger, attempts,
+          ZonedDateTime.now(ZoneId.of("Etc/Zulu")), ZonedDateTime.now(ZoneId.of("Etc/Zulu")));
+      this.mongoStorageService.saveTransactionAttemptList(attempt_list);
+      log.info("Created new attempt list " + attempt_list);
+    }
+
   }
 }

@@ -59,13 +59,13 @@ public class TransactionModels
   {
 
     private MappedAddress address;
-    private double amount;
+    private int amount;
 
     public TransactionReceiver()
     {
     }
 
-    public TransactionReceiver(MappedAddress address, double amount)
+    public TransactionReceiver(MappedAddress address, int amount)
     {
       this.address = address;
       this.amount = amount;
@@ -147,13 +147,13 @@ public class TransactionModels
   {
 
     private String address;
-    private Double amount;
+    private int amount;
 
     public TransactionAttemptReceiver()
     {
     }
 
-    TransactionAttemptReceiver(String address, Double amount)
+    public TransactionAttemptReceiver(String address, int amount)
     {
       this.address = address;
       this.amount = amount;
@@ -166,15 +166,15 @@ public class TransactionModels
 
     private String sender;
     private List<TransactionAttemptReceiver> receivers;
-    private double fee;
+    private int fee;
     private String currency;
 
     public TransactionAttempt()
     {
     }
 
-    TransactionAttempt(String sender, List<TransactionAttemptReceiver> receivers, double fee,
-                       String currency)
+    public TransactionAttempt(String sender, int fee,
+                       String currency, List<TransactionAttemptReceiver> receivers)
     {
       this.sender = sender;
       this.receivers = receivers;
@@ -206,7 +206,8 @@ public class TransactionModels
     {
     }
 
-    TransactionAttemptList(TransactionAttemptListTrigger trigger, List<TransactionAttempt> attempts,
+    public TransactionAttemptList(TransactionAttemptListTrigger trigger,
+                            List<TransactionAttempt> attempts,
                            List<?> transactions, ZonedDateTime createdOn,
                            ZonedDateTime lastModifiedOn, Integer tries, String transactionAttemptID)
     {
@@ -220,13 +221,24 @@ public class TransactionModels
       this.transactionAttemptID = transactionAttemptID;
     }
 
-    TransactionAttemptList(TransactionAttemptListTrigger trigger, List<TransactionAttempt> attempts,
+   public  TransactionAttemptList(TransactionAttemptListTrigger trigger,
+                            List<TransactionAttempt> attempts,
                            Integer tries)
     {
       this.Id = UUID.randomUUID().toString();
       this.trigger = trigger;
       this.attempts = attempts;
       this.tries = tries;
+    }
+
+    public TransactionAttemptList(TransactionAttemptListTrigger trigger,
+                                  List<TransactionAttempt> attempts, ZonedDateTime lastModifiedOn,
+                                  ZonedDateTime createdOn)
+    {
+      this.trigger = trigger;
+      this.attempts =attempts;
+      this.lastModifiedOn =lastModifiedOn;
+      this.createdOn =createdOn;
     }
 
     /*
