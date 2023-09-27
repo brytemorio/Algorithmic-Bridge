@@ -4,6 +4,7 @@ import bridge.blockchains.Asset;
 import bridge.common.BridgeUtils;
 import bridge.common.ConfigFileObj;
 import bridge.exceptions.BridgeExceptions.AssetNotFoundException;
+import bridge.services.storagservice.MongoStorageService;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import java.util.Objects;
@@ -14,6 +15,7 @@ public final class WavesChainI<K> extends WavesIBaseChain<K> {
   private static final UnmodifiableConfig configObject = ConfigFileObj.CONFIG;
 
   private String[] assetConfigName;
+  private MongoStorageService mongoStorageService;
 
   public WavesChainI(String... assetConfigName) throws AssetNotFoundException, RuntimeException {
     BridgeUtils.checkArgsLength(

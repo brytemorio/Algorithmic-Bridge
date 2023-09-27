@@ -15,7 +15,7 @@ public class DataObjects {
   private DataObjects() {}
 
   @Data
-  protected static final class BlockHeightStorage {
+  public static final class BlockHeightStorage {
 
     private ObjectId id;
     private String blockChainIdentifier;
@@ -32,7 +32,7 @@ public class DataObjects {
   }
 
   @Data
-  protected static final class AddressMappingStorage {
+  public static final class AddressMappingStorage {
     private ObjectId id;
 
     /*
