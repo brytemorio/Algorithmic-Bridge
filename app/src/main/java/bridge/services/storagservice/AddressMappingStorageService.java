@@ -20,7 +20,7 @@ public class AddressMappingStorageService
 
   public AddressMappingStorageService()
   {
-    this.database = MongoDatabaseFactory.getMongoClient();
+    this.database = MongoDatabaseFactory.getMongoDatabase();
   }
 
 

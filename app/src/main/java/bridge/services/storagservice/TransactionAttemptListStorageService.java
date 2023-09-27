@@ -20,7 +20,7 @@ public class TransactionAttemptListStorageService
 
   public TransactionAttemptListStorageService()
   {
-    this.database = MongoDatabaseFactory.getMongoClient();
+    this.database = MongoDatabaseFactory.getMongoDatabase();
   }
 
 

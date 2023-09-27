@@ -17,7 +17,7 @@ public class BlockHeightStorageService
   private MongoDatabase database;
   public BlockHeightStorageService()
   {
-    this.database = MongoDatabaseFactory.getMongoClient();
+    this.database = MongoDatabaseFactory.getMongoDatabase();
   }
 
 

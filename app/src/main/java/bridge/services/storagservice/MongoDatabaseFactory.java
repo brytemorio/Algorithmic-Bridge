@@ -2,7 +2,6 @@ package bridge.services.storagservice;
 
 import bridge.blockchains.Asset;
 import bridge.services.transactionservice.TransactionModels.TransactionAttemptList;
-import bridge.services.transactionservice.TransactionModels.TransactionAttemptListTrigger;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -10,7 +9,6 @@ import com.mongodb.ServerApi;
 import com.mongodb.ServerApiVersion;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 import lombok.Getter;
@@ -94,58 +92,9 @@ public class MongoDatabaseFactory
     this.dataBase = mongoClient.getDatabase(databaseName);
   }
 
-  
-
-  public static MongoDatabase getMongoClient()
+  public static MongoDatabase getMongoDatabase()
   {
     return new MongoDatabaseFactory().getDataBase();
-  }
-
-
-
-
-
-  public void setTransactionPollingState(DataObjects.PollingState pollingState)
-  {
-    MongoCollection<DataObjects.PollingState> collection = dataBase.getCollection(
-        CollectionNames.TRANSACTION_POLLING_STATE.toString(), DataObjects.PollingState.class);
-    collection.insertOne(pollingState);
-  }
-
-  public DataObjects.PollingState getTrnasactionPollingState(String chainIdentifier)
-  {
-    MongoCollection<DataObjects.PollingState> collection = dataBase.getCollection(
-        CollectionNames.TRANSACTION_POLLING_STATE.toString(), DataObjects.PollingState.class);
-    Bson query = eq("chainIdentifier", chainIdentifier);
-    return collection.find(query).first();
-  }
-
-  public void saveAssetsToStorage(DataObjects.AssetStorage assetStorage)
-  {
-    MongoCollection<DataObjects.AssetStorage> collection = dataBase.getCollection(
-        CollectionNames.ASSET_STORAGE.toString(), DataObjects.AssetStorage.class);
-    var chain = getKey(assetStorage.getAssets());
-
-    Bson filter = Filters.eq("assets." + chain, new Document("$exits", true));
-
-    Bson updateOperation = Updates.combine(
-        Updates.setOnInsert("assets." + chain, assetStorage.getAssets().get(chain)));
-
-    UpdateOptions updateOptions = new UpdateOptions().upsert(true);
-    collection.updateOne(filter, updateOperation, updateOptions);
-  }
-
-  public ArrayList<Asset> getAssetFromStorage(String blockhain)
-  {
-    MongoCollection<DataObjects.AssetStorage> collection = dataBase.getCollection(
-        CollectionNames.ASSET_STORAGE.toString(), DataObjects.AssetStorage.class);
-
-    Bson filter = Filters.eq("assets." + blockhain, new Document("$exits", true));
-
-    DataObjects.AssetStorage restult = collection.find(filter).first();
-
-    if (restult != null) return restult.getAssets().get(blockhain);
-    else return null;
   }
 
 }
