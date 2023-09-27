@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.maven:maven-settings:3.6.1" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.apache.maven" artifactId="maven-settings" version="3.6.1" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.maven/maven-settings/3.6.1/1d99e845071aa23a8e5290d72082e0eac56483e3/maven-settings-3.6.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.maven/maven-settings/3.6.1/459b730d5fc6c122e3a081d9af35dbb088a8c525/maven-settings-3.6.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

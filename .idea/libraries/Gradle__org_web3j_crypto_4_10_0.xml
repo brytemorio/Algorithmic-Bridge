@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.web3j:crypto:4.10.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.web3j" artifactId="crypto" version="4.10.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.web3j/crypto/4.10.0/39ae5a6b5ba6a41de2d89f444ed91ef3cd474a2c/crypto-4.10.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.web3j/crypto/4.10.0/57f3386c56620476e934c204d0f92d842c6bb682/crypto-4.10.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,199 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" external-system-id="GRADLE" name="Gradle : bridge : app.war (exploded)">
+    <output-path>$PROJECT_DIR$/app/build/libs/exploded/app.war</output-path>
+    <properties id="gradle-properties">
+      <options external-project-path="$PROJECT_DIR$">
+        <buildTaskPath>:app:war_exploded</buildTaskPath>
+        <cleanTaskPath>:app:cleanWar_exploded</cleanTaskPath>
+        <manifest>TWFuaWZlc3QtVmVyc2lvbjogMS4wDQoNCg==</manifest>
+      </options>
+    </properties>
+    <root id="root">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/app/build/libs/exploded/app.war/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="bridge.app.main/web/Web Gradle : app.war" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="bridge.app.main" />
+          <element id="dir-copy" path="$PROJECT_DIR$/app/build/resources/main" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Gradle: org.web3j:web3j-maven-plugin:4.10.0" />
+          <element id="library" level="project" name="Gradle: com.wavesplatform:wavesj:1.3.0" />
+          <element id="library" level="project" name="Gradle: wf.bitcoin:bitcoin-rpc-client:1.1.0" />
+          <element id="library" level="project" name="Gradle: com.lmax:disruptor:4.0.0.RC1" />
+          <element id="library" level="project" name="Gradle: org.agrona:agrona:1.19.2" />
+          <element id="library" level="project" name="Gradle: com.konghq:unirest-java:3.11.09" />
+          <element id="library" level="project" name="Gradle: com.google.code.gson:gson:2.8.9" />
+          <element id="library" level="project" name="Gradle: io.vertx:vertx-web:4.4.5" />
+          <element id="library" level="project" name="Gradle: org.mongodb:mongodb-driver-sync:4.10.2" />
+          <element id="library" level="project" name="Gradle: org.apache.commons:commons-lang3:3.12.0" />
+          <element id="library" level="project" name="Gradle: io.undertow:undertow-servlet:2.2.14.Final" />
+          <element id="library" level="project" name="Gradle: io.undertow:undertow-core:2.2.14.Final" />
+          <element id="library" level="project" name="Gradle: com.electronwill.night-config:json:3.6.5" />
+          <element id="library" level="project" name="Gradle: com.google.guava:guava:31.0.1-jre" />
+          <element id="library" level="project" name="Gradle: org.apache.maven.shared:file-management:3.0.0" />
+          <element id="library" level="project" name="Gradle: org.apache.maven:maven-core:3.6.1" />
+          <element id="library" level="project" name="Gradle: org.apache.maven:maven-plugin-api:3.6.1" />
+          <element id="library" level="project" name="Gradle: org.web3j:codegen:4.10.0" />
+          <element id="library" level="project" name="Gradle: org.web3j:core:4.10.0" />
+          <element id="library" level="project" name="Gradle: com.googlecode.json-simple:json-simple:1.1.1" />
+          <element id="library" level="project" name="Gradle: org.web3j:web3j-sokt:0.2.3" />
+          <element id="library" level="project" name="Gradle: com.wavesplatform:waves-transactions:1.1.0" />
+          <element id="library" level="project" name="Gradle: org.apache.httpcomponents:httpclient:4.5.13" />
+          <element id="library" level="project" name="Gradle: ch.qos.logback:logback-classic:1.2.3" />
+          <element id="library" level="project" name="Gradle: org.apache.httpcomponents:httpmime:4.5.13" />
+          <element id="library" level="project" name="Gradle: org.apache.httpcomponents:httpcore-nio:4.4.13" />
+          <element id="library" level="project" name="Gradle: org.apache.httpcomponents:httpasyncclient:4.1.4" />
+          <element id="library" level="project" name="Gradle: io.vertx:vertx-web-common:4.4.5" />
+          <element id="library" level="project" name="Gradle: io.vertx:vertx-auth-common:4.4.5" />
+          <element id="library" level="project" name="Gradle: io.vertx:vertx-bridge-common:4.4.5" />
+          <element id="library" level="project" name="Gradle: io.vertx:vertx-core:4.4.5" />
+          <element id="library" level="project" name="Gradle: org.mongodb:mongodb-driver-core:4.10.2" />
+          <element id="library" level="project" name="Gradle: org.mongodb:bson:4.10.2" />
+          <element id="library" level="project" name="Gradle: org.jboss.spec.javax.servlet:jboss-servlet-api_4.0_spec:2.0.0.Final" />
+          <element id="library" level="project" name="Gradle: org.jboss.spec.javax.annotation:jboss-annotations-api_1.3_spec:2.0.1.Final" />
+          <element id="library" level="project" name="Gradle: org.jboss.threads:jboss-threads:3.1.0.Final" />
+          <element id="library" level="project" name="Gradle: org.jboss.xnio:xnio-api:3.8.4.Final" />
+          <element id="library" level="project" name="Gradle: org.jboss.logging:jboss-logging:3.4.1.Final" />
+          <element id="library" level="project" name="Gradle: com.electronwill.night-config:core:3.6.5" />
+          <element id="library" level="project" name="Gradle: com.google.guava:failureaccess:1.0.1" />
+          <element id="library" level="project" name="Gradle: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" />
+          <element id="library" level="project" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" />
+          <element id="library" level="project" name="Gradle: org.checkerframework:checker-qual:3.12.0" />
+          <element id="library" level="project" name="Gradle: com.google.errorprone:error_prone_annotations:2.7.1" />
+          <element id="library" level="project" name="Gradle: com.google.j2objc:j2objc-annotations:1.3" />
+          <element id="library" level="project" name="Gradle: org.apache.maven.shared:maven-shared-io:3.0.0" />
+          <element id="library" level="project" name="Gradle: org.codehaus.plexus:plexus-utils:3.2.0" />
+          <element id="library" level="project" name="Gradle: org.apache.maven.shared:maven-shared-utils:3.2.1" />
+          <element id="library" level="project" name="Gradle: org.apache.maven:maven-resolver-provider:3.6.1" />
+          <element id="library" level="project" name="Gradle: org.apache.maven:maven-model-builder:3.6.1" />
+          <element id="library" level="project" name="Gradle: org.apache.maven:maven-artifact:3.6.1" />
+          <element id="library" level="project" name="Gradle: com.google.inject:guice:no_aop:4.2.1" />
+          <element id="library" level="project" name="Gradle: org.apache.maven:maven-model:3.6.1" />
+          <element id="library" level="project" name="Gradle: org.eclipse.sisu:org.eclipse.sisu.plexus:0.3.3" />
+          <element id="library" level="project" name="Gradle: org.apache.maven:maven-settings-builder:3.6.1" />
+          <element id="library" level="project" name="Gradle: org.apache.maven:maven-settings:3.6.1" />
+          <element id="library" level="project" name="Gradle: org.apache.maven:maven-repository-metadata:3.6.1" />
+          <element id="library" level="project" name="Gradle: org.codehaus.plexus:plexus-classworlds:2.6.0" />
+          <element id="library" level="project" name="Gradle: org.apache.maven:maven-builder-support:3.6.1" />
+          <element id="library" level="project" name="Gradle: org.apache.maven.resolver:maven-resolver-impl:1.3.3" />
+          <element id="library" level="project" name="Gradle: org.apache.maven.resolver:maven-resolver-spi:1.3.3" />
+          <element id="library" level="project" name="Gradle: org.apache.maven.resolver:maven-resolver-util:1.3.3" />
+          <element id="library" level="project" name="Gradle: org.apache.maven.resolver:maven-resolver-api:1.3.3" />
+          <element id="library" level="project" name="Gradle: org.eclipse.sisu:org.eclipse.sisu.inject:0.3.3" />
+          <element id="library" level="project" name="Gradle: javax.inject:javax.inject:1" />
+          <element id="library" level="project" name="Gradle: org.codehaus.plexus:plexus-component-annotations:1.7.1" />
+          <element id="library" level="project" name="Gradle: org.web3j:crypto:4.10.0" />
+          <element id="library" level="project" name="Gradle: org.web3j:abi:4.10.0" />
+          <element id="library" level="project" name="Gradle: org.web3j:tuples:4.10.0" />
+          <element id="library" level="project" name="Gradle: com.github.jnr:jnr-unixsocket:0.38.17" />
+          <element id="library" level="project" name="Gradle: com.squareup.okhttp3:logging-interceptor:4.9.0" />
+          <element id="library" level="project" name="Gradle: com.squareup.okhttp3:okhttp:4.9.0" />
+          <element id="library" level="project" name="Gradle: io.reactivex.rxjava2:rxjava:2.2.2" />
+          <element id="library" level="project" name="Gradle: org.java-websocket:Java-WebSocket:1.5.3" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.15.0" />
+          <element id="library" level="project" name="Gradle: org.slf4j:slf4j-api:1.7.30" />
+          <element id="library" level="project" name="Gradle: com.wavesplatform:protobuf-schemas:1.4.0" />
+          <element id="library" level="project" name="Gradle: com.wavesplatform:waves-crypto:2.0.4" />
+          <element id="library" level="project" name="Gradle: org.apache.httpcomponents:httpcore:4.4.13" />
+          <element id="library" level="project" name="Gradle: commons-logging:commons-logging:1.2" />
+          <element id="library" level="project" name="Gradle: commons-codec:commons-codec:1.11" />
+          <element id="library" level="project" name="Gradle: ch.qos.logback:logback-core:1.2.3" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.15.0" />
+          <element id="library" level="project" name="Gradle: io.netty:netty-handler-proxy:4.1.97.Final" />
+          <element id="library" level="project" name="Gradle: io.netty:netty-codec-http2:4.1.97.Final" />
+          <element id="library" level="project" name="Gradle: io.netty:netty-codec-http:4.1.97.Final" />
+          <element id="library" level="project" name="Gradle: io.netty:netty-resolver-dns:4.1.97.Final" />
+          <element id="library" level="project" name="Gradle: io.netty:netty-handler:4.1.97.Final" />
+          <element id="library" level="project" name="Gradle: io.netty:netty-transport:4.1.97.Final" />
+          <element id="library" level="project" name="Gradle: io.netty:netty-buffer:4.1.97.Final" />
+          <element id="library" level="project" name="Gradle: io.netty:netty-resolver:4.1.97.Final" />
+          <element id="library" level="project" name="Gradle: io.netty:netty-common:4.1.97.Final" />
+          <element id="library" level="project" name="Gradle: org.wildfly.client:wildfly-client-config:1.0.1.Final" />
+          <element id="library" level="project" name="Gradle: org.wildfly.common:wildfly-common:1.5.2.Final" />
+          <element id="library" level="project" name="Gradle: org.apache.maven:maven-compat:3.0" />
+          <element id="library" level="project" name="Gradle: org.apache.maven.wagon:wagon-provider-api:2.10" />
+          <element id="library" level="project" name="Gradle: commons-io:commons-io:2.5" />
+          <element id="library" level="project" name="Gradle: org.codehaus.plexus:plexus-interpolation:1.25" />
+          <element id="library" level="project" name="Gradle: aopalliance:aopalliance:1.0" />
+          <element id="library" level="project" name="Gradle: javax.enterprise:cdi-api:1.0" />
+          <element id="library" level="project" name="Gradle: org.sonatype.plexus:plexus-sec-dispatcher:1.4" />
+          <element id="library" level="project" name="Gradle: org.web3j:rlp:4.10.0" />
+          <element id="library" level="project" name="Gradle: org.web3j:utils:4.10.0" />
+          <element id="library" level="project" name="Gradle: com.github.jnr:jnr-enxio:0.32.13" />
+          <element id="library" level="project" name="Gradle: com.github.jnr:jnr-posix:3.1.15" />
+          <element id="library" level="project" name="Gradle: com.github.jnr:jnr-ffi:2.2.11" />
+          <element id="library" level="project" name="Gradle: com.github.jnr:jnr-constants:0.10.3" />
+          <element id="library" level="project" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10" />
+          <element id="library" level="project" name="Gradle: com.squareup.okio:okio:2.8.0" />
+          <element id="library" level="project" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.4.10" />
+          <element id="library" level="project" name="Gradle: org.reactivestreams:reactive-streams:1.0.2" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.15.0" />
+          <element id="library" level="project" name="Gradle: io.grpc:grpc-netty-shaded:1.25.0" />
+          <element id="library" level="project" name="Gradle: io.grpc:grpc-protobuf:1.25.0" />
+          <element id="library" level="project" name="Gradle: io.grpc:grpc-stub:1.25.0" />
+          <element id="library" level="project" name="Gradle: javax.annotation:javax.annotation-api:1.3.2" />
+          <element id="library" level="project" name="Gradle: com.google.protobuf:protobuf-java:3.11.0" />
+          <element id="library" level="project" name="Gradle: org.bouncycastle:bcpkix-jdk15on:1.70" />
+          <element id="library" level="project" name="Gradle: org.bouncycastle:bcprov-jdk15on:1.70" />
+          <element id="library" level="project" name="Gradle: com.wavesplatform:curve25519-java:0.6.4" />
+          <element id="library" level="project" name="Gradle: ch.randelshofer:fastdoubleparser:0.8.0" />
+          <element id="library" level="project" name="Gradle: io.netty:netty-codec-socks:4.1.97.Final" />
+          <element id="library" level="project" name="Gradle: io.netty:netty-codec:4.1.97.Final" />
+          <element id="library" level="project" name="Gradle: io.netty:netty-codec-dns:4.1.97.Final" />
+          <element id="library" level="project" name="Gradle: io.netty:netty-transport-native-unix-common:4.1.97.Final" />
+          <element id="library" level="project" name="Gradle: org.sonatype.sisu:sisu-inject-plexus:1.4.2" />
+          <element id="library" level="project" name="Gradle: javax.annotation:jsr250-api:1.0" />
+          <element id="library" level="project" name="Gradle: org.sonatype.plexus:plexus-cipher:1.4" />
+          <element id="library" level="project" name="Gradle: org.bouncycastle:bcprov-jdk18on:1.73" />
+          <element id="library" level="project" name="Gradle: com.github.jnr:jffi:1.3.9" />
+          <element id="library" level="project" name="Gradle: org.ow2.asm:asm-commons:9.2" />
+          <element id="library" level="project" name="Gradle: org.ow2.asm:asm-util:9.2" />
+          <element id="library" level="project" name="Gradle: org.ow2.asm:asm-analysis:9.2" />
+          <element id="library" level="project" name="Gradle: org.ow2.asm:asm-tree:9.2" />
+          <element id="library" level="project" name="Gradle: org.ow2.asm:asm:9.2" />
+          <element id="library" level="project" name="Gradle: com.github.jnr:jnr-a64asm:1.0.0" />
+          <element id="library" level="project" name="Gradle: com.github.jnr:jnr-x86asm:1.0.2" />
+          <element id="library" level="project" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.10" />
+          <element id="library" level="project" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.4.10" />
+          <element id="library" level="project" name="Gradle: org.jetbrains:annotations:13.0" />
+          <element id="library" level="project" name="Gradle: io.grpc:grpc-core:1.25.0" />
+          <element id="library" level="project" name="Gradle: io.grpc:grpc-protobuf-lite:1.25.0" />
+          <element id="library" level="project" name="Gradle: io.grpc:grpc-api:1.25.0" />
+          <element id="library" level="project" name="Gradle: com.google.api.grpc:proto-google-common-protos:1.12.0" />
+          <element id="library" level="project" name="Gradle: org.bouncycastle:bcutil-jdk15on:1.70" />
+          <element id="library" level="project" name="Gradle: net.java.dev.jna:jna:5.5.0" />
+          <element id="library" level="project" name="Gradle: org.sonatype.sisu:sisu-inject-bean:1.4.2" />
+          <element id="library" level="project" name="Gradle: io.perfmark:perfmark-api:0.19.0" />
+          <element id="library" level="project" name="Gradle: com.google.android:annotations:4.1.1.4" />
+          <element id="library" level="project" name="Gradle: io.opencensus:opencensus-contrib-grpc-metrics:0.21.0" />
+          <element id="library" level="project" name="Gradle: io.opencensus:opencensus-api:0.21.0" />
+          <element id="library" level="project" name="Gradle: io.grpc:grpc-context:1.25.0" />
+          <element id="library" level="project" name="Gradle: org.codehaus.mojo:animal-sniffer-annotations:1.17" />
+          <element id="library" level="project" name="Gradle: org.sonatype.sisu:sisu-guice:noaop:2.1.7" />
+          <element id="library" level="project" name="Gradle: org.jboss.xnio:xnio-nio:3.8.4.Final" />
+          <element id="library" level="project" name="Gradle: com.github.zafarkhaja:java-semver:0.9.0" />
+          <element id="library" level="project" name="Gradle: org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.14.0" />
+          <element id="library" level="project" name="Gradle: com.squareup:kotlinpoet:1.5.0" />
+          <element id="library" level="project" name="Gradle: com.squareup:javapoet:1.7.0" />
+          <element id="library" level="project" name="Gradle: info.picocli:picocli:3.0.0" />
+          <element id="library" level="project" name="Gradle: org.junit.platform:junit-platform-launcher:1.5.2" />
+          <element id="library" level="project" name="Gradle: org.junit.jupiter:junit-jupiter-engine:5.5.2" />
+          <element id="library" level="project" name="Gradle: org.junit.vintage:junit-vintage-engine:5.5.2" />
+          <element id="library" level="project" name="Gradle: junit:junit:4.12" />
+          <element id="library" level="project" name="Gradle: org.mongodb:bson-record-codec:4.10.2" />
+          <element id="library" level="project" name="Gradle: org.jetbrains.kotlin:kotlin-reflect:1.3.61" />
+          <element id="library" level="project" name="Gradle: org.junit.platform:junit-platform-engine:1.5.2" />
+          <element id="library" level="project" name="Gradle: org.apiguardian:apiguardian-api:1.1.0" />
+          <element id="library" level="project" name="Gradle: org.junit.jupiter:junit-jupiter-api:5.5.2" />
+          <element id="library" level="project" name="Gradle: org.hamcrest:hamcrest-core:1.3" />
+          <element id="library" level="project" name="Gradle: org.junit.platform:junit-platform-commons:1.5.2" />
+          <element id="library" level="project" name="Gradle: org.opentest4j:opentest4j:1.2.0" />
+          <element id="library" level="project" name="Gradle: com.github.jnr:jffi:native:1.3.9" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

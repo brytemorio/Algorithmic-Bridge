@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.maven.shared:file-management:3.0.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.apache.maven.shared" artifactId="file-management" version="3.0.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.maven.shared/file-management/3.0.0/65d87e03797af7bb5bb199d4d8b50f83cbea3ce/file-management-3.0.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.maven.shared/file-management/3.0.0/b68518def727dcb8945f063b80492d1c3c909764/file-management-3.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

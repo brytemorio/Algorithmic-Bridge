@@ -11,8 +11,11 @@ import com.mongodb.ServerApiVersion;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.model.Updates;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.ClassModel;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -82,6 +85,10 @@ public class MongoStorageService implements IStorageService
 
     ClassModel<DataObjects.PollingState> transactionPolllingStateModel = ClassModel.builder(
         DataObjects.PollingState.class).enableDiscriminator(true).build();
+
+    ClassModel<DataObjects.AssetStorage> assetStorageClassModel = ClassModel.builder(
+        DataObjects.AssetStorage.class).enableDiscriminator(true).build();
+
 
 
     this.codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
@@ -284,6 +291,21 @@ public class MongoStorageService implements IStorageService
     return collection.find(query).first();
   }
 
+  public void saveAssets(DataObjects.AssetStorage assetStorage)
+  {
+    MongoCollection<DataObjects.AssetStorage> collection = dataBase.getCollection(
+        CollectionNames.ASSET_STORAGE.toString(), DataObjects.AssetStorage.class);
+    var chain = getKey(assetStorage.getAssets());
+
+    Bson filter = Filters.eq("assets." + chain, new Document("$exits", true));
+
+    Bson updateOperation = Updates.combine(
+        Updates.setOnInsert("assets." + chain, assetStorage.getAssets().get(chain))
+    );
+
+    UpdateOptions updateOptions = new UpdateOptions().upsert(true);
+    collection.updateOne(filter, updateOperation, updateOptions);
+  }
 
 
 
@@ -293,6 +315,7 @@ public class MongoStorageService implements IStorageService
     BlOCK_HEIGHT_STORAGE("Block_Height_Store"), ADDRESS_MAPPING_STORAGE(
       "Address_Mapping_Store"), VALID_TRASANCTION_STORAGE(
       "Transaction_AttemptList_Store"), TRANSACTION_POLLING_STATE("transaction_polling_state"),
+    ASSET_STORAGE("Assets_Store"),
 
     /*
      * Bridge internal wallets(public and private Keys pairs per blockchains supported used for

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.web3j:web3j-maven-plugin:4.10.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.web3j" artifactId="web3j-maven-plugin" version="4.10.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.web3j/web3j-maven-plugin/4.10.0/2b1497c0e7c0dc69844c1136782c4088e608db2a/web3j-maven-plugin-4.10.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.web3j/web3j-maven-plugin/4.10.0/40cf63a0c37c5f818910c429dad011a09dd0d6c8/web3j-maven-plugin-4.10.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

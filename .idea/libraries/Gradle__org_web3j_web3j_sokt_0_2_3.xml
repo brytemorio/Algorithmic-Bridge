@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.web3j:web3j-sokt:0.2.3" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.web3j" artifactId="web3j-sokt" version="0.2.3" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.web3j/web3j-sokt/0.2.3/6f2e4ba421f9ab7fb80f7487e9ba2b924fa8052a/web3j-sokt-0.2.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.web3j/web3j-sokt/0.2.3/b18bf40035f630ebd72a46c6e358894a3c3918a8/web3j-sokt-0.2.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

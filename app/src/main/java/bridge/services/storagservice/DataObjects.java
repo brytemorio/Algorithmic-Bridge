@@ -1,11 +1,13 @@
 package bridge.services.storagservice;
 
+import bridge.blockchains.Asset;
 import bridge.services.transactionservice.TransactionModels.MappedAddress;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class DataObjects {
@@ -88,6 +90,17 @@ public class DataObjects {
     public PollingState(String chainIdentifier)
     {
       this.chainIdentifier =chainIdentifier;
+    }
+  }
+
+  @Data
+  public static class AssetStorage
+  {
+    private Map<String, ArrayList<Asset>> assets;
+
+    public AssetStorage(Map<String, ArrayList<Asset>> assets)
+    {
+      this.assets = assets;
     }
   }
 }

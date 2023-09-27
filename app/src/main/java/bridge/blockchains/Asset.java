@@ -1,13 +1,17 @@
 package bridge.blockchains;
 
 import javax.annotation.Nullable;
+
 import org.bson.types.ObjectId;
 import com.electronwill.nightconfig.core.Config;
 import lombok.Data;
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Data
-public class Asset {
+public class Asset
+{
   ObjectId Id;
 
   private String assetName;
@@ -15,7 +19,8 @@ public class Asset {
 
   // Bitcoin class of blockchains do not require an assetId(Contract Address of token) so null could
   // be passed in place
-  @Nullable private String assetId;
+  @Nullable
+  private String assetId;
 
   // Enforcing a transfer fee is optional. This transfer fee is not the same as the fees required
   // for on-chain transaction e.g etheruem gas fee
@@ -30,29 +35,40 @@ public class Asset {
   // 3.2units of token A on blockchain A been swap for 1unit of token B on blockchain B)
   private double swapRatio; // TODO: Implement swapRation
 
-  public Asset() {}
-
-  public Asset(Config assetInfo) {
-    this.assetId = assetInfo.get("name");
-    this.ticker = assetInfo.get("ticker");
-    this.assetId = assetInfo.get("asset_id");
-    this.transferFee = assetInfo.get("transfer_fee");
-    this.decimals = assetInfo.get("decimals");
-    this.wallet =
-        new Wallet(assetInfo.get("wallet.private_key"), assetInfo.get("wallet.public_key"));
+  public Asset()
+  {
   }
 
-  private static class Wallet {
+  public Asset(Config assetInfo)
+  {
+    this.assetId = Objects.requireNonNullElse(assetInfo.get("name"), "name of asset not empty");
+    this.ticker = Objects.requireNonNull(assetInfo.get("ticker"), "ticker of asset not empty");
+    this.assetId = Objects.requireNonNull(assetInfo.get("asset_id"), "asset id is empty");
+    this.transferFee = Objects.requireNonNullElse(assetInfo.get("transfer_fee"), 0);
+    this.decimals = Objects.requireNonNull(assetInfo.get("decimals"), "decimal not empty");
+    this.wallet = new Wallet(
+        Objects.requireNonNull(assetInfo.get("wallet.private_key"),"private key is empty"),
+        Objects.requireNonNull(assetInfo.get("wallet.public_key"),"public key is empty"));
+  }
+
+  private static class Wallet
+  {
 
     // private key can be null if the it not required internally by the bridge to handle
     // transactions
-    @Nullable @Getter private String privateKey;
+    @Nullable
+    @Getter
+    private String privateKey;
 
-    @Getter private String publicKey;
+    @Getter
+    private String publicKey;
 
-    public Wallet() {}
+    public Wallet()
+    {
+    }
 
-    public Wallet(final String privateKey, final String publicKey) {
+    public Wallet(final String privateKey, final String publicKey)
+    {
       this.privateKey = privateKey;
       this.publicKey = publicKey;
     }

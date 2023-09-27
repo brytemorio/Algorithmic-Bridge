@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" external-system-id="GRADLE" name="Gradle : bridge : app.war">
+    <output-path>$PROJECT_DIR$/app/build/libs</output-path>
+    <properties id="gradle-properties">
+      <options external-project-path="$PROJECT_DIR$">
+        <buildTaskPath>:app:war</buildTaskPath>
+        <cleanTaskPath>:app:cleanWar</cleanTaskPath>
+      </options>
+    </properties>
+    <root id="archive" name="app.war">
+      <element id="artifact" artifact-name="Gradle : bridge : app.war (exploded)" />
+    </root>
+  </artifact>
+</component>

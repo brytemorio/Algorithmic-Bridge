@@ -1,5 +1,6 @@
 package bridge.blockchains.waveschains;
 
+import bridge.blockchains.Asset;
 import bridge.common.BridgeUtils;
 import bridge.common.ConfigFileObj;
 import bridge.exceptions.BridgeExceptions.AssetNotFoundException;
@@ -22,7 +23,7 @@ public final class WavesChainI<K> extends WavesIBaseChain<K> {
             + " constructor");
     this.assetConfigName = Objects.requireNonNull(assetConfigName); //NO need for this check
     Object2ObjectHashMap<String, Config> assets = new Object2ObjectHashMap<>();
-    Config assetList = configObject.get("Blockchain.Waves.asset");
+    Config assetList = configObject.get("Blockchain.Waves.assets");
     for (String configName : this.assetConfigName) {
       if (!assetList.contains(configName)) {
         throw new AssetNotFoundException(
@@ -30,6 +31,9 @@ public final class WavesChainI<K> extends WavesIBaseChain<K> {
       }
       assets.put(configName, configObject.get("Blockchain.Waves.asset" + "." + configName));
     }
+    Asset wavesAsset = new Asset(assetList);
+
+
     super.setAsset(assets);
     super.setNetworkNode(configObject.get("Blockchain.Waves.node"));
     super.setWavesBridgeAddress(configObject.get("Blockchain.Waves.gateway_address"));

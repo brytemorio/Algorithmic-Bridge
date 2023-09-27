@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.web3j:codegen:4.10.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.web3j" artifactId="codegen" version="4.10.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.web3j/codegen/4.10.0/f3460cb466696ca3dc3a59f4a6672447b4e41051/codegen-4.10.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.web3j/codegen/4.10.0/b0bfa589ce44b28b4dd1a3ea5c39e9c8bfe5d323/codegen-4.10.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import bridge.blockchains.waveschains.WavesChainI;
 import bridge.common.BridgeUtils;
-import bridge.messageservice.NewBlockEventProducer;
+import bridge.disruptorservice.NewBlockEventProducer;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.wavesplatform:waves-transactions:1.1.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="com.wavesplatform" artifactId="waves-transactions" version="1.1.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.wavesplatform/waves-transactions/1.1.0/fb96a813c56bf747f0ec076ad704d4c731b851c3/waves-transactions-1.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.wavesplatform/waves-transactions/1.1.0/cb79030e5de1c9eed9c6bae21c33600eec301800/waves-transactions-1.1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

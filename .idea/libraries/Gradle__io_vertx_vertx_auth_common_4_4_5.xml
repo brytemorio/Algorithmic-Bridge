@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: io.vertx:vertx-auth-common:4.4.5" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="io.vertx" artifactId="vertx-auth-common" version="4.4.5" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.vertx/vertx-auth-common/4.4.5/7bdedb06249c41f45681c225463435afae09dcf8/vertx-auth-common-4.4.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.vertx/vertx-auth-common/4.4.5/bb17b98fdfe17676ffb036f31a83a87c7855bcb1/vertx-auth-common-4.4.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

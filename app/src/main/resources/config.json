@@ -7,6 +7,7 @@
       "rpc_password": " ",
       "network": "mainnet",
       "chain_identifier": "QCN",
+      "gateway_address": "gateway-address",
       "asset": {
         "name": "Qnodecoin",
         "ticker": "QNC",
@@ -14,8 +15,8 @@
         "transfer_fee": 0.00001,
         "decimals": 8,
         "wallet":{
-        	"private_key": null,
-        	"public_key": null
+        	"private_key": "private_key",
+        	"public_key": "public_key"
       }  
       }
     },
@@ -25,7 +26,7 @@
       "network_id": "W",
       "chain_identifier": "WAV",
       "gateway_address": "GATEWAY_ADDRESS",
-      "asset": {
+      "assets": {
         "qnodecoin": {
           "name": "Qnodecoin",
           "ticker": "QNC",
@@ -43,8 +44,8 @@
           "asset_id": "51x7v7eg4aRzzeDTnR2CcMyrTprDyDt9sYCGcZJ6Xpp3",
           "transfer_fee": 0.00001,
           "wallet": {
-            "private_key": " ",
-            "public_key": " "
+            "private_key": "private-key",
+            "public_key": "public-key"
           }
         }
       }
@@ -54,15 +55,16 @@
       "network": "testnet",
       "network_id": 137,
       "chain_identifier": "PLY",
-      "asset": {
+      "gateway_address": "gateway-address",
+      "assets": {
         "fishfactory_p": {
           "name": "Fishfactory P",
           "ticker": "XFP",
           "asset_id": "asset-id",
           "transfer_fee": 0.00001,
           "wallet": {
-            "private_key": " ",
-            "public_key": " "
+            "private_key": "private-key",
+            "public_key": "public-key"
           }
         }
       }
@@ -72,15 +74,16 @@
       "network": "testnet",
       "network_id": 97,
       "chain_identifier": "BSC",
-      "asset": {
+      "gateway_address": "gateway-address",
+      "assets": {
         "qnode_defi": {
           "name": "Qnode.Defi",
           "ticker": "QND",
           "asset_id": "0x34f1BD5aBC180df218631278a249d7C606B2E89d",
           "transfer_fee": 0.00001,
           "wallet": {
-            "private_key": "",
-            "public_key": ""
+            "private_key": "private-key",
+            "public_key": "public-key"
           }
         }
       }
@@ -88,11 +91,11 @@
   },
   "Bridge": {
     "server": {
-      "host": "host-name",
-      "port": "port-name"
+      "host": "localhost",
+      "port": "random-port"
     },
     "database": {
-      "name": "State-Of-Chain",
+      "name": "LYQNC",
       "host": "localhost",
       "port": 27017,
       "username": null,

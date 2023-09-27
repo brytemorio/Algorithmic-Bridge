@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.wavesplatform:curve25519-java:0.6.4" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="com.wavesplatform" artifactId="curve25519-java" version="0.6.4" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.wavesplatform/curve25519-java/0.6.4/a686d2a343de71f701da43c61fad8260c7c1c547/curve25519-java-0.6.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.wavesplatform/curve25519-java/0.6.4/5585e4ce65b46ed392c4f1305fb6034e08b9c6c/curve25519-java-0.6.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

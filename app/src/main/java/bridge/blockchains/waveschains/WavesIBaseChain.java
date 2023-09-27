@@ -300,7 +300,7 @@ class WavesIBaseChain<K> implements IBaseChain
     return result;
   }
 
-  private void _handleTransaction(String transactionId, String sendingAddress,
+  private void _handleTransaction(String transactionId,
                                   TransactionReceiver receiver, int index,
                                    String assetName)
   {

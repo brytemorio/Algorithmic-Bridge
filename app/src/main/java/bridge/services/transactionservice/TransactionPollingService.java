@@ -46,7 +46,7 @@ public class TransactionPollingService
     this.ensurePollingStateHasTransaction(trx);
 
     TransactionModels.MappedAddress es;
-    this.blockChain.handleTransaction(trx, es);
+    this.blockChain.handleTransaction(trx, es.getAddress());
   }
 
   private void ensurePollingStateHasTransaction(Transaction trx)

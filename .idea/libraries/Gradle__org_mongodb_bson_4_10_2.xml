@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.mongodb:bson:4.10.2" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.mongodb" artifactId="bson" version="4.10.2" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mongodb/bson/4.10.2/a07162adfb847cbf9c00ac74a5245d80e7306f5b/bson-4.10.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mongodb/bson/4.10.2/f78a129031e68109b81bbac9094de7f1b0c5927a/bson-4.10.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
