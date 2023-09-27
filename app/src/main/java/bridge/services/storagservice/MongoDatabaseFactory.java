@@ -104,66 +104,6 @@ public class MongoDatabaseFactory
 
 
 
-  
-
-
-
-
-
-
-
-
-  public TransactionAttemptList findTransactionAttemptByTrigger(
-      TransactionAttemptListTrigger trigger)
-  {
-    MongoCollection<TransactionAttemptList> collection = dataBase.getCollection(
-        CollectionNames.VALID_TRASANCTION_STORAGE.toString(), TransactionAttemptList.class);
-    Bson[] query = {eq("trigger.receiver", trigger.getReceiver()), eq("trigger.currency",
-        trigger.getCurrency()), eq("trigger.trxId", trigger.getTrxId())};
-    Bson filter = and(query);
-    return collection.find(filter).first();
-  }
-
-  public TransactionAttemptList findOldestPendingAttemptList()
-  {
-    int maxTries = 10;
-    Bson query = Filters.and(Filters.or(Filters.and(Filters.not(Filters.size("attempts", 1)),
-                Filters.not(Filters.size("transactions", 1))),
-            Filters.and(Filters.size("attempts", 2), Filters.size("transactions", 2)),
-            Filters.and(Filters.size("attempts", 3), Filters.size("transactions", 3))),
-        Filters.or(Filters.lt("tries", maxTries), Filters.exists("tries", false)));
-
-    MongoCollection<TransactionAttemptList> collection = dataBase.getCollection(
-        CollectionNames.VALID_TRASANCTION_STORAGE.toString(), TransactionAttemptList.class);
-
-    FindIterable<TransactionAttemptList> results = collection.find(query)
-        .sort(Sorts.ascending("lastModifiedOn")).limit(1);
-
-    TransactionAttemptList document = results.first();
-    if (document != null)
-    {
-      return document;
-    }
-    else
-    {
-      return null;
-    }
-  }
-
-  public boolean gatewayTransactionExists(String transactionID)
-  {
-    MongoCollection<TransactionAttemptList> collections = dataBase.getCollection(
-        CollectionNames.VALID_TRASANCTION_STORAGE.toString(), TransactionAttemptList.class);
-    for (var collection : collections.find())
-    {
-      java.util.List<String> transactions = collection.getTransactions();
-      if (transactions != null && transactions.contains(transactionID))
-      {
-        return true;
-      }
-    }
-    return false;
-  }
 
   public void setTransactionPollingState(DataObjects.PollingState pollingState)
   {
