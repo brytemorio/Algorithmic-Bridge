@@ -1,40 +1,34 @@
 package bridge.services.transactionservice;
 
-import static bridge.services.transactionservice.TransactionModels.Transaction;
-
-import bridge.services.storagservice.DataObjects;
-import com.lmax.disruptor.EventHandler;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import bridge.blockchains.IBaseChain;
-import bridge.services.storagservice.MongoStorageService;
+import bridge.services.storagservice.DataObjects;
+import bridge.services.storagservice.TransactionAttemptListStorageService;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static bridge.services.transactionservice.TransactionModels.Transaction;
 
 
 @Slf4j
 @Getter
 @Setter
-@NoArgsConstructor
 public class TransactionPollingService
 {
-  private final MongoStorageService storageService = new MongoStorageService();
-  private  IBaseChain blockChain;
+  private final TransactionAttemptListStorageService trxAttemptListStorage;
+  private IBaseChain blockChain;
   private String assetName;
-  private MongoStorageService mongoStorageService;
   private DataObjects.PollingTransactionState pollingTransactionState;
   private DataObjects.PollingState pollingState;
+
   public TransactionPollingService(IBaseChain blockChain, String assetName)
   {
     this.blockChain = blockChain;
     this.assetName = assetName;
-    this.mongoStorageService = new MongoStorageService();
+    this.trxAttemptListStorage = new TransactionAttemptListStorageService();
     this.pollingTransactionState = new DataObjects.PollingTransactionState();
     this.pollingState = new DataObjects.PollingState(this.blockChain.getChainIdentifier());
   }
@@ -59,8 +53,8 @@ public class TransactionPollingService
 
   private boolean filterTransactions(Transaction transactionList)
   {
-    if (null != storageService.findTransactionAttemptById(transactionList.getTransactionID()))
-      return false;
+    if (null != trxAttemptListStorage.findTransactionAttemptById(
+        transactionList.getTransactionID())) return false;
     return true;
 
 
@@ -70,10 +64,10 @@ public class TransactionPollingService
       for( int i = 0; i < trx.getReceivers().size() - 1; i++) {
         MappedAddress address = trx.getReceivers().get(i).getAddress();
       mappedAddress.put(fromBlockChainName, address);
-      String savedMappingForAddress = storageService.getAddressFromSavedMapping(mappedAddress, toBlockchainName);
+      String savedMappingForAddress = trxAttemptListStorage.getAddressFromSavedMapping(mappedAddress, toBlockchainName);
       if(null != savedMappingForAddress && !trx.getAddress().getAddress().equals("placeholder")) {
         var attemptList =
-            storageService.findTransactionAttemptByTrigger(new TransactionModels.TransactionAttemptListTrigger(trans));
+            trxAttemptListStorage.findTransactionAttemptByTrigger(new TransactionModels.TransactionAttemptListTrigger(trans));
       }
       }
      
