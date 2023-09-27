@@ -38,7 +38,7 @@ public final class WavesChainI<K> extends WavesIBaseChain<K>
     }
     wavesAssets.put("waves", assetList);
     new AssetStorageService().saveAssetsToStorage(new DataObjects.AssetStorage(wavesAssets));
-    
+
     super.setNetworkNode(configObject.get("Blockchain.Waves.node"));
     super.setWavesBridgeAddress(configObject.get("Blockchain.Waves.gateway_address"));
     super.setNetwork(configObject.get("Blockchain.Waves.network"));

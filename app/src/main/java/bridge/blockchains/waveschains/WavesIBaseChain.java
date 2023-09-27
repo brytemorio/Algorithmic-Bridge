@@ -48,10 +48,6 @@ class WavesIBaseChain<K> implements IBaseChain
   @Setter(AccessLevel.PROTECTED)
   private String chainIdentifier;
 
-  @Setter(AccessLevel.PROTECTED)
-  @Getter(AccessLevel.PROTECTED)
-  private Object2ObjectHashMap<String, Config> asset;
-
   @Getter
   @Setter(AccessLevel.PROTECTED)
   Object2ObjectHashMap<String, Object> chain2IdentifierMapping;
@@ -72,35 +68,6 @@ class WavesIBaseChain<K> implements IBaseChain
     this.mongoStorageService = new MongoStorageService();
   }
 
-  public String getAssetID(String assetConfigName)
-  {
-    WavesAssets assetInfo = assetInfoFactory(assetConfigName);
-    return assetInfo.getAssetID();
-  }
-
-  public String getAssetTicker(String assetConfigName)
-  {
-    WavesAssets assetInfo = assetInfoFactory(assetConfigName);
-    return assetInfo.getAssetTicker();
-  }
-
-  public String getAssetName(String assetConfigName)
-  {
-    WavesAssets assetInfo = assetInfoFactory(assetConfigName);
-    return assetInfo.getAssetName();
-  }
-
-  public double getAssetTransferFee(String assetConfigName)
-  {
-    WavesAssets assetInfo = assetInfoFactory(assetConfigName);
-    return assetInfo.getTransferFee();
-  }
-
-  public int getAssetDecimals(String assetConfigName)
-  {
-    WavesAssets assetInfo = assetInfoFactory(assetConfigName);
-    return assetInfo.getDecimals();
-  }
 
   @SneakyThrows
   public Node getNodeObj()
@@ -225,40 +192,7 @@ class WavesIBaseChain<K> implements IBaseChain
     return new Transaction(trxID, recipients, senders);
   }
 
-  static class WavesAssets
-  {
 
-    @Getter
-    private String assetID;
-
-    @Getter
-    private String assetName;
-
-    @Getter
-    private String assetTicker;
-
-    @Getter
-    private double transferFee;
-
-    @Getter
-    private int decimals;
-
-    @Getter
-    private Config assetControlWallet;
-
-    private final Config asset;
-
-    public WavesAssets(final Config asset)
-    {
-      this.asset = asset;
-      this.assetID = this.asset.get("asset_id");
-      this.assetName = this.asset.get("name");
-      this.assetTicker = this.asset.get("ticker");
-      this.transferFee = this.asset.get("transfer_fee");
-      this.decimals = this.asset.get("decimals");
-      this.assetControlWallet = this.asset.get("wallet");
-    }
-  }
 
   // ======================Helper functions==============================//
   private double waveAmount2Double(int val, String assetName)
@@ -268,10 +202,6 @@ class WavesIBaseChain<K> implements IBaseChain
     return BridgeUtils.roundUp(result, decimalPlace);
   }
 
-  private WavesAssets assetInfoFactory(String assetConfigName)
-  {
-    return new WavesAssets(asset.get(assetConfigName));
-  }
 
   @SneakyThrows
   private String getTokenReceiverFromTransaction(String transactionID)
