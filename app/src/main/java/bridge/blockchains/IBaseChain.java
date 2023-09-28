@@ -49,8 +49,8 @@ public interface IBaseChain {
 
 
   Transaction sendCoin(TransactionModels.TransactionAttempt attempt) throws Exception;
-  Boolean filterTransactions(Transaction trx, TransactionModels.MappedAddress sender);
-  void handleTransaction(Transaction trx, TransactionModels.MappedAddress sender);
+  Boolean filterTransactions(Transaction trx);
+  void handleTransaction(Transaction trx);
 
 
 

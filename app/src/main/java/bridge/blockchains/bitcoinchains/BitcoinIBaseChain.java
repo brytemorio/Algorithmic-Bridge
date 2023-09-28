@@ -135,17 +135,6 @@ class BitcoinIBaseChain implements IBaseChain {
     return null;
   }
 
-  @Override
-  public Boolean filterTransactions(TransactionModels.Transaction trx, MappedAddress sender)
-  {
-    return null;
-  }
-
-  @Override
-  public void handleTransaction(TransactionModels.Transaction trx, MappedAddress sender)
-  {
-
-  }
 
   @Override
   public Boolean filterTransactions(TransactionModels.Transaction trx)
@@ -179,7 +168,7 @@ class BitcoinIBaseChain implements IBaseChain {
                   receivers.add(
                       new TransactionReceiver(
                           new MappedAddress(receiverAddress, getAssetName()),
-                          iter.value().doubleValue())));
+                          (int) iter.value().doubleValue())));
     }
     return receivers;
   }

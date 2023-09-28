@@ -118,8 +118,9 @@ class WavesIBaseChain<K> implements IBaseChain
   }
 
   @Override
-  public Boolean filterTransactions(Transaction trx, TransactionModels.MappedAddress sender)
+  public Boolean filterTransactions(Transaction trx)
   {
+
     if (this.trxAttemptListStorage.gatewayTransactionExists(trx.getTransactionID())) return false;
     else return !_filterTransactionReceivers(trx).isEmpty();
   }
@@ -129,7 +130,7 @@ class WavesIBaseChain<K> implements IBaseChain
    * FIXME: Use TransactionSender Model from {bridge.services.transactionservice.TransactionModel}
    * */
   @Override
-  public void handleTransaction(Transaction trx, TransactionModels.MappedAddress sender)
+  public void handleTransaction(Transaction trx)
   {
     var receivers = this._filterTransactionReceivers(trx);
 

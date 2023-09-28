@@ -24,14 +24,14 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
-class EthIBaseChain<K> implements IBaseChain {
+class EthIBaseChain<K> implements IBaseChain
+{
 
   private BigInteger previousBlockHeight = BigInteger.ZERO;
 
   @Setter(AccessLevel.PROTECTED)
   @Getter(AccessLevel.PROTECTED)
   Object2ObjectHashMap<String, Config> asset;
-
 
 
   @Getter
@@ -52,52 +52,61 @@ class EthIBaseChain<K> implements IBaseChain {
 
   private Web3j web3j;
 
-  public String getAssetID(String assetConfigName) {
+  public String getAssetID(String assetConfigName)
+  {
     EthAssets assetInfo = assetInfoFactory(assetConfigName);
     return assetInfo.getAssetID();
   }
 
-  public String getAssetTicker(String assetConfigName) {
+  public String getAssetTicker(String assetConfigName)
+  {
     EthAssets assetInfo = assetInfoFactory(assetConfigName);
     return assetInfo.getAssetTicker();
   }
 
-  public String getAssetName(String assetConfigName) {
+  public String getAssetName(String assetConfigName)
+  {
     EthAssets assetInfo = assetInfoFactory(assetConfigName);
     return assetInfo.getAssetName();
   }
 
-  public Double getAssetTransferFee(String assetConfigName) {
+  public Double getAssetTransferFee(String assetConfigName)
+  {
     EthAssets assetInfo = assetInfoFactory(assetConfigName);
     return assetInfo.getTransferFee();
   }
 
 
-
-  public Config getAssetWallet(String assetConfigName) {
+  public Config getAssetWallet(String assetConfigName)
+  {
     EthAssets assetInfo = assetInfoFactory(assetConfigName);
     return assetInfo.getAssetControlWallet();
   }
 
-  protected void init() {
+  protected void init()
+  {
     this.web3j = initWeb3j();
   }
 
   @SneakyThrows
-  private Web3j initWeb3j() {
+  private Web3j initWeb3j()
+  {
     return Web3j.build(new HttpService(networkNode));
   }
 
   @Override
   @SneakyThrows
-  public BigInteger getBlockHeight() {
+  public BigInteger getBlockHeight()
+  {
     EthBlockNumber ethBlockNumber;
     boolean noNewBlockFound = true;
     BigInteger currentHeight;
-    while (noNewBlockFound) {
+    while (noNewBlockFound)
+    {
       ethBlockNumber = web3j.ethBlockNumber().send();
       currentHeight = ethBlockNumber.getBlockNumber();
-      if (currentHeight.compareTo(this.previousBlockHeight) > 0) {
+      if (currentHeight.compareTo(this.previousBlockHeight) > 0)
+      {
         this.previousBlockHeight = currentHeight;
         noNewBlockFound = false;
       }
@@ -107,11 +116,13 @@ class EthIBaseChain<K> implements IBaseChain {
 
   @Override
   @SneakyThrows
-  public ArrayList<String> getTrxIdsByBlockHeight(BigInteger height) {
-    EthBlock.Block block =
-        web3j.ethGetBlockByNumber(DefaultBlockParameter.valueOf(height), false).send().getBlock();
+  public ArrayList<String> getTrxIdsByBlockHeight(BigInteger height)
+  {
+    EthBlock.Block block = web3j.ethGetBlockByNumber(DefaultBlockParameter.valueOf(height), false)
+        .send().getBlock();
     ArrayList<String> trxIds = new ArrayList<>();
-    for (var trx : block.getTransactions()) {
+    for (var trx : block.getTransactions())
+    {
       trxIds.add(BridgeUtils.object2JsonConverter(trx).get("value").toString());
     }
     return trxIds;
@@ -119,13 +130,15 @@ class EthIBaseChain<K> implements IBaseChain {
 
   @Override
   @SneakyThrows
-  public org.web3j.protocol.core.methods.response.Transaction getTrxByID(String trxID) {
+  public org.web3j.protocol.core.methods.response.Transaction getTrxByID(String trxID)
+  {
     return web3j.ethGetTransactionByHash(trxID).send().getResult();
   }
 
 
   @Override
-  public boolean validateAddress(String address) {
+  public boolean validateAddress(String address)
+  {
     return false;
   }
 
@@ -141,17 +154,6 @@ class EthIBaseChain<K> implements IBaseChain {
     return null;
   }
 
-  @Override
-  public Boolean filterTransactions(Transaction trx, TransactionModels.MappedAddress sender)
-  {
-    return null;
-  }
-
-  @Override
-  public void handleTransaction(Transaction trx, TransactionModels.MappedAddress sender)
-  {
-
-  }
 
   @Override
   public Boolean filterTransactions(Transaction trx)
@@ -166,7 +168,8 @@ class EthIBaseChain<K> implements IBaseChain {
   }
 
   @Override
-  public Transaction getTransaction(String trxID) {
+  public Transaction getTransaction(String trxID)
+  {
     /*String assetId = getAssetID(assetName);
     ERC20ABI erc20abi = getABIWrapper(assetName);
     var transaction = getTrxByID(trxID);
@@ -180,7 +183,8 @@ class EthIBaseChain<K> implements IBaseChain {
     return null;
   }
 
-  class EthAssets {
+  class EthAssets
+  {
 
     @Getter
     private String assetID;
@@ -198,10 +202,10 @@ class EthIBaseChain<K> implements IBaseChain {
     private Config assetControlWallet;
 
 
-
     private Config asset;
 
-    public EthAssets(final Config asset) {
+    public EthAssets(final Config asset)
+    {
       this.asset = asset;
       this.assetID = this.asset.get("asset_id");
       this.assetName = this.asset.get("name");
@@ -213,28 +217,33 @@ class EthIBaseChain<K> implements IBaseChain {
   }
 
   // ========================= Helper Functions ================//
-  private EthAssets assetInfoFactory(String assetConfigName) {
+  private EthAssets assetInfoFactory(String assetConfigName)
+  {
     return new EthAssets(asset.get(assetConfigName));
   }
 
   @SneakyThrows
-  private ERC20ABI getABIWrapper(String assetName) {
+  private ERC20ABI getABIWrapper(String assetName)
+  {
     String assetId = getAssetID(assetName);
     Credentials assetWalletCredential = Credentials.create(
         getAssetWallet(assetName).get("private_key"), getAssetWallet(assetName).get("public_key"));
     return ERC20ABI.load(assetId, web3j, assetWalletCredential, new DefaultGasProvider());
   }
 
-  class Address implements Type<String> {
+  class Address implements Type<String>
+  {
 
     @Override
-    public String getValue() {
+    public String getValue()
+    {
       // TODO Auto-generated method stub
       return new String();
     }
 
     @Override
-    public String getTypeAsString() {
+    public String getTypeAsString()
+    {
       // TODO Auto-generated method stub
       return new String().toString();
     }
