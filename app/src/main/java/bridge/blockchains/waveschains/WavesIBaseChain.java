@@ -121,7 +121,7 @@ class WavesIBaseChain<K> implements IBaseChain
   public Boolean filterTransactions(Transaction trx, TransactionModels.MappedAddress sender)
   {
     if (this.trxAttemptListStorage.gatewayTransactionExists(trx.getTransactionID())) return false;
-    else return !_filterTransactionReceivers(trx, sender.getAddress()).isEmpty();
+    else return !_filterTransactionReceivers(trx).isEmpty();
   }
 
 
@@ -274,6 +274,5 @@ class WavesIBaseChain<K> implements IBaseChain
       this.trxAttemptListStorage.saveTransactionAttemptList(attempt_list);
       log.info("Created new attempt list " + attempt_list);
     }
-
   }
 }
