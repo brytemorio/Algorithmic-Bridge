@@ -42,6 +42,7 @@ public class TransactionAttemptListStorageService
     var result = collection.findOneAndReplace(filter, transactionAttemptList);
 
 
+    assert result != null;
     log.debug(result.toString());
   }
 

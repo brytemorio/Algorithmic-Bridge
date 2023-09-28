@@ -1,7 +1,7 @@
 package bridge.services.transactionservice;
 
 import bridge.blockchains.IBaseChain;
-import bridge.services.storagservice.MongoStorageService;
+import bridge.services.storagservice.TransactionAttemptListStorageService;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -11,12 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 public class TransactionAttemptListService
 {
 
-  private MongoStorageService dbService;
+  private TransactionAttemptListStorageService dbService;
   private IBaseChain chain;
+
   public TransactionAttemptListService(IBaseChain chain)
   {
     this.chain = chain;
-    this.dbService = new MongoStorageService();
+    this.dbService = new TransactionAttemptListStorageService();
   }
 
   @SneakyThrows
@@ -29,20 +30,19 @@ public class TransactionAttemptListService
       return;
     }
 
-    for(int i =0; i <= trxAttemptList.getTransactions().size(); i++)
+    for (int i = 0; i <= trxAttemptList.getTransactions().size(); i++)
       logAttemptAlreadyDone(trxAttemptList.getAttempts().get(i));
 
-    while(!trxAttemptList.hasCompleted())
+    while (!trxAttemptList.hasCompleted())
     {
       var nextAttempt = trxAttemptList.nextIncompleteAttempt();
       var transaction = this.chain.sendCoin(nextAttempt);
       trxAttemptList.markNextAttemptAsCompleted(nextAttempt, transaction.getTransactionID());
-      this.dbService.updateTransactionAttempt(trxAttemptList);
+      this.dbService.updateTransactionAttemptList(trxAttemptList);
       logAttemptSuccess(nextAttempt);
     }
     log.info(trxAttemptList.getTransactionAttemptID() + " is completed");
   }
-
 
 
   private void logAttemptSuccess(TransactionModels.TransactionAttempt attempt)
@@ -50,8 +50,8 @@ public class TransactionAttemptListService
     for (var receivers : attempt.getReceivers())
     {
 
-      log.info("[" + attempt.getCurrency() + "]" + " : Transferred " + receivers.getAmount()
-          .toString() + " from " + attempt.getSender() + " to " + receivers.getAddress());
+      log.info(
+          "[" + attempt.getCurrency() + "]" + " : Transferred " + receivers.getAmount() + " from " + attempt.getSender() + " to " + receivers.getAddress());
     }
   }
 
@@ -60,8 +60,8 @@ public class TransactionAttemptListService
     for (var receivers : attempt.getReceivers())
     {
 
-      log.info("[" + attempt.getCurrency() + "]" + " : Already transferred " + receivers.getAmount()
-          .toString() + " from " + attempt.getSender() + " to " + receivers.getAddress());
+      log.info(
+          "[" + attempt.getCurrency() + "]" + " : Already transferred " + receivers.getAmount() + " from " + attempt.getSender() + " to " + receivers.getAddress());
     }
   }
 }
