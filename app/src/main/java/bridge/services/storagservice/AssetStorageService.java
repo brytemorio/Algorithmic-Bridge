@@ -40,7 +40,7 @@ public class AssetStorageService
   {
     var collection = getCollection();
 
-    Bson filter = Filters.eq("assets." + blockhain, new Document("$exits", true));
+    Bson filter = Filters.eq("assets." + blockhain, new Document("$exists", true));
     DataObjects.AssetStorage restult = collection.find(filter).first();
 
     if (restult != null) return restult.getAssets().get(blockhain);

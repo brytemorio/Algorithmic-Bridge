@@ -5,6 +5,8 @@ import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
 import bridge.exceptions.BridgeExceptions;
 import bridge.services.storagservice.AssetStorageService;
+import bridge.services.storagservice.ConfigurationStorageService;
+import bridge.services.storagservice.DataObjects;
 import bridge.services.storagservice.TransactionAttemptListStorageService;
 import bridge.services.transactionservice.TransactionModels;
 import bridge.services.transactionservice.TransactionModels.Transaction;
@@ -35,56 +37,34 @@ import java.util.Objects;
 class WavesIBaseChain<K> implements IBaseChain
 {
 
-  @Setter(AccessLevel.PROTECTED)
-  @Getter
-  private String networkNode;
-
-  @Getter
-  @Setter(AccessLevel.PROTECTED)
-  private String network;
-
-  @Getter
-  @Setter(AccessLevel.PROTECTED)
-  private K networkID;
-
-  @Getter
-  @Setter(AccessLevel.PROTECTED)
-  private String chainIdentifier;
-
-  @Getter
-  @Setter(AccessLevel.PROTECTED)
-  Object2ObjectHashMap<String, Object> chain2IdentifierMapping;
-
-  @Getter
-  @Setter
-  private String wavesBridgeAddress;
-
-  @Getter
-  private ArrayList<Asset> wavesAsset;
   private Node wavesRpcClient;
-
   private TransactionAttemptListStorageService trxAttemptListStorage;
   private BigInteger previousBlockHeight;
-
   private String assetID;
   private String ticker;
+
+  private DataObjects.ConfigurationStorage wavesConfig;
 
   protected void init()
   {
     this.wavesRpcClient = getNodeObj();
     this.previousBlockHeight = BigInteger.ZERO;
     this.trxAttemptListStorage = new TransactionAttemptListStorageService();
-    AssetStorageService assetStorage = new AssetStorageService();
-    this.wavesAsset = assetStorage.getAssetFromStorage("waves");
+    this.wavesConfig = new ConfigurationStorageService().getConfiguration("waves");
   }
 
 
   @SneakyThrows
   public Node getNodeObj()
   {
-    return new Node(networkNode);
+    return new Node(this.wavesConfig.getNode());
   }
 
+  @Override
+  public String getChainPublicGatewayAddress()
+  {
+    return this.wavesConfig.getGatewayAddress();
+  }
   @Override
   @SneakyThrows
   public BigInteger getBlockHeight()
@@ -178,7 +158,7 @@ class WavesIBaseChain<K> implements IBaseChain
     }
     else
     {
-      for (var asseti : wavesAsset)
+      for (var asseti : this.wavesConfig.getAssets())
       {
         String waveAssetId = Objects.requireNonNull(asseti.getAssetId(),
             "asset Id not defined asset id for waves chain cannot be null");
@@ -248,7 +228,7 @@ class WavesIBaseChain<K> implements IBaseChain
     List<TransactionReceiver> receivers = trx.getReceivers();
     for (int i = 0; i <= receivers.size(); i++)
     {
-      if (receivers.get(i).getAddress().getAddress().equals(this.wavesBridgeAddress))
+      if (receivers.get(i).getAddress().getAddress().equals(this.wavesConfig.getGatewayAddress()))
       {
         var trx_attempt = this.trxAttemptListStorage.findTransactionAttemptByTrigger(
             new TransactionModels.TransactionAttemptListTrigger(trx.getTransactionID(), i,

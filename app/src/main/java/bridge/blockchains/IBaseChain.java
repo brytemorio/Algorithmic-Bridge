@@ -45,7 +45,7 @@ public interface IBaseChain {
 
   boolean validateAddress(String address);
 
-  String getGateWayAddress();
+  String getChainPublicGatewayAddress();
 
 
   Transaction sendCoin(TransactionModels.TransactionAttempt attempt) throws Exception;

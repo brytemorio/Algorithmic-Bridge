@@ -2,6 +2,7 @@ package bridge.services.storagservice;
 
 import bridge.blockchains.Asset;
 import bridge.services.transactionservice.TransactionModels.MappedAddress;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
@@ -102,5 +103,18 @@ public class DataObjects {
     {
       this.assets = assets;
     }
+  }
+
+  @Data
+  @NoArgsConstructor
+  public static class ConfigurationStorage
+  {
+    private String chainName;
+    private String node;
+    private String network;
+    private String networkId;
+    private String chainIdentifier;
+    private String gatewayAddress;
+    private ArrayList<Asset> assets;
   }
 }

@@ -3,7 +3,7 @@ package bridge;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import bridge.blockchains.waveschains.WavesChainI;
+import bridge.blockchains.waveschains.WavesChain;
 import bridge.common.BridgeUtils;
 import bridge.disruptorservice.NewBlockEventProducer;
 import lombok.SneakyThrows;
@@ -17,7 +17,7 @@ public class App
   {
     // QnodecoinChainI qnodecoinChain = new QnodecoinChainI();
     // PolygonChainI<?> polygonChain = new PolygonChainI<>("fishfactory_p");
-    WavesChainI<?> wavesChain = new WavesChainI<>("qnodecoin", "fishfactory_p");
+    WavesChain<?> wavesChain = new WavesChain<>("qnodecoin", "fishfactory_p");
     // BinanceSmartChainI<?> binanceSmartChain = new BinanceSmartChainI<>("qnode_defi");
     NewBlockEventProducer producer = NewBlockEventProducer.getNewBlockEventProducer(wavesChain);
     log.info("Starting Up Bridge...");

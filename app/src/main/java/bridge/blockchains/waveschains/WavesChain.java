@@ -5,6 +5,7 @@ import bridge.common.BridgeUtils;
 import bridge.common.ConfigFileObj;
 import bridge.exceptions.BridgeExceptions.AssetNotFoundException;
 import bridge.services.storagservice.AssetStorageService;
+import bridge.services.storagservice.ConfigurationStorageService;
 import bridge.services.storagservice.DataObjects;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
@@ -13,13 +14,13 @@ import org.agrona.collections.Object2ObjectHashMap;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public final class WavesChainI<K> extends WavesIBaseChain<K>
+public final class WavesChain<K> extends WavesIBaseChain<K>
 {
 
   private static final UnmodifiableConfig configObject = ConfigFileObj.CONFIG;
 
 
-  public WavesChainI(String... assetConfigName) throws AssetNotFoundException, RuntimeException
+  public WavesChain(String... assetConfigName) throws AssetNotFoundException, RuntimeException
   {
     BridgeUtils.checkArgsLength(assetConfigName,
         "Atleast one token name should be passed to " + getClass().getSimpleName() + " constructor");
@@ -37,13 +38,16 @@ public final class WavesChainI<K> extends WavesIBaseChain<K>
       assetList.add(new Asset(configObject.get("Blockchain.Waves.asset" + "." + configName)));
     }
     wavesAssets.put("waves", assetList);
-    new AssetStorageService().saveAssetsToStorage(new DataObjects.AssetStorage(wavesAssets));
+    var wavesConfiguration = new DataObjects.ConfigurationStorage();
+    wavesConfiguration.setChainName("waves");
+    wavesConfiguration.setNode(configObject.get("Blockchain.Waves.node"));
+    wavesConfiguration.setNetwork(configObject.get("Blockchain.Waves.network"));
+    wavesConfiguration.setNetworkId(configObject.get("Blockchain.Waves.network_id"));
+    wavesConfiguration.setChainIdentifier(configObject.get("Blockchain.Waves.chain_identifier"));
+    wavesConfiguration.setGatewayAddress(configObject.get("Blockchain.Waves.gateway_address"));
+    wavesConfiguration.setAssets(assetList);
 
-    super.setNetworkNode(configObject.get("Blockchain.Waves.node"));
-    super.setWavesBridgeAddress(configObject.get("Blockchain.Waves.gateway_address"));
-    super.setNetwork(configObject.get("Blockchain.Waves.network"));
-    super.setNetworkID(configObject.get("Blockchain.Waves.network_id"));
-    super.setChainIdentifier(configObject.get("Blockchain.Waves.chain_identifier"));
+    new ConfigurationStorageService().saveConfiguration(wavesConfiguration);
     super.init();
   }
 }

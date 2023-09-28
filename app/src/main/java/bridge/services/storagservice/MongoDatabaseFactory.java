@@ -1,6 +1,5 @@
 package bridge.services.storagservice;
 
-import bridge.blockchains.Asset;
 import bridge.services.transactionservice.TransactionModels.TransactionAttemptList;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import com.mongodb.ConnectionString;
@@ -8,22 +7,15 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.ServerApi;
 import com.mongodb.ServerApiVersion;
 import com.mongodb.client.*;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.model.Updates;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.ClassModel;
 import org.bson.codecs.pojo.PojoCodecProvider;
-import org.bson.conversions.Bson;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static bridge.common.ConfigFileObj.CONFIG;
-import static com.mongodb.client.model.Filters.*;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
@@ -45,9 +37,8 @@ public class MongoDatabaseFactory
         MongoDatabaseFactory.configfile.get("Bridge.database.name"), "Algo-Bridge");
     String dbHostName = Objects.requireNonNullElse(
         MongoDatabaseFactory.configfile.get("Bridge.database.hostname"), "localhost");
-    int dbPort = Objects.requireNonNullElse(MongoDatabaseFactory.configfile.get("Bridge.database" +
-            ".port"),
-        27017);
+    int dbPort = Objects.requireNonNullElse(
+        MongoDatabaseFactory.configfile.get("Bridge.database" + ".port"), 27017);
     String username = MongoDatabaseFactory.configfile.get("Bridge.database.username");
     String password = MongoDatabaseFactory.configfile.get("Bridge.database.password");
 
@@ -76,12 +67,15 @@ public class MongoDatabaseFactory
     ClassModel<DataObjects.AssetStorage> assetStorageClassModel = ClassModel.builder(
         DataObjects.AssetStorage.class).enableDiscriminator(true).build();
 
+    ClassModel<DataObjects.ConfigurationStorage> configurationStorageClassModel = ClassModel.builder(
+        DataObjects.ConfigurationStorage.class).enableDiscriminator(true).build();
+
 
     CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
         fromProviders(PojoCodecProvider.builder()
             .register(blockHeightStorageModel, addressMappingStroageModel,
                 transactionAttemptListStorageModel, transactionPolllingStateModel,
-                assetStorageClassModel).automatic(true).build()));
+                assetStorageClassModel, configurationStorageClassModel).automatic(true).build()));
 
     ServerApi serverApi = ServerApi.builder().version(ServerApiVersion.V1).build();
     ConnectionString connectionString = new ConnectionString(connectionURL);

@@ -95,7 +95,12 @@ public class AddressValidator
     @SneakyThrows
     public void onEvent(ValidatorObject event, long sequece, boolean endOfBatch)
     {
-
+      ArrayList<IBaseChain> chains = event.getChains();
+      String addressToValidate = event.getAddressToValidate();;
+      chains.stream().forEach(chain -> {
+        if(chain.validateAddress(addressToValidate))
+          AddressValidator.gatewayAddress.getAndSet(chain.getChainPublicGatewayAddress());
+      });
     }
   }
 

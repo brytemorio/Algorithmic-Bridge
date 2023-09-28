@@ -6,6 +6,7 @@ public enum Collections
     "Address_Mapping_Store"), VALID_TRASANCTION_STORAGE(
     "Transaction_AttemptList_Store"), TRANSACTION_POLLING_STATE(
     "transaction_polling_state"), ASSET_STORAGE("Assets_Store"),
+  CONFIGURATION_STORE("Configuration_Store"),
 
   /*
    * Bridge internal wallets(public and private Keys pairs per blockchains supported used for
