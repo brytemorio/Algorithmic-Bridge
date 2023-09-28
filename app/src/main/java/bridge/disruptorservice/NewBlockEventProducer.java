@@ -61,7 +61,9 @@ public final class NewBlockEventProducer {
     disruptor.start();
     ringBuffer = disruptor.getRingBuffer();
 
+    //Todo: Find a better way of allocating threads to the thread pool
     threadExecutor = Executors.newFixedThreadPool(blockChains.length);
+
     for (int index = 0; index < blockChains.length; index++) {
       threadExecutor.execute(new ProducerInitializer(blockChains[index]));
     }

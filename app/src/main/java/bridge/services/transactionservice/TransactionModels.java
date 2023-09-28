@@ -182,6 +182,14 @@ public class TransactionModels
       this.currency = currency;
     }
 
+    public TransactionAttempt(int fee, String currency, List<TransactionAttemptReceiver> receivers)
+    {
+      this.sender = null;
+      this.receivers = receivers;
+      this.fee = fee;
+      this.currency = currency;
+    }
+
     public Double overallAmount()
     {
       // TODO: Implement overallAmount() if turns out to be necessary

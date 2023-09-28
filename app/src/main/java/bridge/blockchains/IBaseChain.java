@@ -41,9 +41,11 @@ public interface IBaseChain {
 
   <T> T getTrxByID(String trxID);
 
-  Transaction getTransaction(String trxId, String asseId);
+  Transaction getTransaction(String trxId);
 
   boolean validateAddress(String address);
+
+  String getGateWayAddress();
 
 
   Transaction sendCoin(TransactionModels.TransactionAttempt attempt) throws Exception;

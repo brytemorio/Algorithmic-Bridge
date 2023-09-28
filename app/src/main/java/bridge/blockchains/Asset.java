@@ -43,24 +43,22 @@ public class Asset
   {
     this.assetId = Objects.requireNonNullElse(assetInfo.get("name"), "name of asset not empty");
     this.ticker = Objects.requireNonNull(assetInfo.get("ticker"), "ticker of asset not empty");
-    this.assetId = Objects.requireNonNull(assetInfo.get("asset_id"), "asset id is empty");
+    String asset_id = assetInfo.get("asset_id");
+    this.assetId = Objects.equals(asset_id, "") || Objects.equals(asset_id, " ") ? null : asset_id;
     this.transferFee = Objects.requireNonNullElse(assetInfo.get("transfer_fee"), 0);
     this.decimals = Objects.requireNonNull(assetInfo.get("decimals"), "decimal not empty");
     this.wallet = new Wallet(
-        Objects.requireNonNull(assetInfo.get("wallet.private_key"),"private key is empty"),
-        Objects.requireNonNull(assetInfo.get("wallet.public_key"),"public key is empty"));
+        Objects.requireNonNull(assetInfo.get("wallet.private_key"), "private key is empty"),
+        Objects.requireNonNull(assetInfo.get("wallet.public_key"), "public key is empty"));
   }
 
+
+  @Getter
   private static class Wallet
   {
 
-    // private key can be null if the it not required internally by the bridge to handle
-    // transactions
-    @Nullable
-    @Getter
     private String privateKey;
 
-    @Getter
     private String publicKey;
 
     public Wallet()
