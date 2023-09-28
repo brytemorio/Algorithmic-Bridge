@@ -1,10 +1,9 @@
 package bridge.blockchains.waveschains;
 
-import bridge.blockchains.Asset;
 import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
+import bridge.disruptorservice.AddressValidator;
 import bridge.exceptions.BridgeExceptions;
-import bridge.services.storagservice.AssetStorageService;
 import bridge.services.storagservice.ConfigurationStorageService;
 import bridge.services.storagservice.DataObjects;
 import bridge.services.storagservice.TransactionAttemptListStorageService;
@@ -18,12 +17,8 @@ import com.wavesplatform.transactions.common.Id;
 import com.wavesplatform.wavesj.Block;
 import com.wavesplatform.wavesj.Node;
 import com.wavesplatform.wavesj.info.TransactionInfo;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.agrona.collections.Object2ObjectHashMap;
 
 import java.math.BigInteger;
 import java.time.ZoneId;
@@ -40,7 +35,6 @@ class WavesIBaseChain<K> implements IBaseChain
   private Node wavesRpcClient;
   private TransactionAttemptListStorageService trxAttemptListStorage;
   private BigInteger previousBlockHeight;
-  private String assetID;
   private String ticker;
 
   private DataObjects.ConfigurationStorage wavesConfig;
@@ -65,6 +59,7 @@ class WavesIBaseChain<K> implements IBaseChain
   {
     return this.wavesConfig.getGatewayAddress();
   }
+
   @Override
   @SneakyThrows
   public BigInteger getBlockHeight()
@@ -78,6 +73,12 @@ class WavesIBaseChain<K> implements IBaseChain
 
     previousBlockHeight = BigInteger.valueOf(height);
     return previousBlockHeight;
+  }
+
+  @Override
+  public String getChainIdentifier()
+  {
+    return this.wavesConfig.getChainIdentifier();
   }
 
   @Override
@@ -130,16 +131,15 @@ class WavesIBaseChain<K> implements IBaseChain
   @Override
   public void handleTransaction(Transaction trx, TransactionModels.MappedAddress sender)
   {
-    var receivers = this._filterTransactionReceivers(trx, sender.getAssetName());
+    var receivers = this._filterTransactionReceivers(trx);
 
     //FIXME: this may not  be necessary
     if (receivers.size() > 1)
       throw new BridgeExceptions.MultipleGateWayReceiverException(trx.getTransactionID());
 
-    //FIXME: senders should not be empty. senderAddress
+
     for (var tx : receivers)
-      this._handleTransaction(trx.getTransactionID(), sender.getAddress(),
-          trx.getReceivers().get(tx), tx, sender.getAssetName());
+      this._handleTransaction(trx.getTransactionID(), trx.getReceivers().get(tx), tx);
   }
 
   @Override
@@ -148,6 +148,8 @@ class WavesIBaseChain<K> implements IBaseChain
 
     Config transaction = BridgeUtils.getJsonDeserializer().parse(getTrxByID(trxID));
 
+    String assetId = null;
+    String assetName = null;
 
     if (Integer.parseInt(transaction.get("type")) != 4) return null;
 
@@ -164,16 +166,16 @@ class WavesIBaseChain<K> implements IBaseChain
             "asset Id not defined asset id for waves chain cannot be null");
         if (waveAssetId.equals(transaction.get("assetId")))
         {
-          this.assetID = waveAssetId;
-          this.ticker = asseti.getTicker();
+          assetId = waveAssetId;
+          assetName = asseti.getAssetName();
           break;
         }
         else
         {
-          this.assetID = null;
+          assetId = null;
         }
       }
-      if (this.assetID == null) return null;
+      if (assetId == null) return null;
     }
     ;
 
@@ -203,9 +205,9 @@ class WavesIBaseChain<K> implements IBaseChain
       receiver = transaction.get("recipient");
     }
 
-    senders.add(new TransactionSender(new TransactionModels.MappedAddress(sender, this.ticker)));
+    senders.add(new TransactionSender(new TransactionModels.MappedAddress(sender, assetName)));
     recipients.add(
-        new TransactionReceiver(new TransactionModels.MappedAddress(receiver, this.ticker), amount));
+        new TransactionReceiver(new TransactionModels.MappedAddress(receiver, assetName), amount));
     return new Transaction(trxID, recipients, senders);
   }
 
@@ -222,7 +224,7 @@ class WavesIBaseChain<K> implements IBaseChain
 
 
   /*ensure only transactions to the associated waves bridge address should be handled*/
-  private List<Integer> _filterTransactionReceivers(Transaction trx, String assetName)
+  private List<Integer> _filterTransactionReceivers(Transaction trx)
   {
     List<Integer> result = new ArrayList<>();
     List<TransactionReceiver> receivers = trx.getReceivers();
@@ -232,7 +234,7 @@ class WavesIBaseChain<K> implements IBaseChain
       {
         var trx_attempt = this.trxAttemptListStorage.findTransactionAttemptByTrigger(
             new TransactionModels.TransactionAttemptListTrigger(trx.getTransactionID(), i,
-                assetName));
+                receivers.get(i).getAddress().getAssetName()));
         if (trx_attempt == null || trx_attempt.hasCompleted()) result.add(i);
       }
     }
@@ -252,18 +254,20 @@ class WavesIBaseChain<K> implements IBaseChain
     if (attempt_list == null)
     {
       trigger = new TransactionModels.TransactionAttemptListTrigger(transactionId, index,
-          this.ticker);
+          receiver.getAddress().getAssetName());
 
       List<TransactionModels.TransactionAttempt> attempts = new ArrayList<>();
       List<TransactionModels.TransactionAttemptReceiver> tokenReceiversList = new ArrayList<>();
 
       String tokenReceiver = this.getTokenReceiverFromTransaction(transactionId);
-
+      AddressValidator.addressToValidate.set(tokenReceiver);
+      String sender = AddressValidator.gatewayAddress.get();
       tokenReceiversList.add(
           new TransactionModels.TransactionAttemptReceiver(tokenReceiver, receiver.getAmount()));
 
-      attempts.add(new TransactionModels.TransactionAttempt(sendingAddress, 0, assetName,
-          tokenReceiversList));
+      attempts.add(
+          new TransactionModels.TransactionAttempt(sender, 0, receiver.getAddress().getAssetName(),
+              tokenReceiversList));
 
       attempt_list = new TransactionModels.TransactionAttemptList(trigger, attempts,
           ZonedDateTime.now(ZoneId.of("Etc/Zulu")), ZonedDateTime.now(ZoneId.of("Etc/Zulu")));

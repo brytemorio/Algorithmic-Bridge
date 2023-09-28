@@ -130,9 +130,27 @@ class EthIBaseChain<K> implements IBaseChain {
   }
 
   @Override
+  public String getChainPublicGatewayAddress()
+  {
+    return null;
+  }
+
+  @Override
   public Transaction sendCoin(TransactionModels.TransactionAttempt attempt)
   {
     return null;
+  }
+
+  @Override
+  public Boolean filterTransactions(Transaction trx, TransactionModels.MappedAddress sender)
+  {
+    return null;
+  }
+
+  @Override
+  public void handleTransaction(Transaction trx, TransactionModels.MappedAddress sender)
+  {
+
   }
 
   @Override
@@ -148,7 +166,7 @@ class EthIBaseChain<K> implements IBaseChain {
   }
 
   @Override
-  public Transaction getTransaction(String trxID, String assetName) {
+  public Transaction getTransaction(String trxID) {
     /*String assetId = getAssetID(assetName);
     ERC20ABI erc20abi = getABIWrapper(assetName);
     var transaction = getTrxByID(trxID);

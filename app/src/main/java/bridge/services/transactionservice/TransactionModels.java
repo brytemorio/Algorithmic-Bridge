@@ -79,6 +79,7 @@ public class TransactionModels
     private String transactionID;
     private List<TransactionReceiver> receivers;
     private List<TransactionSender> senders;
+    private String assetId;
 
     private boolean afffirmTransaction;
     private int retries;
@@ -95,10 +96,11 @@ public class TransactionModels
       this.senders = senders;
     }
 
-    public Transaction(String transactionID, List<TransactionReceiver> receivers)
+    public Transaction(String transactionID, List<TransactionReceiver> receivers, String assetId)
     {
       this.transactionID = transactionID;
       this.receivers = receivers;
+      this.assetId = assetId;
     }
 
     public void markAsDone()

@@ -124,9 +124,27 @@ class BitcoinIBaseChain implements IBaseChain {
   }
 
   @Override
+  public String getChainPublicGatewayAddress()
+  {
+    return null;
+  }
+
+  @Override
   public TransactionModels.Transaction sendCoin(TransactionModels.TransactionAttempt attempt)
   {
     return null;
+  }
+
+  @Override
+  public Boolean filterTransactions(TransactionModels.Transaction trx, MappedAddress sender)
+  {
+    return null;
+  }
+
+  @Override
+  public void handleTransaction(TransactionModels.Transaction trx, MappedAddress sender)
+  {
+
   }
 
   @Override
@@ -142,7 +160,7 @@ class BitcoinIBaseChain implements IBaseChain {
   }
 
   @Override
-  public TransactionModels.Transaction getTransaction(String trxId, String assetName) {
+  public TransactionModels.Transaction getTransaction(String trxId) {
     RawTransaction decodedTrx = getTrxByID(trxId);
     return new TransactionModels.Transaction(
         trxId, getTrxReceivers(decodedTrx), getTrxSenders(decodedTrx));
