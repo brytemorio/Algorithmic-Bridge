@@ -2,6 +2,7 @@ package bridge.blockchains.waveschains;
 
 import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
+import bridge.common.RateLimiter;
 import bridge.disruptorservice.AddressValidator;
 import bridge.exceptions.BridgeExceptions;
 import bridge.services.storagservice.ConfigurationStorageService;
@@ -66,13 +67,25 @@ class WavesIBaseChain<K> implements IBaseChain
   public BigInteger getBlockHeight()
   {
 
-    int height = wavesRpcClient.getHeight();
+    RateLimiter rateLimiter = new RateLimiter(10, 5);
+    int currentHeight = wavesRpcClient.getHeight();
+    int nextHeight = wavesRpcClient.getHeight();
 
-    while (height == wavesRpcClient.getHeight())
+    do
     {
+      if (rateLimiter.allowRequest())
+      {
+        nextHeight = wavesRpcClient.getHeight();
+      }
+      else
+      {
+        rateLimiter = new RateLimiter(10, 5);
+      }
     }
+    while (currentHeight == nextHeight);
 
-    previousBlockHeight = BigInteger.valueOf(height);
+
+    previousBlockHeight = BigInteger.valueOf(currentHeight);
     return previousBlockHeight;
   }
 
