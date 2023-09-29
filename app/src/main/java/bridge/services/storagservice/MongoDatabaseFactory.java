@@ -1,5 +1,6 @@
 package bridge.services.storagservice;
 
+import bridge.services.transactionservice.TransactionModels;
 import bridge.services.transactionservice.TransactionModels.TransactionAttemptList;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import com.mongodb.ConnectionString;
@@ -75,13 +76,36 @@ public class MongoDatabaseFactory
     ClassModel<DataObjects.Wallet> walletClassModel = ClassModel.builder(DataObjects.Wallet.class)
         .enableDiscriminator(true).build();
 
+    ClassModel<TransactionModels.TransactionAttempt> transactionAttemptClassModel = ClassModel.builder(
+        TransactionModels.TransactionAttempt.class).enableDiscriminator(true).build();
+
+    ClassModel<TransactionModels.TransactionAttemptListTrigger> transactionAttemptListTriggerClassModel = ClassModel.builder(
+        TransactionModels.TransactionAttemptListTrigger.class).enableDiscriminator(true).build();
+
+    ClassModel<TransactionModels.TransactionSender> transactionSenderClassModel = ClassModel.builder(
+        TransactionModels.TransactionSender.class).enableDiscriminator(true).build();
+
+    ClassModel<TransactionModels.TransactionReceiver> transactionReceiverClassModel = ClassModel.builder(
+        TransactionModels.TransactionReceiver.class).enableDiscriminator(true).build();
+
+    ClassModel<TransactionModels.TransactionAttemptReceiver> transactionAttemptReceiverClassModel = ClassModel.builder(
+        TransactionModels.TransactionAttemptReceiver.class).enableDiscriminator(true).build();
+
+    ClassModel<TransactionModels.MappedAddress> mappedAddressClassModel = ClassModel.builder(
+        TransactionModels.MappedAddress.class).enableDiscriminator(true).build();
+
+    ClassModel<TransactionModels.Transaction> transactionClassModel = ClassModel.builder(
+        TransactionModels.Transaction.class).enableDiscriminator(true).build();
 
     CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
         fromProviders(PojoCodecProvider.builder()
             .register(blockHeightStorageModel, addressMappingStroageModel,
                 transactionAttemptListStorageModel, transactionPolllingStateModel,
-                assetStorageClassModel, configurationStorageClassModel, walletClassModel)
-            .automatic(true).build()));
+                assetStorageClassModel, configurationStorageClassModel, walletClassModel,
+                transactionAttemptClassModel, transactionAttemptListTriggerClassModel,
+                transactionSenderClassModel, transactionReceiverClassModel,
+                transactionAttemptReceiverClassModel, mappedAddressClassModel,
+                transactionClassModel).automatic(true).build()));
 
     ServerApi serverApi = ServerApi.builder().version(ServerApiVersion.V1).build();
     ConnectionString connectionString = new ConnectionString(connectionURL);
