@@ -81,6 +81,9 @@ public class BridgeUtils {
         : new BlockingWaitStrategy();
   }
 
+  public static int getCPUCounts(){
+    return  Runtime.getRuntime().availableProcessors();
+  }
   public static Object2ObjectHashMap<String, MappedAddress> createChainName2AddressMap(
       String blockChainName, MappedAddress Address) {
     Object2ObjectHashMap<String, MappedAddress> mapping = new Object2ObjectHashMap<>();

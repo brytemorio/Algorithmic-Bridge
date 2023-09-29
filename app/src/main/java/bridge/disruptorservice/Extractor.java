@@ -71,7 +71,7 @@ final class Extractor implements EventHandler<BlockProp>
   {
 
     // TODO: Change log.info() to log.debug()
-    log.info("Got Block: " + event.getBlockHeight() + " with ID: " + event.getChainIdentifier());
+    log.info("Got Block: " + event.getBlockHeight() + "from: " + event.getChainName());
 
     BlockHeightStorageService dbService = new BlockHeightStorageService();
     if (dbService.getBlockHeightFromStorage(event.getChainIdentifier()) == null)

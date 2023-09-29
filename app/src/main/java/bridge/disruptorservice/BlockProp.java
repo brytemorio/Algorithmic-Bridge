@@ -9,6 +9,7 @@ final class BlockProp {
   private String chainIdentifier;
 
   private BigInteger blockHeight;
+  private String chainName;
 
   public BlockProp() {}
 

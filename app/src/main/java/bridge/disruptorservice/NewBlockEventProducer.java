@@ -61,11 +61,11 @@ public final class NewBlockEventProducer {
     disruptor.start();
     ringBuffer = disruptor.getRingBuffer();
 
-    //Todo: Find a better way of allocating threads to the thread pool
-    threadExecutor = Executors.newFixedThreadPool(blockChains.length);
+    threadExecutor = Executors.newFixedThreadPool(BridgeUtils.getCPUCounts());
 
-    for (int index = 0; index < blockChains.length; index++) {
-      threadExecutor.execute(new ProducerInitializer(blockChains[index]));
+    for (IBaseChain blockChain : blockChains)
+    {
+      threadExecutor.execute(new ProducerInitializer(blockChain));
     }
   }
 
@@ -73,8 +73,8 @@ public final class NewBlockEventProducer {
     threadExecutor.shutdown();
   }
 
-  class ProducerInitializer implements Runnable {
-    private IBaseChain blockchain;
+  static class ProducerInitializer implements Runnable {
+    private final IBaseChain blockchain;
 
     public ProducerInitializer(final IBaseChain blockchain) {
       this.blockchain = blockchain;
@@ -90,11 +90,13 @@ public final class NewBlockEventProducer {
        */
       for (; ; ) {
         String chainIdentifier = blockchain.getChainIdentifier();
+        String chainName = blockchain.getChainName();
         BigInteger chainHeight = blockchain.getBlockHeight();
         long sequence = ringBuffer.next();
         BlockProp newBlockHeight = ringBuffer.get(sequence);
         newBlockHeight.setChainIdentifier(chainIdentifier);
         newBlockHeight.setBlockHeight(chainHeight);
+        newBlockHeight.setChainName(chainName);
         ringBuffer.publish(sequence);
         try {
           Thread.currentThread().sleep(100);

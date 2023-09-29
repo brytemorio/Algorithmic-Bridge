@@ -39,12 +39,13 @@ class WavesIBaseChain<K> implements IBaseChain
 
   private DataObjects.ConfigurationStorage wavesConfig;
 
+  @SneakyThrows
   protected void init()
   {
-    this.wavesRpcClient = getNodeObj();
+    this.wavesConfig = new ConfigurationStorageService().getConfiguration("waves");
     this.previousBlockHeight = BigInteger.ZERO;
     this.trxAttemptListStorage = new TransactionAttemptListStorageService();
-    this.wavesConfig = new ConfigurationStorageService().getConfiguration("waves");
+    this.wavesRpcClient = getNodeObj();
   }
 
 
@@ -141,6 +142,12 @@ class WavesIBaseChain<K> implements IBaseChain
 
     for (var tx : receivers)
       this._handleTransaction(trx.getTransactionID(), trx.getReceivers().get(tx), tx);
+  }
+
+  @Override
+  public String getChainName()
+  {
+    return this.wavesConfig.getChainName();
   }
 
   @Override

@@ -168,6 +168,12 @@ class EthIBaseChain<K> implements IBaseChain
   }
 
   @Override
+  public String getChainName()
+  {
+    return null;
+  }
+
+  @Override
   public Transaction getTransaction(String trxID)
   {
     /*String assetId = getAssetID(assetName);

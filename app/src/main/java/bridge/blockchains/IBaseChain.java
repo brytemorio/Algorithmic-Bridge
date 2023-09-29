@@ -52,6 +52,8 @@ public interface IBaseChain {
   Boolean filterTransactions(Transaction trx);
   void handleTransaction(Transaction trx);
 
+  String getChainName();
+
 
 
 
