@@ -117,4 +117,14 @@ public class DataObjects {
     private String gatewayAddress;
     private ArrayList<Asset> assets;
   }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class Wallet
+  {
+    private String privateKey;
+    private String publicKey;
+
+  }
 }

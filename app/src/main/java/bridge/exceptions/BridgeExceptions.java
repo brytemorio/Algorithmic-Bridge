@@ -56,4 +56,11 @@ public class BridgeExceptions {
           "Gateway cannot handle this.");
     }
   }
+
+  public static class ConfigurationStoreNotFoundException extends  RuntimeException{
+    public ConfigurationStoreNotFoundException(final String msg)
+    {
+      super(msg);
+    }
+  }
 }

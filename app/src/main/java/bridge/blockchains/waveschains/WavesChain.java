@@ -9,11 +9,13 @@ import bridge.services.storagservice.ConfigurationStorageService;
 import bridge.services.storagservice.DataObjects;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.agrona.collections.Object2ObjectHashMap;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
+@Slf4j
 public final class WavesChain<K> extends WavesIBaseChain<K>
 {
 
@@ -46,8 +48,8 @@ public final class WavesChain<K> extends WavesIBaseChain<K>
     wavesConfiguration.setChainIdentifier(configObject.get("Blockchain.Waves.chain_identifier"));
     wavesConfiguration.setGatewayAddress(configObject.get("Blockchain.Waves.gateway_address"));
     wavesConfiguration.setAssets(assetList);
-
     new ConfigurationStorageService().saveConfiguration(wavesConfiguration);
+
     super.init();
   }
 }

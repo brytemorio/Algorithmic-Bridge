@@ -31,7 +31,7 @@
           "name": "Qnodecoin",
           "ticker": "QNC",
           "asset_id": "MFW1SBXgPYxP32RfmDFkHQ3N7sGzU7YEAeUBYBxrJeC",
-          "transfer_fee": 0.00001,
+          "transfer_fee": 0,
           "decimals": 8,
           "wallet": {
             "private_key": "private-key",
@@ -42,7 +42,8 @@
           "name": "Fishfactory P",
           "ticker": "XFP",
           "asset_id": "51x7v7eg4aRzzeDTnR2CcMyrTprDyDt9sYCGcZJ6Xpp3",
-          "transfer_fee": 0.00001,
+          "transfer_fee": 0,
+          "decimals": 8,
           "wallet": {
             "private_key": "private-key",
             "public_key": "public-key"

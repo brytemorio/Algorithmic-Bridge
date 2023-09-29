@@ -7,6 +7,7 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.ServerApi;
 import com.mongodb.ServerApiVersion;
 import com.mongodb.client.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -22,12 +23,13 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 /*FIXME: This class is in need of heavy refactoring*/
 @Slf4j
+@Data
 public class MongoDatabaseFactory
 {
 
   private static final UnmodifiableConfig configfile = CONFIG;
 
-  @Getter
+
   private final MongoDatabase dataBase;
 
   private MongoDatabaseFactory()
@@ -70,12 +72,16 @@ public class MongoDatabaseFactory
     ClassModel<DataObjects.ConfigurationStorage> configurationStorageClassModel = ClassModel.builder(
         DataObjects.ConfigurationStorage.class).enableDiscriminator(true).build();
 
+    ClassModel<DataObjects.Wallet> walletClassModel = ClassModel.builder(DataObjects.Wallet.class)
+        .enableDiscriminator(true).build();
+
 
     CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
         fromProviders(PojoCodecProvider.builder()
             .register(blockHeightStorageModel, addressMappingStroageModel,
                 transactionAttemptListStorageModel, transactionPolllingStateModel,
-                assetStorageClassModel, configurationStorageClassModel).automatic(true).build()));
+                assetStorageClassModel, configurationStorageClassModel, walletClassModel)
+            .automatic(true).build()));
 
     ServerApi serverApi = ServerApi.builder().version(ServerApiVersion.V1).build();
     ConnectionString connectionString = new ConnectionString(connectionURL);
