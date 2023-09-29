@@ -23,7 +23,8 @@ public final class WavesChain<K> extends WavesIBaseChain<K>
   public WavesChain(String... assetConfigName) throws AssetNotFoundException, RuntimeException
   {
     BridgeUtils.checkArgsLength(assetConfigName,
-        "Atleast one token name should be passed to " + getClass().getSimpleName() + " constructor");
+        "At least one token name should be passed to " + getClass().getSimpleName() + " " +
+            "constructor");
     String[] assetConfigName1 = Objects.requireNonNull(assetConfigName); //NO need for this check
     ArrayList<Asset> assetList = new ArrayList<>();
     Config assets = configObject.get("Blockchain.Waves.assets");
