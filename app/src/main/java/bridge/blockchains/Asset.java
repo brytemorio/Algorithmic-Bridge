@@ -24,7 +24,7 @@ public class Asset
 
   // Enforcing a transfer fee is optional. This transfer fee is not the same as the fees required
   // for on-chain transaction e.g etheruem gas fee
-  private double transferFee;
+  private int transferFee;
 
   // Currency Decimal places peculiar to the asset
   private int decimals;

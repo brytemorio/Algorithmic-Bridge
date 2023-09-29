@@ -25,7 +25,6 @@ public final class WavesChain<K> extends WavesIBaseChain<K>
     BridgeUtils.checkArgsLength(assetConfigName,
         "Atleast one token name should be passed to " + getClass().getSimpleName() + " constructor");
     String[] assetConfigName1 = Objects.requireNonNull(assetConfigName); //NO need for this check
-    Object2ObjectHashMap<String, ArrayList<Asset>> wavesAssets = new Object2ObjectHashMap<>();
     ArrayList<Asset> assetList = new ArrayList<>();
     Config assets = configObject.get("Blockchain.Waves.assets");
     for (String configName : assetConfigName1)
@@ -35,9 +34,9 @@ public final class WavesChain<K> extends WavesIBaseChain<K>
         throw new AssetNotFoundException(
             String.format("Asset: %s, could not be found in the config file", configName));
       }
-      assetList.add(new Asset(configObject.get("Blockchain.Waves.asset" + "." + configName)));
+      assetList.add(new Asset(configObject.get("Blockchain.Waves.assets" + "." + configName)));
     }
-    wavesAssets.put("waves", assetList);
+
     var wavesConfiguration = new DataObjects.ConfigurationStorage();
     wavesConfiguration.setChainName("waves");
     wavesConfiguration.setNode(configObject.get("Blockchain.Waves.node"));
