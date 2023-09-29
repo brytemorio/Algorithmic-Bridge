@@ -48,16 +48,20 @@ public class ConfigurationStorageService
   public DataObjects.ConfigurationStorage getConfiguration(String chainname)
   {
     var collection = getCollection();
-    Bson filter = Filters.eq("chainName", chainname);
-    MongoCursor<DataObjects.ConfigurationStorage> cursor = collection.find(filter).iterator();
-    if (cursor.hasNext())
+    //Bson filter = Filters.eq("chainName", chainname);
+    Document findFilter = new Document("chainName", chainname);
+    try (MongoCursor<DataObjects.ConfigurationStorage> cursor =
+             collection.find(findFilter).iterator())
     {
-      return cursor.next();
-    }
-    else
-    {
-      throw new BridgeExceptions.ConfigurationStoreNotFoundException(
-          "could not find the " + "confiuration store for " + chainname);
+      if (cursor.hasNext())
+      {
+        return cursor.next();
+      }
+      else
+      {
+        throw new BridgeExceptions.ConfigurationStoreNotFoundException(
+            "could not find the " + "confiuration store for " + chainname);
+      }
     }
 
   }
