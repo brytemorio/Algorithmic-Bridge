@@ -85,12 +85,12 @@ public class DataObjects {
   @Data
   public static class PollingState
   {
-    private String chainIdentifier;
+    private String chainName;
     private Map<String, PollingTransactionState> transactionMap;
 
-    public PollingState(String chainIdentifier)
+    public PollingState(String chainaName)
     {
-      this.chainIdentifier =chainIdentifier;
+      this.chainName =chainaName;
     }
   }
 

@@ -22,11 +22,15 @@ public class TransactionPollingStateStorageService
     collection.insertOne(pollingState);
   }
 
-  public DataObjects.PollingState getTransactionPollingState(String chainIdentifier)
+  public DataObjects.PollingState getTransactionPollingState(String chainName)
   {
     var collection = getCollection();
-    Bson query = eq("chainIdentifier", chainIdentifier);
-    return collection.find(query).first();
+    Bson query = eq("chainName", chainName);
+    try(var coursor = collection.find(query).iterator()){
+      if(coursor.hasNext())
+        return coursor.next();
+      return null;
+    }
   }
 
   private MongoCollection<DataObjects.PollingState> getCollection()

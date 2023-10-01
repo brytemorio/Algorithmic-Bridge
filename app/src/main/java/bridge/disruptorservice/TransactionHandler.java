@@ -1,6 +1,7 @@
 package bridge.disruptorservice;
 
 import bridge.blockchains.IBaseChain;
+import bridge.services.transactionservice.TransactionPollingService;
 import com.lmax.disruptor.EventHandler;
 
 import java.util.ArrayList;
@@ -27,6 +28,9 @@ public class TransactionHandler implements EventHandler<ArrayList<String>>
   {
     log.info(
         chain.getChainName() + ":" + " Number of transactions in block => " + event.toArray().length);
-
+    log.info("Now checking the each transactions");
+    var trxPoller = new TransactionPollingService(chain);
+    trxPoller.run(event);
   }
+
 }
