@@ -124,7 +124,7 @@ class EthIBaseChain<K> implements IBaseChain
   @Override
   public String getChainPublicGatewayAddress()
   {
-    return null;
+    return this.ethChainConfig.getGatewayAddress();
   }
 
   @Override
@@ -149,22 +149,13 @@ class EthIBaseChain<K> implements IBaseChain
   @Override
   public String getChainName()
   {
-    return null;
+    return this.ethChainConfig.getChainName();
   }
 
   @Override
   public Transaction getTransaction(String trxID)
   {
-    /*String assetId = getAssetID(assetName);
-    ERC20ABI erc20abi = getABIWrapper(assetName);
-    var transaction = getTrxByID(trxID);
-    if (!assetId.equals(transaction.getTo())) return null;
-    Function transferFunction = new Function((erc20abi.FUNC_TRANSFER,
-        Arrays.asList(erc20abi. ),
-        erc20abi.TRANSFER_EVENT.getParameters());
-    System.out.println(FunctionReturnDecoder.decode(transaction.getTo(), erc20abi.TRANSFER_EVENT.));*/
 
-    // TODO: Complete this function
     return convertNodeResponseToTransaction(getTrxByID(trxID));
   }
 
