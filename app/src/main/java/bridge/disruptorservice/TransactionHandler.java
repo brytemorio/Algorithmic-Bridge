@@ -32,5 +32,4 @@ public class TransactionHandler implements EventHandler<ArrayList<String>>
     var trxPoller = new TransactionPollingService(chain);
     trxPoller.run(event);
   }
-
 }

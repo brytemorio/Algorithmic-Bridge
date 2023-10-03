@@ -1,117 +1,94 @@
 package bridge.blockchains.ethchains;
 
-import bridge.abiwrapper.ERC20ABI;
+import bridge.blockchains.ethchains.abiwrapper.ERC20ABI;
 import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
+import bridge.common.RateLimiter;
+import bridge.services.storagservice.DataObjects;
+import bridge.services.storagservice.TransactionAttemptListStorageService;
 import bridge.services.transactionservice.TransactionModels;
 import bridge.services.transactionservice.TransactionModels.Transaction;
-import com.electronwill.nightconfig.core.Config;
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import org.agrona.collections.Object2ObjectHashMap;
+import lombok.extern.slf4j.Slf4j;
+import org.web3j.abi.FunctionReturnDecoder;
+import org.web3j.abi.TypeReference;
+import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthBlock;
-import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.DefaultGasProvider;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
+import java.util.*;
 
-@SuppressWarnings("unchecked")
+import bridge.blockchains.ethchains.abiwrapper.ERC20ABI;
+
+@Slf4j
 class EthIBaseChain<K> implements IBaseChain
 {
 
-  private BigInteger previousBlockHeight = BigInteger.ZERO;
-
-  @Setter(AccessLevel.PROTECTED)
-  @Getter(AccessLevel.PROTECTED)
-  Object2ObjectHashMap<String, Config> asset;
-
-
-  @Getter
-  @Setter(AccessLevel.PROTECTED)
-  private String networkNode;
-
-  @Getter
-  @Setter(AccessLevel.PROTECTED)
-  private String network;
-
-  @Getter
-  @Setter(AccessLevel.PROTECTED)
-  private K networkID;
-
-  @Getter
-  @Setter(AccessLevel.PROTECTED)
-  private String chainIdentifier;
+  private BigInteger previousBlockHeight;
 
   private Web3j web3j;
+  private TransactionAttemptListStorageService trxAttempListStorage;
 
-  public String getAssetID(String assetConfigName)
-  {
-    EthAssets assetInfo = assetInfoFactory(assetConfigName);
-    return assetInfo.getAssetID();
-  }
+  @Setter
+  private DataObjects.ConfigurationStorage ethChainConfig;
 
-  public String getAssetTicker(String assetConfigName)
-  {
-    EthAssets assetInfo = assetInfoFactory(assetConfigName);
-    return assetInfo.getAssetTicker();
-  }
-
-  public String getAssetName(String assetConfigName)
-  {
-    EthAssets assetInfo = assetInfoFactory(assetConfigName);
-    return assetInfo.getAssetName();
-  }
-
-  public Double getAssetTransferFee(String assetConfigName)
-  {
-    EthAssets assetInfo = assetInfoFactory(assetConfigName);
-    return assetInfo.getTransferFee();
-  }
-
-
-  public Config getAssetWallet(String assetConfigName)
-  {
-    EthAssets assetInfo = assetInfoFactory(assetConfigName);
-    return assetInfo.getAssetControlWallet();
-  }
+  //private ERC20ABI erc20ABI;
+  private final int RATELIMITER_CAPACITY = 10;
+  private final int RATELIMITER_REFILL_RATE = 5;
 
   protected void init()
   {
     this.web3j = initWeb3j();
+    this.previousBlockHeight = BigInteger.ZERO;
+    this.trxAttempListStorage = new TransactionAttemptListStorageService();
+
   }
 
   @SneakyThrows
   private Web3j initWeb3j()
   {
-    return Web3j.build(new HttpService(networkNode));
+    return Web3j.build(new HttpService(this.ethChainConfig.getNode()));
   }
 
   @Override
   @SneakyThrows
   public BigInteger getBlockHeight()
   {
-    EthBlockNumber ethBlockNumber;
-    boolean noNewBlockFound = true;
-    BigInteger currentHeight;
-    while (noNewBlockFound)
+    RateLimiter rateLimiter = new RateLimiter(RATELIMITER_CAPACITY, RATELIMITER_REFILL_RATE);
+    BigInteger currentHeight = web3j.ethBlockNumber().send().getBlockNumber();
+    BigInteger nextHeight = web3j.ethBlockNumber().send().getBlockNumber();
+
+    do
     {
-      ethBlockNumber = web3j.ethBlockNumber().send();
-      currentHeight = ethBlockNumber.getBlockNumber();
-      if (currentHeight.compareTo(this.previousBlockHeight) > 0)
+      if (rateLimiter.allowRequest())
       {
-        this.previousBlockHeight = currentHeight;
-        noNewBlockFound = false;
+        nextHeight = web3j.ethBlockNumber().send().getBlockNumber();
+      }
+      else
+      {
+        rateLimiter = new RateLimiter(RATELIMITER_CAPACITY, RATELIMITER_REFILL_RATE);
       }
     }
-    return this.previousBlockHeight;
+    while (currentHeight.equals(nextHeight));
+
+    previousBlockHeight = currentHeight;
+    return previousBlockHeight;
+  }
+
+  @Override
+  public String getChainIdentifier()
+  {
+    return this.ethChainConfig.getChainIdentifier();
   }
 
   @Override
@@ -128,6 +105,7 @@ class EthIBaseChain<K> implements IBaseChain
     return trxIds;
   }
 
+
   @Override
   @SneakyThrows
   public org.web3j.protocol.core.methods.response.Transaction getTrxByID(String trxID)
@@ -136,10 +114,11 @@ class EthIBaseChain<K> implements IBaseChain
   }
 
 
+  @SneakyThrows
   @Override
   public boolean validateAddress(String address)
   {
-    return false;
+    return WalletUtils.isValidAddress(address);
   }
 
   @Override
@@ -186,90 +165,101 @@ class EthIBaseChain<K> implements IBaseChain
     System.out.println(FunctionReturnDecoder.decode(transaction.getTo(), erc20abi.TRANSFER_EVENT.));*/
 
     // TODO: Complete this function
-    return null;
+    return convertNodeResponseToTransaction(getTrxByID(trxID));
   }
 
-  class EthAssets
-  {
-
-    @Getter
-    private String assetID;
-
-    @Getter
-    private String assetName;
-
-    @Getter
-    private String assetTicker;
-
-    @Getter
-    private Double transferFee;
-
-    @Getter
-    private Config assetControlWallet;
-
-
-    private Config asset;
-
-    public EthAssets(final Config asset)
-    {
-      this.asset = asset;
-      this.assetID = this.asset.get("asset_id");
-      this.assetName = this.asset.get("name");
-      this.assetTicker = this.asset.get("ticker");
-      this.transferFee = this.asset.get("transfer_fee");
-      this.assetControlWallet = this.asset.get("wallet");
-
-    }
-  }
 
   // ========================= Helper Functions ================//
-  private EthAssets assetInfoFactory(String assetConfigName)
-  {
-    return new EthAssets(asset.get(assetConfigName));
-  }
+
 
   @SneakyThrows
-  private ERC20ABI getABIWrapper(String assetName)
-  {
-    String assetId = getAssetID(assetName);
-    Credentials assetWalletCredential = Credentials.create(
-        getAssetWallet(assetName).get("private_key"), getAssetWallet(assetName).get("public_key"));
-    return ERC20ABI.load(assetId, web3j, assetWalletCredential, new DefaultGasProvider());
-  }
-
-  class Address implements Type<String>
+  private Transaction convertNodeResponseToTransaction(
+      org.web3j.protocol.core.methods.response.Transaction res)
   {
 
-    @Override
-    public String getValue()
+    String toAddress = res.getTo();
+    String assetName = null;
+    Integer assetDecimals = null;
+
+    for (var asset : this.ethChainConfig.getAssets())
     {
-      // TODO Auto-generated method stub
-      return new String();
+      if (toAddress.equalsIgnoreCase(asset.getAssetId()))
+      {
+        assetName = asset.getAssetName();
+        assetDecimals = asset.getDecimals();
+        break;
+      }
+      else
+      {
+        return null;
+      }
     }
 
-    @Override
-    public String getTypeAsString()
+
+    String input = res.getInput();
+
+    // Decode the transaction input using web3j
+    //We only expect a transfer or transferFrom function
+    var decodedTranferFromFunc = FunctionReturnDecoder.decode(input,
+        getTransferFromFunction().getOutputParameters());
+
+    BigInteger amount;
+    String receiver;
+
+
+    //if it is a transferFrom function
+    if (decodedTranferFromFunc.get(2) != null)
     {
-      // TODO Auto-generated method stub
-      return new String().toString();
+      receiver = ((Address) decodedTranferFromFunc.get(1)).getValue();
+      amount = ((BigInteger) decodedTranferFromFunc.get(2));
+    }
+    else
+    {
+      receiver = ((Address) decodedTranferFromFunc.get(0)).getValue();
+      amount = ((BigInteger) decodedTranferFromFunc.get(1));
+
+      //only integers are used internally to by the brige
+      amount = amount.divide(new BigInteger(String.valueOf((long) Math.pow(10, assetDecimals))));
     }
 
+
+    return new Transaction(res.getHash(), Collections.singletonList(
+        new TransactionModels.TransactionReceiver(
+            new TransactionModels.MappedAddress(receiver, assetName), amount.intValue())),
+        Collections.singletonList(new TransactionModels.TransactionSender(
+            new TransactionModels.MappedAddress(res.getFrom(), assetName))));
+
+
+    /* return Optional.empty();*/
   }
 
- /* class Unit256 implements Type<BigInteger> {
 
-    @Override
-    public BigInteger getValue() {
-      // TODO Auto-generated method stub
-      return new BigInteger();
-    }
+  private ERC20ABI getERC20ABI(String assetId, String assetWalletPrivateKey)
+  {
+    Credentials cred = Credentials.create(assetWalletPrivateKey);
+    return ERC20ABI.load(assetId, this.web3j, cred, BigInteger.valueOf(10000),
+        BigInteger.valueOf(50000));
+  }
 
-    @Override
-    public String getTypeAsString() {
-      // TODO Auto-generated method stub
-      return null;
-    }
+  private Function getTransferFunction()
+  {
+    return new Function(ERC20ABI.FUNC_TRANSFER, Collections.<Type>emptyList(),
+        Arrays.asList(new TypeReference<Address>()
+        {
+        }, new TypeReference<Uint256>()
+        {
+        }));
+  }
 
-  }*/
-
+  private Function getTransferFromFunction()
+  {
+    return new Function(ERC20ABI.FUNC_TRANSFERFROM, Collections.<Type>emptyList(),
+        Arrays.asList(new TypeReference<Address>()
+        {
+        }, new TypeReference<Address>()
+        {
+        }, new TypeReference<Uint256>()
+        {
+        }));
+  }
 }

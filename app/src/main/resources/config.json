@@ -48,6 +48,36 @@
             "private_key": "private-key",
             "public_key": "public-key"
           }
+        },
+        "fishfactoryP": {
+          "name": "FishFactoryP",
+          "ticker": "XFP",
+          "asset_id": "HFG3ATiBFhckT7VgRPAgXayYT2ymPwL7tfNaBNxbmso1",
+          "transfer_fee": 0,
+          "decimals": 8,
+          "wallet": {
+            "private_key": "BmdryXemEFeNssxAdo4KkHA5ZnwHcWTZuLyE2cifNeSL",
+            "public_key": "G9z1APHFYZRYf7Qq7C9XtjKptMPbAJ18S8zQfNLudc5q"
+          }
+        }
+      }
+    },
+    "Avax": {
+      "node": "https://api.avax-test.network/ext/bc/C/rpc",
+      "netowork": "fuji",
+      "network_id": 43113,
+      "chain_identifier": "AVAX-FUJI",
+      "gateway_address": "0xaDF0888A5D150938F652c6731a7D8CA5d8ead379",
+      "assets": {
+        "fishfarmtoken": {
+          "name": "Fishfarm Token",
+          "ticker": "XFT",
+          "asset_id": "0xF77D71Ca22A999F91F3344e12e05591a2B943468",
+          "transfer_fee": 0,
+          "wallet": {
+            "private_key": "754fe43ff651720347ac36cca05fb9423bdb51c597ad986c6b4c0086ec330758",
+            "public_key": "0xaDF0888A5D150938F652c6731a7D8CA5d8ead379"
+          }
         }
       }
     },

@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static bridge.services.storagservice.DataObjects.Wallet;
 
@@ -38,6 +39,7 @@ public class Asset
   // 3.2units of token A on blockchain A been swap for 1unit of token B on blockchain B)
   private int swapRatio; // TODO: Implement swapRation
 
+  private Optional<String> tokenContractAddress;
   public Asset()
   {
   }

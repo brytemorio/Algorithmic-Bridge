@@ -1,4 +1,4 @@
-package bridge.abiwrapper;
+package bridge.blockchains.ethchains.abiwrapper;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

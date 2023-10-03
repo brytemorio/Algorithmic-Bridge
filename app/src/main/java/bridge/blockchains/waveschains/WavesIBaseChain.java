@@ -172,7 +172,7 @@ class WavesIBaseChain<K> implements IBaseChain
     String assetId = null;
     String assetName = null;
 
-    if (Integer.parseInt(transaction.get("type")) != 4) return null;
+    if ((int)transaction.get("type") != 4) return null;
 
     //Todo: Optimised this block of code
     if (!transaction.contains("assetId"))
