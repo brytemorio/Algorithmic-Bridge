@@ -3,6 +3,7 @@ package bridge;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import bridge.blockchains.ethchains.AvaxChain;
 import bridge.blockchains.waveschains.WavesChain;
 import bridge.common.BridgeUtils;
 import bridge.disruptorservice.NewBlockEventProducer;
@@ -18,8 +19,10 @@ public class App
     // QnodecoinChainI qnodecoinChain = new QnodecoinChainI();
     // PolygonChainI<?> polygonChain = new PolygonChainI<>("fishfactory_p");
     WavesChain<?> wavesChain = new WavesChain<>("qnodecoin", "fishfactory_p");
+    AvaxChain<?> avaxChain = new AvaxChain<>("fishfarmtoken");
     // BinanceSmartChainI<?> binanceSmartChain = new BinanceSmartChainI<>("qnode_defi");
-    NewBlockEventProducer producer = NewBlockEventProducer.getNewBlockEventProducer(wavesChain);
+    NewBlockEventProducer producer = NewBlockEventProducer.getNewBlockEventProducer(wavesChain,
+        avaxChain);
     log.info("Starting Up Bridge...");
     producer.start();
 
