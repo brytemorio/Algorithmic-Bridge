@@ -40,7 +40,7 @@ public final class AvaxChain<K> extends EthIBaseChain<K>
     avaxConfig.setNode(configObject.get("Blockchain.Avax.node"));
     avaxConfig.setNetwork(configObject.get("Blockchain.Avax.network"));
     avaxConfig.setNetworkId(configObject.get("Blockchain.Avax.network_id"));
-    avaxConfig.setChainIdentifier(configObject.get("Blockchain.Avax.chain_idenntifier"));
+    avaxConfig.setChainIdentifier(configObject.get("Blockchain.Avax.chain_identifier"));
     avaxConfig.setGatewayAddress(configObject.get("Blockchain.Avax.gateway_address"));
     avaxConfig.setAssets(assetList);
 

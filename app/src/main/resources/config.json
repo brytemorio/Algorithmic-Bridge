@@ -23,7 +23,7 @@
     "Waves": {
       "node": "https://nodes.wavesnodes.com",
       "network": "mainnet",
-      "network_id": "W",
+      "network_id": 87,
       "chain_identifier": "WAV",
       "gateway_address": "GATEWAY_ADDRESS",
       "assets": {
@@ -74,6 +74,7 @@
           "ticker": "XFT",
           "asset_id": "0xF77D71Ca22A999F91F3344e12e05591a2B943468",
           "transfer_fee": 0,
+          "decimals": 8,
           "wallet": {
             "private_key": "754fe43ff651720347ac36cca05fb9423bdb51c597ad986c6b4c0086ec330758",
             "public_key": "0xaDF0888A5D150938F652c6731a7D8CA5d8ead379"

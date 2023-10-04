@@ -2,6 +2,7 @@ package bridge.services.storagservice;
 
 import bridge.blockchains.Asset;
 import bridge.services.transactionservice.TransactionModels.MappedAddress;
+import jnr.ffi.annotations.In;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -112,10 +113,15 @@ public class DataObjects {
     private String chainName;
     private String node;
     private String network;
-    private String networkId;
+    private long networkId;
     private String chainIdentifier;
     private String gatewayAddress;
     private ArrayList<Asset> assets;
+
+    public void setNetworkId(int networkId)
+    {
+      this.networkId = (Integer.valueOf(networkId)).longValue();
+    }
   }
 
   @Data
@@ -127,4 +133,5 @@ public class DataObjects {
     private String publicKey;
 
   }
+
 }
