@@ -1,4 +1,4 @@
-package bridge.disruptorservice;
+package bridge.services.disruptorservice;
 
 import com.lmax.disruptor.EventHandler;
 

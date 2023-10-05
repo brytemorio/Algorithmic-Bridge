@@ -17,6 +17,7 @@ public class DataObjects {
   private DataObjects() {}
 
   @Data
+  @NoArgsConstructor
   public static final class BlockHeightStorage {
 
     private ObjectId id;
@@ -25,7 +26,7 @@ public class DataObjects {
     // since BSON can't handle BigInteger Type directly, we default to long
     private long blockHeight;
 
-    public BlockHeightStorage() {}
+
 
     public BlockHeightStorage(final String blockChainIdentifier, final BigInteger blockHeight) {
       this.blockChainIdentifier = blockChainIdentifier;
@@ -34,6 +35,7 @@ public class DataObjects {
   }
 
   @Data
+  @NoArgsConstructor
   public static final class AddressMappingStorage {
     private ObjectId id;
 
@@ -50,7 +52,6 @@ public class DataObjects {
     // Wallet Address on the target blockchain asset is been sent to
     private Map<String, MappedAddress> toBlockChainAddress;
 
-    public AddressMappingStorage() {}
 
     public AddressMappingStorage(
         final Map<String, MappedAddress> fromBlockChainAddress,
@@ -84,6 +85,7 @@ public class DataObjects {
 
   // Save information about the last poller execution
   @Data
+  @NoArgsConstructor
   public static class PollingState
   {
     private String chainName;
@@ -113,15 +115,15 @@ public class DataObjects {
     private String chainName;
     private String node;
     private String network;
-    private long networkId;
+    private Integer networkId;
     private String chainIdentifier;
     private String gatewayAddress;
     private ArrayList<Asset> assets;
 
-    public void setNetworkId(int networkId)
+    /*public void setNetworkId(int networkId)
     {
-      this.networkId = (Integer.valueOf(networkId)).longValue();
-    }
+      this.networkId = (long)networkId;
+    }*/
   }
 
   @Data

@@ -29,11 +29,12 @@ import com.electronwill.nightconfig.json.JsonFormat;
 import com.google.common.base.Supplier;
 import bridge.services.transactionservice.TransactionModels.Transaction;
 import bridge.exceptions.BridgeExceptions.ChainNodeException;
+import com.wavesplatform.wavesj.exceptions.NodeException;
 
 public interface IBaseChain {
   // void init();
 
-  BigInteger getBlockHeight();
+  BigInteger getBlockHeight() throws Exception;
 
   <T> T getChainIdentifier();
 
@@ -41,7 +42,7 @@ public interface IBaseChain {
 
   <T> T getTrxByID(String trxID);
 
-  Transaction getTransaction(String trxId);
+  Transaction getTransaction(String trxId) throws Exception;
 
   boolean validateAddress(String address);
 

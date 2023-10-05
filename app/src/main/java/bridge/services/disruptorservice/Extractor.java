@@ -1,4 +1,4 @@
-package bridge.disruptorservice;
+package bridge.services.disruptorservice;
 
 import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
@@ -67,24 +67,34 @@ final class Extractor implements EventHandler<BlockProp>
   }
 
   @Override
-  public void onEvent(BlockProp event, long sequence, boolean endOfBatch) throws Exception
+  public void onEvent(BlockProp event, long sequence, boolean endOfBatch)
   {
 
-    // TODO: Change log.info() to log.debug()
-    log.info("Got new block: " + event.getBlockHeight() + " from " + event.getChainName());
+    // FIXME: Remove checking. Checking is for the purpose of debugging
+    if (event.getChainName().equals("waves"))
+      log.info("Got new block: " + event.getBlockHeight() + " from " + event.getChainName());
 
-    BlockHeightStorageService dbService = new BlockHeightStorageService();
-    if (dbService.getBlockHeightFromStorage(event.getChainIdentifier()) == null)
-      dbService.setBlockHeightStorage(event.getChainIdentifier(), event.getBlockHeight());
-    else dbService.updateBlockHeightStorage(event.getChainIdentifier(), event.getBlockHeight());
 
-    IBaseChain uniqueChain = Objects.requireNonNull(getUniqueChain(event.getChainIdentifier()));
-    var uniqueChainBuffer = chainRingBufferMapping.get(event.getChainIdentifier());
-    ArrayList<String> trxHashList = uniqueChain.getTrxIdsByBlockHeight(event.getBlockHeight());
-    long uniqueChainBufferSequence = uniqueChainBuffer.next();
-    var nextSlot = uniqueChainBuffer.get(uniqueChainBufferSequence);
-    nextSlot.addAll(trxHashList);
-    uniqueChainBuffer.publish(uniqueChainBufferSequence);
+    try
+    {
+      BlockHeightStorageService dbService = new BlockHeightStorageService();
+      if (dbService.getBlockHeightFromStorage(event.getChainIdentifier()) == null)
+        dbService.setBlockHeightStorage(event.getChainIdentifier(), event.getBlockHeight());
+      else dbService.updateBlockHeightStorage(event.getChainIdentifier(), event.getBlockHeight());
+
+      IBaseChain uniqueChain = Objects.requireNonNull(getUniqueChain(event.getChainIdentifier()));
+      var uniqueChainBuffer = chainRingBufferMapping.get(event.getChainIdentifier());
+      ArrayList<String> trxHashList = uniqueChain.getTrxIdsByBlockHeight(event.getBlockHeight());
+      long uniqueChainBufferSequence = uniqueChainBuffer.next();
+      var nextSlot = uniqueChainBuffer.get(uniqueChainBufferSequence);
+      nextSlot.addAll(trxHashList);
+      uniqueChainBuffer.publish(uniqueChainBufferSequence);
+    }
+    catch (Exception exception)
+    {
+      exception.printStackTrace();
+    }
+
   }
 
   /*

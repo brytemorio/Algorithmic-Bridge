@@ -1,4 +1,4 @@
-package bridge.disruptorservice;
+package bridge.services.disruptorservice;
 
 import java.math.BigInteger;
 import lombok.Data;

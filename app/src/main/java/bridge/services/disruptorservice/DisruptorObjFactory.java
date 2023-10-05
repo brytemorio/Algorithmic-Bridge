@@ -1,4 +1,4 @@
-package bridge.disruptorservice;
+package bridge.services.disruptorservice;
 
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
@@ -14,6 +14,7 @@ final class DisruptorObjFactory<T> extends Disruptor<T> {
       final EventFactory<T> eventFactory,
       final Integer bufferSize) {
     super(eventFactory, bufferSize, DaemonThreadFactory.INSTANCE);
+    super.handleExceptionsFor(eventHandler);
     super.handleEventsWith(eventHandler).then(new EventHelpers.ClearBufferSlot());
   }
 
@@ -23,6 +24,7 @@ final class DisruptorObjFactory<T> extends Disruptor<T> {
       final Integer bufferSize,
       final WaitStrategy waitStrategy) {
     super(eventFactory, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.MULTI, waitStrategy);
+    super.handleExceptionsFor(eventHandler);
     super.handleEventsWith(eventHandler).then(new EventHelpers.ClearBufferSlot());
   }
 }

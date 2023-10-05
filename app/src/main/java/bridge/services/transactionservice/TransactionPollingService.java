@@ -4,8 +4,10 @@ import bridge.blockchains.IBaseChain;
 import bridge.services.storagservice.DataObjects;
 import bridge.services.storagservice.TransactionAttemptListStorageService;
 import bridge.services.storagservice.TransactionPollingStateStorageService;
+import com.wavesplatform.wavesj.exceptions.NodeException;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -22,7 +24,7 @@ public class TransactionPollingService
   private final IBaseChain blockChain;
   private String assetName;
   private final DataObjects.PollingTransactionState pollingTransactionState;
-  private  DataObjects.PollingState pollingState;
+  private DataObjects.PollingState pollingState;
 
   /*total number of retries for handling transaction before it is marked as failed*/
   private final int MAX_RETRIES = 5;
@@ -41,7 +43,7 @@ public class TransactionPollingService
   {
     var transactions = getTransactionList(trxid);
 
-    if(transactions.isEmpty())
+    if (transactions.isEmpty())
     {
       log.info("no bridge transaction found");
       return;
@@ -78,9 +80,27 @@ public class TransactionPollingService
     }
   }
 
+  @SneakyThrows
   private List<Transaction> getTransactionList(ArrayList<String> trx)
   {
-    return trx.stream().map(this.blockChain::getTransaction).filter(Objects::nonNull).collect(Collectors.toList());
+    /*return trx.stream().map(this.blockChain::getTransaction).filter(Objects::nonNull)
+        .collect(Collectors.toList());*/
+
+    ArrayList<Transaction> validTrxs = new ArrayList<>();
+    for (String trxid : trx)
+    {
+      try
+      {
+        var trxi = this.blockChain.getTransaction(trxid);
+        if (trxi != null) validTrxs.add(trxi);
+      }
+      catch (NodeException exception)
+      {
+        if (exception.getErrorCode() == 311) continue;
+        else throw exception;
+      }
+    }
+    return validTrxs;
   }
 
   private void resetPollingState()
@@ -113,11 +133,12 @@ public class TransactionPollingService
   private void ensurePollingStateHasTransaction(Transaction trx)
   {
     Map<String, DataObjects.PollingTransactionState> pollingTransactionStateMap = new HashMap<>();
-    if (this.pollingState.getTransactionMap().get(trx.getTransactionID()) == null)
+   /* if (this.pollingState.getTransactionMap().get(trx.getTransactionID()) == null)
     {
-      pollingTransactionStateMap.put(trx.getTransactionID(), this.pollingTransactionState);
-      this.pollingState.setTransactionMap(pollingTransactionStateMap);
-    }
+
+    }*/
+    pollingTransactionStateMap.put(trx.getTransactionID(), this.pollingTransactionState);
+    this.pollingState.setTransactionMap(pollingTransactionStateMap);
 
   }
 

@@ -3,7 +3,7 @@ package bridge.blockchains.waveschains;
 import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
 import bridge.common.RateLimiter;
-import bridge.disruptorservice.AddressValidator;
+import bridge.services.disruptorservice.AddressValidator;
 import bridge.exceptions.BridgeExceptions;
 import bridge.services.storagservice.ConfigurationStorageService;
 import bridge.services.storagservice.DataObjects;
@@ -164,6 +164,7 @@ class WavesIBaseChain<K> implements IBaseChain
   }
 
   @Override
+  @SneakyThrows
   public Transaction getTransaction(String trxID)
   {
 
@@ -229,7 +230,12 @@ class WavesIBaseChain<K> implements IBaseChain
     senders.add(new TransactionSender(new TransactionModels.MappedAddress(sender, assetName)));
     recipients.add(
         new TransactionReceiver(new TransactionModels.MappedAddress(receiver, assetName), amount));
-    return new Transaction(trxID, recipients, senders);
+
+    var newTrx = new Transaction(trxID, recipients, senders);
+
+    //FIXME: Change to debug or remove
+    log.info("New transaction: " + newTrx);
+    return newTrx;
   }
 
 
@@ -249,7 +255,7 @@ class WavesIBaseChain<K> implements IBaseChain
   {
     List<Integer> result = new ArrayList<>();
     List<TransactionReceiver> receivers = trx.getReceivers();
-    for (int i = 0; i <= receivers.size(); i++)
+    for (int i = 0; i < receivers.size(); i++)
     {
       if (receivers.get(i).getAddress().getAddress().equals(this.wavesConfig.getGatewayAddress()))
       {

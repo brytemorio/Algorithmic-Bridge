@@ -21,11 +21,11 @@
       }
     },
     "Waves": {
-      "node": "https://nodes.wavesnodes.com",
-      "network": "mainnet",
-      "network_id": 87,
+      "node": "https://nodes-testnet.wavesnodes.com",
+      "network": "testnet",
+      "network_id": 84,
       "chain_identifier": "WAV",
-      "gateway_address": "GATEWAY_ADDRESS",
+      "gateway_address": "3N1mhAP3488v6UTPBi1xd8bVvBuDTcBZpun",
       "assets": {
         "qnodecoin": {
           "name": "Qnodecoin",

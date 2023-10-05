@@ -1,4 +1,4 @@
-package bridge.disruptorservice;
+package bridge.services.disruptorservice;
 
 import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
@@ -7,7 +7,6 @@ import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

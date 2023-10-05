@@ -1,4 +1,4 @@
-package bridge.disruptorservice;
+package bridge.services.disruptorservice;
 
 import bridge.blockchains.IBaseChain;
 import bridge.common.BridgeUtils;
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 public final class NewBlockEventProducer {
   private static NewBlockEventProducer newBlockEventProducer;
   private static RingBuffer<BlockProp> ringBuffer;
-  private IBaseChain[] blockChains;
+  private final IBaseChain[] blockChains;
   private ExecutorService threadExecutor;
 
   private NewBlockEventProducer(final IBaseChain... cblockChains) {
@@ -56,8 +56,8 @@ public final class NewBlockEventProducer {
         new DisruptorObjFactory<>(
             dispatchService,
             blockEventFactory,
-            bufferSize,
-            BridgeUtils.determineWaitStrategy(blockChains));
+            bufferSize
+            );
     disruptor.start();
     ringBuffer = disruptor.getRingBuffer();
 
@@ -66,6 +66,7 @@ public final class NewBlockEventProducer {
     for (IBaseChain blockChain : blockChains)
     {
       threadExecutor.execute(new ProducerInitializer(blockChain));
+      //new ProducerInitializer(blockChain).run();
     }
   }
 
@@ -91,24 +92,27 @@ public final class NewBlockEventProducer {
       for (; ; ) {
         String chainIdentifier = blockchain.getChainIdentifier();
         String chainName = blockchain.getChainName();
-        BigInteger chainHeight = blockchain.getBlockHeight();
+        BigInteger chainHeight = null;
+        try
+        {
+          chainHeight = blockchain.getBlockHeight();
+        }
+        catch (Exception e)
+        {
+          throw new RuntimeException(e);
+        }
         long sequence = ringBuffer.next();
         BlockProp newBlockHeight = ringBuffer.get(sequence);
         newBlockHeight.setChainIdentifier(chainIdentifier);
         newBlockHeight.setBlockHeight(chainHeight);
         newBlockHeight.setChainName(chainName);
         ringBuffer.publish(sequence);
-        try {
-          Thread.currentThread().sleep(100);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-          Thread.currentThread().interrupt();
-        }
+
       }
     }
   }
 
-  class NewBlockEventFactory implements EventFactory<BlockProp> {
+  static class NewBlockEventFactory implements EventFactory<BlockProp> {
     @Override
     public BlockProp newInstance() {
       return new BlockProp();

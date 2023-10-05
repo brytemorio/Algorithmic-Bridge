@@ -11,6 +11,7 @@
   <logger name="org.mongodb.driver.client" level="OFF"/>
   <logger name="org.mongodb.driver.cluster" level="OFF"/>
 
+
   <!-- Errors are appender to this Rolling file appender -->
   <appender name="STDERR" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>Error_logFile.log</file>

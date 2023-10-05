@@ -8,6 +8,7 @@ import bridge.services.storagservice.DataObjects;
 import bridge.services.storagservice.TransactionAttemptListStorageService;
 import bridge.services.transactionservice.TransactionModels;
 import bridge.services.transactionservice.TransactionModels.Transaction;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -36,15 +37,17 @@ class EthIBaseChain<K> implements IBaseChain
 
   private BigInteger previousBlockHeight;
 
+  @Getter
   private Web3j web3j;
   private TransactionAttemptListStorageService trxAttempListStorage;
 
   @Setter
+  @Getter
   private DataObjects.ConfigurationStorage ethChainConfig;
 
   //private ERC20ABI erc20ABI;
-  private final int RATELIMITER_CAPACITY = 10;
-  private final int RATELIMITER_REFILL_RATE = 5;
+  private final int RATELIMITER_CAPACITY = 2;
+  private final int RATELIMITER_REFILL_RATE = 1;
 
   protected void init()
   {
@@ -62,13 +65,26 @@ class EthIBaseChain<K> implements IBaseChain
 
   @Override
   @SneakyThrows
-  public BigInteger getBlockHeight()
+  public BigInteger getBlockHeight() throws Exception
   {
     RateLimiter rateLimiter = new RateLimiter(RATELIMITER_CAPACITY, RATELIMITER_REFILL_RATE);
     BigInteger currentHeight = web3j.ethBlockNumber().send().getBlockNumber();
-    BigInteger nextHeight = web3j.ethBlockNumber().send().getBlockNumber();
+    //BigInteger nextHeight = web3j.ethBlockNumber().send().getBlockNumber();
 
-    do
+    return web3j.ethBlockNumber().send().getBlockNumber();
+    /*boolean noNewBlockFound = true;
+
+    while (noNewBlockFound){
+      if(currentHeight.compareTo(previousBlockHeight) > 0){
+        previousBlockHeight = currentHeight;
+        noNewBlockFound = false;
+      }
+
+    }
+
+    return previousBlockHeight;*/
+
+    /*do
     {
       if (rateLimiter.allowRequest())
       {
@@ -79,10 +95,9 @@ class EthIBaseChain<K> implements IBaseChain
         rateLimiter = new RateLimiter(RATELIMITER_CAPACITY, RATELIMITER_REFILL_RATE);
       }
     }
-    while (currentHeight.equals(nextHeight));
+    while (currentHeight.equals(nextHeight));*/
 
-    previousBlockHeight = currentHeight;
-    return previousBlockHeight;
+
   }
 
   @Override
@@ -152,11 +167,13 @@ class EthIBaseChain<K> implements IBaseChain
     return this.ethChainConfig.getChainName();
   }
 
+  @SneakyThrows
   @Override
   public Transaction getTransaction(String trxID)
   {
-
+    //log.info(getTrxByID(trxID).getTo());
     return convertNodeResponseToTransaction(getTrxByID(trxID));
+    //return null;
   }
 
 
