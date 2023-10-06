@@ -124,10 +124,12 @@ class WavesIBaseChain<K> implements IBaseChain
     return Address.isValid(address);
   }
 
+
+  //Todo: implement the sendCoin() function
   @Override
   public Transaction sendCoin(TransactionModels.TransactionAttempt attempt)
   {
-    //Todo: implement this function
+
     return null;
   }
 
@@ -262,7 +264,7 @@ class WavesIBaseChain<K> implements IBaseChain
         var trx_attempt = this.trxAttemptListStorage.findTransactionAttemptByTrigger(
             new TransactionModels.TransactionAttemptListTrigger(trx.getTransactionID(), i,
                 receivers.get(i).getAddress().getAssetName()));
-        if (trx_attempt == null || trx_attempt.hasCompleted()) result.add(i);
+        if (trx_attempt == null || !trx_attempt.hasCompleted()) result.add(i);
       }
     }
     return result;

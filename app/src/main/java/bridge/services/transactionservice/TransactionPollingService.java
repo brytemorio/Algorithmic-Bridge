@@ -23,7 +23,7 @@ public class TransactionPollingService
   private final TransactionPollingStateStorageService transactionPollingStateStorageService;
   private final IBaseChain blockChain;
   private String assetName;
-  private final DataObjects.PollingTransactionState pollingTransactionState;
+  //rivate final DataObjects.PollingTransactionState pollingTransactionState;
   private DataObjects.PollingState pollingState;
 
   /*total number of retries for handling transaction before it is marked as failed*/
@@ -33,7 +33,7 @@ public class TransactionPollingService
   {
     this.blockChain = blockChain;
     this.trxAttemptListStorage = new TransactionAttemptListStorageService();
-    this.pollingTransactionState = new DataObjects.PollingTransactionState();
+    //this.pollingTransactionState = new DataObjects.PollingTransactionState();
     this.pollingState = new DataObjects.PollingState(this.blockChain.getChainName());
     this.transactionPollingStateStorageService = new TransactionPollingStateStorageService();
   }
@@ -45,15 +45,24 @@ public class TransactionPollingService
 
     if (transactions.isEmpty())
     {
-      log.info("no bridge transaction found");
+      //FIXME: Remove if block. Used for the debugging
+      if (blockChain.getChainName().equals("waves")) log.info("no bridge transaction found");
       return;
     }
 
     this.transactionPollingStateStorageService.getTransactionPollingState(
         this.blockChain.getChainName());
+
+
     var filteredTrx = filterTransactions(transactions);
+
+    //FIXME: Remove logger or change to debug leve
+    log.info("Filtered Transactions: " + Arrays.toString(filteredTrx.toArray()));
+
     try
     {
+      //FIXME: Remove logger or change to debug leve
+      log.info("Handling filtered transactions");
       filteredTrx.forEach(this::handleTransaction);
       resetPollingState();
     } finally
@@ -137,7 +146,7 @@ public class TransactionPollingService
     {
 
     }*/
-    pollingTransactionStateMap.put(trx.getTransactionID(), this.pollingTransactionState);
+    pollingTransactionStateMap.put(trx.getTransactionID(), new DataObjects.PollingTransactionState());
     this.pollingState.setTransactionMap(pollingTransactionStateMap);
 
   }

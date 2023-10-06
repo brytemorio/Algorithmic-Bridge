@@ -67,6 +67,9 @@ public class MongoDatabaseFactory
     ClassModel<DataObjects.PollingState> transactionPolllingStateModel = ClassModel.builder(
         DataObjects.PollingState.class).enableDiscriminator(true).build();
 
+ClassModel<DataObjects.PollingTransactionState> pollingTransactionStateModel = ClassModel.builder(
+    DataObjects.PollingTransactionState.class).enableDiscriminator(true).build();
+
     ClassModel<DataObjects.AssetStorage> assetStorageClassModel = ClassModel.builder(
         DataObjects.AssetStorage.class).enableDiscriminator(true).build();
 
@@ -105,7 +108,7 @@ public class MongoDatabaseFactory
                 transactionAttemptClassModel, transactionAttemptListTriggerClassModel,
                 transactionSenderClassModel, transactionReceiverClassModel,
                 transactionAttemptReceiverClassModel, mappedAddressClassModel,
-                transactionClassModel).automatic(true).build()));
+                transactionClassModel,  pollingTransactionStateModel).automatic(true).build()));
 
     ServerApi serverApi = ServerApi.builder().version(ServerApiVersion.V1).build();
     ConnectionString connectionString = new ConnectionString(connectionURL);
