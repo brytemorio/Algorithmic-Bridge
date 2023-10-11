@@ -203,7 +203,7 @@ public class TransactionModels
   public static class TransactionAttemptList
   {
 
-    private String Id;
+    private ObjectId Id;
     private TransactionAttemptListTrigger trigger;
     private List<TransactionAttempt> attempts;
     private List<String> transactions;
@@ -221,7 +221,7 @@ public class TransactionModels
                            List<?> transactions, ZonedDateTime createdOn,
                            ZonedDateTime lastModifiedOn, Integer tries, String transactionAttemptID)
     {
-      this.Id = UUID.randomUUID().toString();
+      //this.Id = UUID.randomUUID().toString();
       this.trigger = trigger;
       this.attempts = attempts;
       this.transactions = (List<String>) transactions;
@@ -235,7 +235,7 @@ public class TransactionModels
                             List<TransactionAttempt> attempts,
                            Integer tries)
     {
-      this.Id = UUID.randomUUID().toString();
+      //this.Id = UUID.randomUUID().toString();
       this.trigger = trigger;
       this.attempts = attempts;
       this.tries = tries;

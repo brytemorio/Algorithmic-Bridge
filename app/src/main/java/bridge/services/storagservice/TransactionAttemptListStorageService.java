@@ -93,6 +93,7 @@ public class TransactionAttemptListStorageService
   public boolean gatewayTransactionExists(String transactionID)
   {
     var collections = getCollection();
+
     for (var collection : collections.find())
     {
       java.util.List<String> transactions = collection.getTransactions();

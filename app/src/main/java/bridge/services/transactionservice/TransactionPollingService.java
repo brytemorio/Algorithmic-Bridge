@@ -23,7 +23,7 @@ public class TransactionPollingService
   private final TransactionPollingStateStorageService transactionPollingStateStorageService;
   private final IBaseChain blockChain;
   private String assetName;
-  //rivate final DataObjects.PollingTransactionState pollingTransactionState;
+  //private final DataObjects.PollingTransactionState pollingTransactionState;
   private DataObjects.PollingState pollingState;
 
   /*total number of retries for handling transaction before it is marked as failed*/
@@ -125,7 +125,7 @@ public class TransactionPollingService
   private boolean trxNotExceedRetries(Transaction trx)
   {
     return this.pollingState.getTransactionMap().get(trx.getTransactionID())
-        .getTries() < this.MAX_RETRIES;
+        .getTries() > this.MAX_RETRIES;
   }
 
   private boolean isTrxNotAlreadyProcessed(Transaction trx)
@@ -135,8 +135,9 @@ public class TransactionPollingService
 
   private boolean shouldTrxBeProcessed(Transaction trx)
   {
-    return this.blockChain.filterTransactions(trx) && isTrxNotAlreadyProcessed(
-        trx) && trxNotExceedRetries(trx);
+
+    return (!(isTrxNotAlreadyProcessed(trx) && trxNotExceedRetries(
+        trx))) && this.blockChain.filterTransactions(trx);
   }
 
   private void ensurePollingStateHasTransaction(Transaction trx)
@@ -146,7 +147,8 @@ public class TransactionPollingService
     {
 
     }*/
-    pollingTransactionStateMap.put(trx.getTransactionID(), new DataObjects.PollingTransactionState());
+    pollingTransactionStateMap.put(trx.getTransactionID(),
+        new DataObjects.PollingTransactionState());
     this.pollingState.setTransactionMap(pollingTransactionStateMap);
 
   }

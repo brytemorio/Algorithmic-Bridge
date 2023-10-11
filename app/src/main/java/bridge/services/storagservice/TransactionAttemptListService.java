@@ -47,14 +47,18 @@ public class TransactionAttemptListService
     for (var receiver : attempt.getReceivers())
     {
       log.info(
-          attempt.getCurrency() + ": Already transferred " + receiver.getAmount() + "from " + attempt.getSender() + "to " + receiver.getAddress());
+          attempt.getCurrency() + ": Already transferred " + receiver.getAmount() + "from "
+              + attempt.getSender() + "to " + receiver.getAddress());
     }
-  } private static void logAttemptSuccess(TransactionModels.TransactionAttempt attempt)
+  }
+
+  private static void logAttemptSuccess(TransactionModels.TransactionAttempt attempt)
   {
     for (var receiver : attempt.getReceivers())
     {
       log.info(
-          attempt.getCurrency() + ": Transferred " + receiver.getAmount() + "from " + attempt.getSender() + "to " + receiver.getAddress());
+          attempt.getCurrency() + ": Transferred " + receiver.getAmount() + "from "
+              + attempt.getSender() + "to " + receiver.getAddress());
     }
   }
 }

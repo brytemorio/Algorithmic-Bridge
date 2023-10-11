@@ -13,6 +13,7 @@ import bridge.services.transactionservice.TransactionModels.Transaction;
 import bridge.services.transactionservice.TransactionModels.TransactionReceiver;
 import bridge.services.transactionservice.TransactionModels.TransactionSender;
 import com.electronwill.nightconfig.core.Config;
+import com.wavesplatform.crypto.base.Base58;
 import com.wavesplatform.transactions.account.Address;
 import com.wavesplatform.transactions.common.Id;
 import com.wavesplatform.wavesj.Block;
@@ -22,9 +23,11 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -248,7 +251,7 @@ class WavesIBaseChain<K> implements IBaseChain
   {
     TransactionInfo trxInfo = this.wavesRpcClient.getTransactionInfo(Id.as(transactionID));
     Config attachment = BridgeUtils.getJsonDeserializer().parse(trxInfo.tx().toJson());
-    return attachment.get("attachment");
+    return new String(Base58.decode(attachment.get("attachment")), StandardCharsets.UTF_8);
   }
 
 
@@ -261,12 +264,18 @@ class WavesIBaseChain<K> implements IBaseChain
     {
       if (receivers.get(i).getAddress().getAddress().equals(this.wavesConfig.getGatewayAddress()))
       {
+        //fixme: change to debug leve or remove
+        log.info("Found a transaction to the bridge's waves address");
+
         var trx_attempt = this.trxAttemptListStorage.findTransactionAttemptByTrigger(
             new TransactionModels.TransactionAttemptListTrigger(trx.getTransactionID(), i,
                 receivers.get(i).getAddress().getAssetName()));
         if (trx_attempt == null || !trx_attempt.hasCompleted()) result.add(i);
       }
     }
+
+    //fixme: change to debug level or remove
+    log.info("returning found bridge transaction: " + result.toArray());
     return result;
   }
 

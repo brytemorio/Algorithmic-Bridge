@@ -1,5 +1,6 @@
 package bridge.services.storagservice;
 
+import bridge.services.storagservice.customcodecs.ZoneDateTimeCodec;
 import bridge.services.transactionservice.TransactionModels;
 import bridge.services.transactionservice.TransactionModels.TransactionAttemptList;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
@@ -11,10 +12,12 @@ import com.mongodb.client.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.ClassModel;
 import org.bson.codecs.pojo.PojoCodecProvider;
 
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 import static bridge.common.ConfigFileObj.CONFIG;
@@ -67,8 +70,8 @@ public class MongoDatabaseFactory
     ClassModel<DataObjects.PollingState> transactionPolllingStateModel = ClassModel.builder(
         DataObjects.PollingState.class).enableDiscriminator(true).build();
 
-ClassModel<DataObjects.PollingTransactionState> pollingTransactionStateModel = ClassModel.builder(
-    DataObjects.PollingTransactionState.class).enableDiscriminator(true).build();
+    ClassModel<DataObjects.PollingTransactionState> pollingTransactionStateModel = ClassModel.builder(
+        DataObjects.PollingTransactionState.class).enableDiscriminator(true).build();
 
     ClassModel<DataObjects.AssetStorage> assetStorageClassModel = ClassModel.builder(
         DataObjects.AssetStorage.class).enableDiscriminator(true).build();
@@ -100,7 +103,11 @@ ClassModel<DataObjects.PollingTransactionState> pollingTransactionStateModel = C
     ClassModel<TransactionModels.Transaction> transactionClassModel = ClassModel.builder(
         TransactionModels.Transaction.class).enableDiscriminator(true).build();
 
-    CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
+
+
+    CodecRegistry customCodecs = CodecRegistries.fromCodecs(new ZoneDateTimeCodec());
+    CodecRegistry codecRegistry = fromRegistries(customCodecs,
+        MongoClientSettings.getDefaultCodecRegistry(),
         fromProviders(PojoCodecProvider.builder()
             .register(blockHeightStorageModel, addressMappingStroageModel,
                 transactionAttemptListStorageModel, transactionPolllingStateModel,
@@ -108,7 +115,8 @@ ClassModel<DataObjects.PollingTransactionState> pollingTransactionStateModel = C
                 transactionAttemptClassModel, transactionAttemptListTriggerClassModel,
                 transactionSenderClassModel, transactionReceiverClassModel,
                 transactionAttemptReceiverClassModel, mappedAddressClassModel,
-                transactionClassModel,  pollingTransactionStateModel).automatic(true).build()));
+                transactionClassModel, pollingTransactionStateModel)
+            .automatic(true).build()));
 
     ServerApi serverApi = ServerApi.builder().version(ServerApiVersion.V1).build();
     ConnectionString connectionString = new ConnectionString(connectionURL);
