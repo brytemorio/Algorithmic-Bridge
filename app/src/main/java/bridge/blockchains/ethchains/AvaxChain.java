@@ -1,6 +1,7 @@
 package bridge.blockchains.ethchains;
 
 import bridge.blockchains.Asset;
+import bridge.blockchains.ethchains.abiwrapper.ERC20ABI;
 import bridge.common.BridgeUtils;
 import bridge.common.ConfigFileObj;
 import bridge.exceptions.BridgeExceptions;
@@ -9,11 +10,13 @@ import bridge.services.storagservice.DataObjects;
 import bridge.services.transactionservice.TransactionModels;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.web3j.crypto.Bip44WalletUtils;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
+import org.web3j.tx.gas.DefaultGasProvider;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,6 +26,8 @@ import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 @Slf4j
 public final class AvaxChain<K> extends EthIBaseChain<K>
@@ -56,8 +61,7 @@ public final class AvaxChain<K> extends EthIBaseChain<K>
     avaxConfig.setGatewayAddress(configObject.get("Blockchain.Avax.gateway_address"));
     avaxConfig.setAssets(assetList);
 
-    ConfigurationStorageService configurationStorageService =
-        new ConfigurationStorageService();
+    ConfigurationStorageService configurationStorageService = new ConfigurationStorageService();
     configurationStorageService.saveConfiguration(avaxConfig);
     super.setEthChainConfig(configurationStorageService.getConfiguration("avax"));
     super.init();
@@ -73,86 +77,26 @@ public final class AvaxChain<K> extends EthIBaseChain<K>
 
 
   //TODO: Temporary fix
-
-
+  @SneakyThrows
   @Override
   public TransactionModels.Transaction sendCoin(TransactionModels.TransactionAttempt attempt)
   {
     var web3j = getWeb3j();
-    String private_key = " ";
-    String Pub
-    var  credentials = Credentials.create()
-    String contractAddress = " ";
+    String private_key = "754fe43ff651720347ac36cca05fb9423bdb51c597ad986c6b4c0086ec330758";
+    String public_key = "0xaDF0888A5D150938F652c6731a7D8CA5d8ead379";
+    String assetId = "0xF77D71Ca22A999F91F3344e12e05591a2B943468";
+    var credentials = Credentials.create(private_key, public_key);
+    ERC20ABI contract = ERC20ABI.load(assetId, web3j, credentials, new DefaultGasProvider());
+    String toAddress = attempt.getReceivers().getFirst().getAddress();
+    int amount = attempt.getReceivers().getFirst().getAmount();
+    BigInteger amountBigInt = new BigInteger(
+        String.valueOf(attempt.getReceivers().getFirst().getAmount()));
 
-    return super.sendCoin(attempt);
+    var trxReceipt = contract.mint(toAddress, amountBigInt).send();
+    return new TransactionModels.Transaction(trxReceipt.getTransactionHash(),
+        Collections.singletonList(new TransactionModels.TransactionReceiver(
+            new TransactionModels.MappedAddress(toAddress, "XFT"), amount)));
   }
 
-  //TODO: Hotfix
-  private static BigInteger getLatestBlockHeight(String url) {
-    try {
-      HttpURLConnection con = getHttpURLConnection(url);
-
-      // Get the response from the server
-      try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
-        String inputLine;
-        StringBuilder response = new StringBuilder();
-
-        while ((inputLine = in.readLine()) != null) {
-          response.append(inputLine);
-        }
-
-        con.disconnect();
-
-        // Parse the JSON response and extract the block height as a BigInteger
-        // Modify this part based on the actual JSON response structure
-        // Example: {"jsonrpc": "2.0", "result": "12345", "id": 1}
-        String jsonResponse = response.toString();
-        log.info(jsonResponse);
-        /*String blockHeightString = jsonResponse.split("\"result\": \"")[1].split("\",")[0];
-        BigInteger blockHeight = new BigInteger(blockHeightString);*/
-
-        if (jsonResponse.contains("\"result\":")) {
-          int startIndex = jsonResponse.indexOf("\"result\":") + 9;
-          int endIndex = jsonResponse.indexOf(",", startIndex);
-          String blockHeightString = jsonResponse.substring(startIndex, endIndex).trim();
-          BigInteger blockHeight = new BigInteger(blockHeightString);
-
-          return blockHeight;
-        }
-
-        //return blockHeight;
-      }
-
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    return BigInteger.ZERO; // Return a default value if an error occurs
-  }
-
-  @NotNull
-  private static HttpURLConnection getHttpURLConnection(String url) throws IOException
-  {
-    String requestData = "{\"jsonrpc\": \"2.0\",\"method\": \"platform.getHeight\",\"params\": {},\"id\": 1}";
-
-    URL obj = new URL(url);
-    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-    // Set the HTTP request method to POST
-    con.setRequestMethod("POST");
-
-    // Set the content type to indicate JSON data
-    con.setRequestProperty("Content-Type", "application/json");
-
-    // Enable input and output streams
-    con.setDoOutput(true);
-
-    // Write the JSON data to the output stream
-    try (OutputStream os = con.getOutputStream()) {
-      byte[] input = requestData.getBytes("utf-8");
-      os.write(input, 0, input.length);
-    }
-    return con;
-  }
 
 }

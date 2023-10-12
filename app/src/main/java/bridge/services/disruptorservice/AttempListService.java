@@ -7,29 +7,28 @@ import bridge.services.storagservice.TransactionAttemptListStorageService;
 import bridge.services.transactionservice.TransactionModels;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
+import lombok.SneakyThrows;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class AttempListService
 {
-  private final IBaseChain chain;
   private final RingBuffer<TransactionModels.TransactionAttemptList> ringBuffer;
-  private final int CAPACITY = 4069;
-  private final Disruptor<TransactionModels.TransactionAttemptList> disruptor;
 
   public AttempListService(IBaseChain chain)
   {
-    this.chain = chain;
-    this.disruptor = new DisruptorObjFactory<>(new AttempListEventHandler(this.chain),
-        new AttempListEventFactory(), CAPACITY);
-    this.disruptor.start();
-    this.ringBuffer = this.disruptor.getRingBuffer();
+    int CAPACITY = 4069;
+    Disruptor<TransactionModels.TransactionAttemptList> disruptor = new DisruptorObjFactory<>(
+        new AttempListEventHandler(chain), new AttempListEventFactory(), CAPACITY);
+    disruptor.start();
+    this.ringBuffer = disruptor.getRingBuffer();
   }
 
   Runnable doRun = new Runnable()
   {
     @Override
+    @SneakyThrows
     public void run()
     {
       for (; ; )
@@ -45,9 +44,9 @@ public class AttempListService
 
   public void run()
   {
-    ExecutorService executorService = Executors.newSingleThreadExecutor();
-    executorService.execute(doRun);
-
+    try (ExecutorService executorService = Executors.newSingleThreadExecutor())
+    {
+      executorService.execute(doRun);
+    }
   }
-
 }

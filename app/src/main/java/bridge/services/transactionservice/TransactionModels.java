@@ -88,6 +88,11 @@ public class TransactionModels
     {
     }
 
+    public Transaction(String transactionID, List<TransactionReceiver> receivers)
+    {
+      this.transactionID = transactionID;
+      this.receivers = receivers;
+    }
     public Transaction(String transactionID, List<TransactionReceiver> receivers,
                        List<TransactionSender> senders)
     {
