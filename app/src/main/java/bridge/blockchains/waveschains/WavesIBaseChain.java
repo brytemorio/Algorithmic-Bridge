@@ -275,7 +275,7 @@ class WavesIBaseChain<K> implements IBaseChain
     }
 
     //fixme: change to debug level or remove
-    log.info("returning found bridge transaction: " + result.toArray());
+    log.info("returning found bridge transaction: " + Arrays.toString(result.toArray()));
     return result;
   }
 

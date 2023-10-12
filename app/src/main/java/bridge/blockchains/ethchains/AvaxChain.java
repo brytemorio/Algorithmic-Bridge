@@ -6,10 +6,14 @@ import bridge.common.ConfigFileObj;
 import bridge.exceptions.BridgeExceptions;
 import bridge.services.storagservice.ConfigurationStorageService;
 import bridge.services.storagservice.DataObjects;
+import bridge.services.transactionservice.TransactionModels;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.web3j.crypto.Bip44WalletUtils;
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.WalletUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -65,6 +69,22 @@ public final class AvaxChain<K> extends EthIBaseChain<K>
     var blockHeight = getWeb3j().ethBlockNumber().send().getBlockNumber();
     Thread.sleep(10000);
     return blockHeight;
+  }
+
+
+  //TODO: Temporary fix
+
+
+  @Override
+  public TransactionModels.Transaction sendCoin(TransactionModels.TransactionAttempt attempt)
+  {
+    var web3j = getWeb3j();
+    String private_key = " ";
+    String Pub
+    var  credentials = Credentials.create()
+    String contractAddress = " ";
+
+    return super.sendCoin(attempt);
   }
 
   //TODO: Hotfix

@@ -1,5 +1,6 @@
 package bridge.services.disruptorservice;
 
+import bridge.services.disruptorservice.eventhandlers.EventHelpers;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.WaitStrategy;

@@ -38,7 +38,7 @@ public class TransactionAttemptListStorageService
       TransactionModels.TransactionAttemptList transactionAttemptList)
   {
     var collection = getCollection();
-    Bson filter = eq("Id", transactionAttemptList.getId());
+    Bson filter = eq("_id", transactionAttemptList.getId());
     var result = collection.findOneAndReplace(filter, transactionAttemptList);
 
 

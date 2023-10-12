@@ -2,8 +2,15 @@ package bridge.services.storagservice;
 
 import bridge.blockchains.IBaseChain;
 import bridge.services.transactionservice.TransactionModels;
+import com.lmax.disruptor.EventHandler;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.agrona.concurrent.UnsafeBuffer;
+import org.agrona.concurrent.ringbuffer.OneToOneRingBuffer;
+import org.agrona.concurrent.ringbuffer.RingBuffer;
+import org.agrona.concurrent.ringbuffer.RingBufferDescriptor;
+
+import java.nio.ByteBuffer;
 
 @Slf4j
 public class TransactionAttemptListService
@@ -11,11 +18,24 @@ public class TransactionAttemptListService
   private final IBaseChain blockchain;
   private final TransactionAttemptListStorageService trxAttempListStorageService;
 
+
+
+
   public TransactionAttemptListService(IBaseChain blockchain)
   {
     this.blockchain = blockchain;
     this.trxAttempListStorageService = new TransactionAttemptListStorageService();
+
   }
+
+  @SneakyThrows
+  public void run()
+  {
+    int capacity = 4096 + RingBufferDescriptor.TRAILER_LENGTH;
+    UnsafeBuffer interBuffer = new UnsafeBuffer(ByteBuffer.allocateDirect(capacity));
+    OneToOneRingBuffer ringBuffer = new OneToOneRingBuffer(interBuffer);
+  }
+
 
   @SneakyThrows
   public void continueAttemptListTransaction(TransactionModels.TransactionAttemptList attemptList)
@@ -61,4 +81,6 @@ public class TransactionAttemptListService
               + attempt.getSender() + "to " + receiver.getAddress());
     }
   }
+
+
 }
