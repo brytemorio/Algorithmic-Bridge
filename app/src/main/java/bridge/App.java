@@ -17,16 +17,14 @@ public class App
   @SneakyThrows
   public static void main(String[] args)
   {
-    // QnodecoinChainI qnodecoinChain = new QnodecoinChainI();
-    // PolygonChainI<?> polygonChain = new PolygonChainI<>("fishfactory_p");
+
     WavesChain<?> wavesChain = new WavesChain<>("fishfactoryP");
     AvaxChain<?> avaxChain = new AvaxChain<>("fishfarmtoken");
-    // BinanceSmartChainI<?> binanceSmartChain = new BinanceSmartChainI<>("qnode_defi");
     NewBlockEventProducer producer = NewBlockEventProducer.getNewBlockEventProducer(wavesChain,
         avaxChain);
     AttempListService attempListService = new AttempListService(avaxChain);
     log.info("Starting Up Bridge...");
-    producer.start();
+    //producer.start();
     attempListService.run();
 
 

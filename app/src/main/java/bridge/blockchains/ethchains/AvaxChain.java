@@ -13,19 +13,24 @@ import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.web3j.crypto.Bip44WalletUtils;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
+import org.web3j.abi.FunctionEncoder;
+import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.generated.Uint256;
+import org.web3j.abi.datatypes.generated.Uint8;
+import org.web3j.crypto.*;
+import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.tx.gas.DefaultGasProvider;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -76,7 +81,7 @@ public final class AvaxChain<K> extends EthIBaseChain<K>
   }
 
 
-  //TODO: Temporary fix
+  //TODO: Temporary Hotfix
   @SneakyThrows
   @Override
   public TransactionModels.Transaction sendCoin(TransactionModels.TransactionAttempt attempt)
@@ -85,17 +90,44 @@ public final class AvaxChain<K> extends EthIBaseChain<K>
     String private_key = "754fe43ff651720347ac36cca05fb9423bdb51c597ad986c6b4c0086ec330758";
     String public_key = "0xaDF0888A5D150938F652c6731a7D8CA5d8ead379";
     String assetId = "0xF77D71Ca22A999F91F3344e12e05591a2B943468";
-    var credentials = Credentials.create(private_key, public_key);
-    ERC20ABI contract = ERC20ABI.load(assetId, web3j, credentials, new DefaultGasProvider());
+    String password = "@CCr21t3v2p@$$@$$";
+    ClassLoader resourceDir = AvaxChain.class.getClassLoader();
+    String walletName = "avax_walle.json";
+    InputStream walletFileName = resourceDir.getResourceAsStream(walletName);
+    String newWalletFileName = "";
+
+    if (walletFileName == null)
+    {
+      var credentials = Credentials.create(private_key);
+      //WalletFile newWalletFile = Wallet.create(password, credentials.getEcKeyPair(), 16384, 1);
+      File newfile = new File(resourceDir.getResource("").getPath());
+      newWalletFileName =  WalletUtils.generateWalletFile(password, credentials.getEcKeyPair(),
+        newfile, false);
+
+      //todo: remove logging
+      log.info(newWalletFileName);
+    }
+
+    var walletCrendentials = WalletUtils.loadCredentials(password,
+        resourceDir.getResource(newWalletFileName).getPath());
+    ERC20ABI contract = ERC20ABI.load(assetId, web3j, walletCrendentials, new DefaultGasProvider());
+
+
     String toAddress = attempt.getReceivers().getFirst().getAddress();
     int amount = attempt.getReceivers().getFirst().getAmount();
     BigInteger amountBigInt = new BigInteger(
         String.valueOf(attempt.getReceivers().getFirst().getAmount()));
-
-    var trxReceipt = contract.mint(toAddress, amountBigInt).send();
-    return new TransactionModels.Transaction(trxReceipt.getTransactionHash(),
+    Function mintFunction = new Function("mint", Arrays.asList(new Uint256(amountBigInt),
+        new Address(toAddress)), Collections.emptyList());
+    String encodedFunction = FunctionEncoder.encode(mintFunction);
+    EthCall response = web3j.ethCall(Transaction.createEthCallTransaction(public_key, assetId,
+        encodedFunction), DefaultBlockParameterName.LATEST).send();
+    log.info("Ethcall Response" + response.getRawResponse());
+    //var trxReceipt = contract.mint(toAddress, amountBigInt).sendAsync().get();
+    /*return new TransactionModels.Transaction(tres.getTransactionHash(),
         Collections.singletonList(new TransactionModels.TransactionReceiver(
-            new TransactionModels.MappedAddress(toAddress, "XFT"), amount)));
+            new TransactionModels.MappedAddress(toAddress, "XFT"), amount)));*/
+    return null;
   }
 
 

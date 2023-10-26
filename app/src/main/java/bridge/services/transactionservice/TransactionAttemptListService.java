@@ -23,15 +23,15 @@ public class TransactionAttemptListService
   @SneakyThrows
   public void continueTrxAttemptList(TransactionModels.TransactionAttemptList trxAttemptList)
   {
-    log.info("Tyring to complete attempt_list '%s'" + trxAttemptList.getTransactionAttemptID());
+    log.info("Tyring to complete attempt_list  " + trxAttemptList.getTransactionAttemptID());
     if (trxAttemptList.hasCompleted())
     {
       log.info("attempt list is already completed");
       return;
     }
 
-    for (int i = 0; i <= trxAttemptList.getTransactions().size(); i++)
-      logAttemptAlreadyDone(trxAttemptList.getAttempts().get(i));
+    /*for (int i = 0; i <= trxAttemptList.getTransactions().size(); i++)
+      logAttemptAlreadyDone(trxAttemptList.getAttempts().get(i));*/
 
     while (!trxAttemptList.hasCompleted())
     {

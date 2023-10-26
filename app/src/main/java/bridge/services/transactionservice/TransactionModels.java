@@ -1,9 +1,11 @@
 package bridge.services.transactionservice;
 
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -93,6 +95,7 @@ public class TransactionModels
       this.transactionID = transactionID;
       this.receivers = receivers;
     }
+
     public Transaction(String transactionID, List<TransactionReceiver> receivers,
                        List<TransactionSender> senders)
     {
@@ -180,8 +183,8 @@ public class TransactionModels
     {
     }
 
-    public TransactionAttempt(String sender, int fee,
-                       String currency, List<TransactionAttemptReceiver> receivers)
+    public TransactionAttempt(String sender, int fee, String currency,
+                              List<TransactionAttemptReceiver> receivers)
     {
       this.sender = sender;
       this.receivers = receivers;
@@ -205,7 +208,7 @@ public class TransactionModels
   }
 
   @Data
-  public static class TransactionAttemptList
+  public static class TransactionAttemptList implements Cloneable
   {
 
     private ObjectId id;
@@ -222,9 +225,9 @@ public class TransactionModels
     }
 
     public TransactionAttemptList(TransactionAttemptListTrigger trigger,
-                            List<TransactionAttempt> attempts,
-                           List<?> transactions, ZonedDateTime createdOn,
-                           ZonedDateTime lastModifiedOn, Integer tries, String transactionAttemptID)
+                                  List<TransactionAttempt> attempts, List<?> transactions,
+                                  ZonedDateTime createdOn, ZonedDateTime lastModifiedOn,
+                                  Integer tries, String transactionAttemptID)
     {
       //this.Id = UUID.randomUUID().toString();
       this.trigger = trigger;
@@ -236,9 +239,8 @@ public class TransactionModels
       this.transactionAttemptID = transactionAttemptID;
     }
 
-   public  TransactionAttemptList(TransactionAttemptListTrigger trigger,
-                            List<TransactionAttempt> attempts,
-                           Integer tries)
+    public TransactionAttemptList(TransactionAttemptListTrigger trigger,
+                                  List<TransactionAttempt> attempts, Integer tries)
     {
       //this.Id = UUID.randomUUID().toString();
       this.trigger = trigger;
@@ -251,9 +253,15 @@ public class TransactionModels
                                   ZonedDateTime createdOn)
     {
       this.trigger = trigger;
-      this.attempts =attempts;
-      this.lastModifiedOn =lastModifiedOn;
-      this.createdOn =createdOn;
+      this.attempts = attempts;
+      this.lastModifiedOn = lastModifiedOn;
+      this.createdOn = createdOn;
+      if (this.transactions == null)
+      {
+        this.transactions = new ArrayList<>();
+      }
+      this.tries = 0;
+      this.transactionAttemptID = UUID.randomUUID().toString();
     }
 
     /*
@@ -270,9 +278,8 @@ public class TransactionModels
       {
         if (this.attempts.get(i) == attempt)
         {
-          if (this.transactions.size() != i)
-            throw new RuntimeException(
-                "Trying to mark an attempt as complete that is not the next " + "attempt");
+          if (this.transactions.size() != i) throw new RuntimeException(
+              "Trying to mark an attempt as complete that is not the next " + "attempt");
         }
         this.transactions.add(transactionID);
         this.lastModifiedOn = ZonedDateTime.from(LocalDateTime.now());
@@ -308,6 +315,21 @@ public class TransactionModels
     public boolean hasCompleted()
     {
       return this.transactions.size() >= this.attempts.size();
+    }
+
+    @Override
+    public TransactionAttemptList clone()
+    {
+      try
+      {
+        TransactionAttemptList clone = (TransactionAttemptList) super.clone();
+        // TODO: copy mutable state here, so the clone can't change the internals of the original
+        return clone;
+      }
+      catch (CloneNotSupportedException e)
+      {
+        throw new AssertionError();
+      }
     }
   }
 }

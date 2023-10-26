@@ -8,22 +8,27 @@ import bridge.services.transactionservice.TransactionModels;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@Slf4j
 public class AttempListService
 {
   private final RingBuffer<TransactionModels.TransactionAttemptList> ringBuffer;
+  private final TransactionAttemptListStorageService transactionAttemptListStorageService;
 
   public AttempListService(IBaseChain chain)
   {
-    int CAPACITY = 4069;
+    int CAPACITY = 2048;
     Disruptor<TransactionModels.TransactionAttemptList> disruptor = new DisruptorObjFactory<>(
         new AttempListEventHandler(chain), new AttempListEventFactory(), CAPACITY);
     disruptor.start();
     this.ringBuffer = disruptor.getRingBuffer();
+    this.transactionAttemptListStorageService = new TransactionAttemptListStorageService();
   }
+
 
   Runnable doRun = new Runnable()
   {
@@ -33,10 +38,24 @@ public class AttempListService
     {
       for (; ; )
       {
-        var nextTransactionAttempt = new TransactionAttemptListStorageService().findOldestPendingAttemptList();
+        var trxAttemptStorage = new TransactionAttemptListStorageService();
+        var nextTransactionAttempt = trxAttemptStorage.findOldestPendingAttemptList();
+
+        //TODO: remove the logging
+        log.info(nextTransactionAttempt.toString());
+
+        nextTransactionAttempt.incrementRetries();
+        trxAttemptStorage.updateTransactionAttemptList(nextTransactionAttempt);
         var sequence = ringBuffer.next();
         var trxAttempt = ringBuffer.get(sequence);
-        trxAttempt = nextTransactionAttempt;
+        trxAttempt.setId(nextTransactionAttempt.getId());
+        trxAttempt.setTrigger(nextTransactionAttempt.getTrigger());
+        trxAttempt.setAttempts(nextTransactionAttempt.getAttempts());
+        trxAttempt.setTransactions(nextTransactionAttempt.getTransactions());
+        trxAttempt.setCreatedOn(nextTransactionAttempt.getCreatedOn());
+        trxAttempt.setLastModifiedOn(nextTransactionAttempt.getLastModifiedOn());
+        trxAttempt.setTries(nextTransactionAttempt.getTries());
+        trxAttempt.setTransactionAttemptID(nextTransactionAttempt.getTransactionAttemptID());
         ringBuffer.publish(sequence);
       }
     }

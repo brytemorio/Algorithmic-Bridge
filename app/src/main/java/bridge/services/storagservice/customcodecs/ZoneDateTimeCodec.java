@@ -24,7 +24,9 @@ public class ZoneDateTimeCodec implements Codec<ZonedDateTime>
       reader.readNull();
       return null;
     }
-    return ZonedDateTime.ofInstant(Instant.ofEpochSecond(reader.readDateTime()), ZoneId.of("Etc/Zulu"));
+    long miliseconds = reader.readDateTime();
+    long seconds  = miliseconds / 1000;
+    return ZonedDateTime.ofInstant(Instant.ofEpochSecond(seconds), ZoneId.of("Etc/Zulu"));
   }
 
   @Override

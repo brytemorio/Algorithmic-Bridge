@@ -3,6 +3,7 @@ package bridge.services.storagservice;
 import bridge.services.transactionservice.TransactionModels;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
@@ -38,10 +39,11 @@ public class TransactionAttemptListStorageService
       TransactionModels.TransactionAttemptList transactionAttemptList)
   {
     var collection = getCollection();
-    Bson filter = eq("_id", transactionAttemptList.getId());
+    Bson filter = eq("transactionAttemptID", transactionAttemptList.getTransactionAttemptID());
     var result = collection.findOneAndReplace(filter, transactionAttemptList);
 
 
+    //TODO: remove logging or leave it at debug
     assert result != null;
     log.debug(result.toString());
   }
@@ -59,25 +61,20 @@ public class TransactionAttemptListStorageService
   {
     var collection = getCollection();
 
-    int maxTries = 10;
+    int maxTries = 5;
     Bson query = Filters.and(Filters.or(Filters.and(Filters.not(Filters.size("attempts", 1)),
                 Filters.not(Filters.size("transactions", 1))),
             Filters.and(Filters.size("attempts", 2), Filters.size("transactions", 2)),
             Filters.and(Filters.size("attempts", 3), Filters.size("transactions", 3))),
         Filters.or(Filters.lt("tries", maxTries), Filters.exists("tries", false)));
 
-    FindIterable<TransactionModels.TransactionAttemptList> results = collection.find(query)
-        .sort(Sorts.ascending("lastModifiedOn")).limit(1);
+    MongoCursor<TransactionModels.TransactionAttemptList> results = collection.find()
+        .sort(Sorts.ascending("lastModifiedOn")).limit(1).iterator();
 
-    TransactionModels.TransactionAttemptList document = results.first();
-    if (document != null)
-    {
-      return document;
-    }
-    else
-    {
-      return null;
-    }
+
+    //log.info(results.next().toString());
+
+    return results.next();
   }
 
   public TransactionModels.TransactionAttemptList findTransactionAttemptByTrigger(

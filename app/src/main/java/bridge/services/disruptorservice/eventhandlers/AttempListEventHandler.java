@@ -31,7 +31,7 @@ public class AttempListEventHandler implements
     }
     catch (Exception exp)
     {
-      log.error(Arrays.toString(exp.getStackTrace()));
+      exp.printStackTrace();
     }
   }
 }
